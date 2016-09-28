@@ -1,0 +1,56 @@
+﻿<html>
+<head>
+    <title>Web Context</title>
+    <script src="bower_components/vss-web-extension-sdk/lib/VSS.SDK.min.js"></script>
+</head>
+
+<body style="padding-left: 20px; padding-top: 20px; overflow-y: auto; background-color: #ddd">
+
+    <h3>Web Context</h3>
+    <pre id="context-display" style=""></pre>
+
+    <div id="configuration" style="display:none">
+        <h3>Configuration</h3>
+        <pre id="configuration-display" style=""></pre>
+    </div>
+    <script type="text/javascript">
+        VSS.init({explicitNotifyLoaded: true, usePlatformScripts: true, usePlatformStyles: true })
+
+        // Show context info when ready
+        VSS.ready(function () {
+            var context = VSS.getWebContext();
+
+            document.getElementById("context-display").textContent = JSON.stringify(context, null, 4);
+
+            // Used for tab contributions
+            if (VSS.getContribution().type === "ms.vss-web.tab") {
+                var updateConfiguration = function(tabContext) {
+                    if (typeof tabContext === "object") {
+                        document.getElementById("configuration-display").textContent = JSON.stringify(tabContext, null, 4);
+                    }
+                }
+                updateConfiguration(VSS.getConfiguration());
+                document.getElementById("configuration").style.display = "block";
+
+                //Register the fully-qualified contribution id here.
+                //Because we're using the contribution id, we do NOT need to define a registeredObjectId in the extension manfiest.
+                VSS.register(VSS.getContribution().id, {
+                    pageTitle: function(state) {
+                        return "Web Context";
+                    },
+                    updateContext: updateConfiguration,
+                    isInvisible: function(state) {
+                        // Hide this tab if the user has selected the "Unsaved work items" pseudo-query.
+                        if (state && state.query && state.query.name === "Unsaved work items" && state.query.path === null) {
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+            }
+            VSS.notifyLoadSucceeded();
+        });
+
+    </script>
+</body>
+</html>

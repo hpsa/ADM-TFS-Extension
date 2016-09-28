@@ -1,0 +1,189 @@
+{
+  "manifestVersion": 1,
+  "id": "uft-build-tasks",
+  "name": "HPE Application Automation Tools Extension",
+  "version": "0.2.1",
+  "publisher": "fabrikam",
+  "targets": [
+    {
+      "id": "Microsoft.VisualStudio.Services"
+    }
+  ],
+  "description": "Tools for test with UFT. Includes 4 build tasks.",
+  "categories": [
+    "Test"
+  ],
+  "resources": [
+    "some stuff"
+  ],
+  "tags": [
+    "UFT",
+    "HPE ALM"
+  ],
+  "icons": {
+    "default": "img/tfs.png"
+  },
+  "screenshots ": [
+    {
+      "path": "screenshots/AlmExecution.PNG"
+    },
+    {
+      "path": "screenshots/screen2.png"
+    }
+  ],
+  "links": {
+    "home": {
+      "uri": "https://github.com/"
+    },
+    "getstarted": {
+      "uri": "https://github.com/"
+    },
+    "learn": {
+      "uri": "https://github.com/"
+    },
+    "support": {
+      "uri": "https://github.com/"
+    },
+    "repository": {
+      "uri": "https://github.com/"
+    },
+    "issues": {
+      "uri": "https://github.com/"
+    }
+  },
+  "content": {
+    "details": {
+      "path": "README.md"
+    },
+    "license": {
+      "path": "License.txt"
+    }
+  },
+  "branding": {
+    "color": "rgb(89, 141, 88)",
+    "theme": "dark"
+  },
+  "files": [
+    {
+      "path": "AlmLabEnvPrepareTask"
+    },
+    {
+      "path": "AlmLabManagementTask"
+    },
+    {
+      "path": "RunFromALM"
+    },
+    {
+      "path": "RunFromFileSystemTask"
+    },
+    {
+      "path": "dist",
+      "addressable": true
+    },
+    {
+      "path": "buildDumpSection.html",
+      "addressable": true
+    },
+    {
+      "path": "infoTab.html",
+      "addressable": true
+    },
+    {
+      "path": "statusSection.html",
+      "addressable": true
+    },
+    {
+      "path": "bower_components/vss-web-extension-sdk/lib/VSS.SDK.min.js",
+      "addressable": true
+    }
+  ],
+  "scopes": [
+    "vso.test",
+    "vso.build_execute",
+    "vso.serviceendpoint"
+  ],
+  "contributions": [
+    {
+      "id": "custom-build-task-1",
+      "type": "ms.vss-distributed-task.task",
+      "targets": [
+        "ms.vss-distributed-task.tasks"
+      ],
+      "properties": {
+        "name": "AlmLabEnvPrepareTask"
+      }
+    },
+    {
+      "id": "custom-build-task-2",
+      "type": "ms.vss-distributed-task.task",
+      "targets": [
+        "ms.vss-distributed-task.tasks"
+      ],
+      "properties": {
+        "name": "AlmLabManagementTask"
+      }
+    },
+    {
+      "id": "custom-build-task-3",
+      "type": "ms.vss-distributed-task.task",
+      "targets": [
+        "ms.vss-distributed-task.tasks"
+      ],
+      "properties": {
+        "name": "RunFromALM"
+      }
+    },
+    {
+      "id": "custom-build-task-4",
+      "type": "ms.vss-distributed-task.task",
+      "targets": [
+        "ms.vss-distributed-task.tasks"
+      ],
+      "properties": {
+        "name": "RunFromFileSystemTask"
+      }
+    },
+    {
+      "id": "build-info-tab",
+      "type": "ms.vss-build-web.build-results-tab",
+      "description": "A tab contributing to build results view",
+      "targets": [
+        "ms.vss-build-web.build-results-view"
+      ],
+      "properties": {
+        "name": "UFT Result",
+        "uri": "infoTab.html"
+
+      }
+    },
+    {
+      "id": "build-status-section",
+      "type": "ms.vss-build-web.build-results-section",
+      "description": "A section contributing to our own new tab and also to existing build 'summary' tab",
+      "targets": [
+        ".build-info-tab",
+        "ms.vss-build-web.build-results-summary-tab"
+      ],
+      "properties": {
+        "name": "Custom Section",
+        "uri": "statusSection.html",
+        "order": 20,
+        "height": 500
+      }
+    },
+    {
+      "id": "build-variables-section",
+      "type": "ms.vss-build-web.build-results-section",
+      "description": "A section contributing to our own new tab",
+      "targets": [
+        ".build-info-tab"
+      ],
+      "properties": {
+        "name": "Custom Section 2",
+        "uri": "buildDumpSection.html",
+        "order": 10,
+        "height": 500
+      }
+    }
+  ]
+}

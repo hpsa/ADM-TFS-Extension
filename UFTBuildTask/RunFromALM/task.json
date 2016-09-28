@@ -1,0 +1,92 @@
+﻿{
+  "id": "A571AE7C-E100-42E1-8CED-498B46029770",
+  "name": "RunFromALM",
+  "friendlyName": "HP UFT ALM Execution",
+  "description": "Execute HP UFT tests from ALM",
+  "category": "Test",
+  "visibility": [
+    "Build",
+    "Release"
+  ],
+  "author": "",
+  "version": {
+    "Major": 1,
+    "Minor": 0,
+    "Patch": 0
+  },
+  "demands": [
+  ],
+  "groups": [
+    {
+      "name": "advanced",
+      "displayName": "Advanced",
+      "isExpanded": false
+    }
+  ],
+  "inputs": [
+    {
+      "name": "varAlmserv",
+      "type": "string",
+      "label": "ALM server",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "This will give you a hover-over tooltip"
+    },
+    {
+      "name": "varUserName",
+      "type": "string",
+      "label": "User name",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "This will give you a hover-over tooltip"
+    },
+    {
+      "name": "varPass",
+      "type": "string",
+      "label": "Password",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "This will give you a hover-over tooltip"
+    },
+    {
+      "name": "varDomain",
+      "type": "string",
+      "label": "Domain",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "This will give you a hover-over tooltip"
+    },
+    {
+      "name": "varProject",
+      "type": "string",
+      "label": "Project",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "This will give you a hover-over tooltip"
+    },
+    {
+      "name": "varTestsets",
+      "type": "string",
+      "label": "Test sets",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "This will give you a hover-over tooltip"
+    },
+    {
+      "name": "varTimeout",
+      "type": "string",
+      "label": "Timeout",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "This will give you a hover-over tooltip"
+    }
+  ],
+  "instanceNameFormat": "RunFromALM: ",
+  "execution": {
+    "PowerShell": {
+      "target": "$(currentDirectory)\\ExampleTask.ps1",
+      "argumentFormat": "",
+      "workingDirectory": "$(currentDirectory)"
+    }
+  }
+}

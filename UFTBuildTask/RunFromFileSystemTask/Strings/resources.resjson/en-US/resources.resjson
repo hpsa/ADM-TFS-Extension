@@ -1,0 +1,7 @@
+﻿{
+	"loc.friendlyName": "Ant",
+	"loc.description": "Build with Apache Ant",
+	"loc.group.displayName.loadRunner": "LoadRunner Settings localized",
+	"loc.group.displayName.modileOptions":"Mobile Center options localized",
+	"loc.group.displayName.advanced":"advanced",
+}
