@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "uft-build-tasks",
   "name": "HPE Application Automation Tools Extension",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "publisher": "fabrikam",
   "targets": [
     {
@@ -21,34 +21,34 @@
     "HPE ALM"
   ],
   "icons": {
-    "default": "img/tfs.png"
+    "default": "resources/img/tfs.png"
   },
   "screenshots ": [
     {
-      "path": "screenshots/AlmExecution.PNG"
+      "path": "resources/screenshots/AlmExecution.PNG"
     },
     {
-      "path": "screenshots/screen2.png"
+      "path": "resources/screenshots/screen2.png"
     }
   ],
   "links": {
     "home": {
-      "uri": "https://github.com/"
+      "uri": "https://github.com/hpsa/ADM-TFS-Extension"
     },
     "getstarted": {
-      "uri": "https://github.com/"
+      "uri": "https://github.com/hpsa/ADM-TFS-Extension"
     },
     "learn": {
-      "uri": "https://github.com/"
+      "uri": "https://github.com/hpsa/ADM-TFS-Extension"
     },
     "support": {
-      "uri": "https://github.com/"
+      "uri": "https://github.com/hpsa/ADM-TFS-Extension"
     },
     "repository": {
-      "uri": "https://github.com/"
+      "uri": "https://github.com/hpsa/ADM-TFS-Extension"
     },
     "issues": {
-      "uri": "https://github.com/"
+      "uri": "https://github.com/hpsa/ADM-TFS-Extension"
     }
   },
   "content": {
@@ -56,7 +56,7 @@
       "path": "README.md"
     },
     "license": {
-      "path": "License.txt"
+      "path": "LICENSE"
     }
   },
   "branding": {
@@ -75,26 +75,6 @@
     },
     {
       "path": "RunFromFileSystemTask"
-    },
-    {
-      "path": "dist",
-      "addressable": true
-    },
-    {
-      "path": "buildDumpSection.html",
-      "addressable": true
-    },
-    {
-      "path": "infoTab.html",
-      "addressable": true
-    },
-    {
-      "path": "statusSection.html",
-      "addressable": true
-    },
-    {
-      "path": "bower_components/vss-web-extension-sdk/lib/VSS.SDK.min.js",
-      "addressable": true
     }
   ],
   "scopes": [
@@ -141,48 +121,6 @@
       ],
       "properties": {
         "name": "RunFromFileSystemTask"
-      }
-    },
-    {
-      "id": "build-info-tab",
-      "type": "ms.vss-build-web.build-results-tab",
-      "description": "A tab contributing to build results view",
-      "targets": [
-        "ms.vss-build-web.build-results-view"
-      ],
-      "properties": {
-        "name": "UFT Result",
-        "uri": "infoTab.html"
-
-      }
-    },
-    {
-      "id": "build-status-section",
-      "type": "ms.vss-build-web.build-results-section",
-      "description": "A section contributing to our own new tab and also to existing build 'summary' tab",
-      "targets": [
-        ".build-info-tab",
-        "ms.vss-build-web.build-results-summary-tab"
-      ],
-      "properties": {
-        "name": "Custom Section",
-        "uri": "statusSection.html",
-        "order": 20,
-        "height": 500
-      }
-    },
-    {
-      "id": "build-variables-section",
-      "type": "ms.vss-build-web.build-results-section",
-      "description": "A section contributing to our own new tab",
-      "targets": [
-        ".build-info-tab"
-      ],
-      "properties": {
-        "name": "Custom Section 2",
-        "uri": "buildDumpSection.html",
-        "order": 10,
-        "height": 500
       }
     }
   ]
