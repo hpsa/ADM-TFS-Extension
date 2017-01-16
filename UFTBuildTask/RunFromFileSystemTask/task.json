@@ -12,7 +12,7 @@
   "version": {
     "Major": 1,
     "Minor": 0,
-    "Patch": 5
+    "Patch": 0
   },
   "demands": [
     "UFT_LAUNCHER"
@@ -37,11 +37,11 @@
   "inputs": [
     {
       "name": "testPathInput",
-      "type": "filePath",
+      "type": "string",
       "label": "Tests",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "List of tests or folders that contain tests, to run. Each line should contain a single test, folder, or MTB file."
     },
     {
       "name": "timeOutIn",
@@ -49,7 +49,7 @@
       "label": "Timeout",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "Timeout value in seconds. If left empty, there is no timeout."
     },
     {
       "name": "pollInterval",
@@ -58,7 +58,7 @@
       "defaultValue": "30",
       "groupName": "loadRunner",
       "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "Polling interval for checking the scenario status, in seconds. The default is 30 seconds."
     },
     {
       "name": "executeTimeout",
@@ -67,7 +67,7 @@
       "defaultValue": "10",
       "groupName": "loadRunner",
       "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown":  "The maximum time allotted for scenario execution, in minutes."
     },
     {
       "name": "ignoreErrors",
@@ -76,7 +76,7 @@
       "defaultValue": "",
       "groupName": "loadRunner",
       "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "Ignore errors during the scenario run containing any of the strings listed below. For  example: \"Error: CPU usage for this load generator has exceeded 80%\""
     },
     {
       "name": "useMC",
@@ -85,7 +85,7 @@
       "defaultValue": "",
       "groupName": "modileOptions",
       "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "Mobile Center Settings"
     },
     {
       "name": "mcUserNameIn",
@@ -94,7 +94,7 @@
       "defaultValue": "",
       "groupName": "modileOptions",
       "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "The user name for Mobile Center."
     },
     {
       "name": "mcPasswordIn",
@@ -103,7 +103,7 @@
       "defaultValue": "",
       "groupName": "modileOptions",
       "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "The password for Mobile Center."
     },
     {
       "name": "useProxy",
@@ -111,8 +111,7 @@
       "label": "Use proxy settings",
       "defaultValue": "",
       "groupName": "modileOptions",
-      "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "required": false
     },
     {
       "name": "proxyAddress",
@@ -122,7 +121,7 @@
       "groupName": "modileOptions",
       "visibleRule": "useProxy = true",
       "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "Example: 16.54.185.180:8080"
     },
     {
       "name": "chkAuth",
@@ -140,8 +139,7 @@
       "defaultValue": "",
       "groupName": "modileOptions",
       "visibleRule": "chkAuth = true",
-      "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "required": false
     },
     {
       "name": "proxyPassword",
@@ -150,8 +148,7 @@
       "defaultValue": "",
       "groupName": "modileOptions",
       "visibleRule": "chkAuth = true",
-      "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "required": false
     },
     {
       "name": "lableDevice",
@@ -165,8 +162,7 @@
       "label": "Device ID",
       "defaultValue": "",
       "groupName": "modileOptions",
-      "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "required": false
     },
     {
       "name": "OS",
@@ -174,8 +170,7 @@
       "label": "OS",
       "defaultValue": "",
       "groupName": "modileOptions",
-      "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "required": false
     },
     {
       "name": "manufacturerAndModel",
@@ -183,8 +178,7 @@
       "label": "Manufacturer and model",
       "defaultValue": "",
       "groupName": "modileOptions",
-      "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "required": false
     },
     {
       "name": "targetLab",
@@ -192,8 +186,7 @@
       "label": "Target lab",
       "defaultValue": "",
       "groupName": "modileOptions",
-      "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "required": false
     },
     {
       "name": "extraApps",
@@ -202,8 +195,7 @@
       "defaultValue": "",
       "groupName": "modileOptions",
       "required": false,
-      "rows": 4,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "rows": 4
     },
     {
       "name": "testDefinition",
@@ -217,8 +209,7 @@
       "label": "Launch on start",
       "defaultValue": "",
       "groupName": "modileOptions",
-      "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "required": false
     },
     {
       "name": "autPackaging",
@@ -226,8 +217,7 @@
       "label": "AUT packaging",
       "defaultValue": "",
       "groupName": "modileOptions",
-      "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "required": false
     },
     {
       "name": "autActions",
@@ -235,8 +225,7 @@
       "label": "AUT actions",
       "defaultValue": "",
       "groupName": "modileOptions",
-      "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "required": false
     },
     {
       "name": "deviceMetrics",
@@ -244,8 +233,7 @@
       "label": "Device metrics",
       "defaultValue": "",
       "groupName": "modileOptions",
-      "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "required": false
     },
     {
       "name": "testsResult",
@@ -253,43 +241,13 @@
       "label": "Archive and publish HP tests results",
       "defaultValue": "always",
       "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip",
+      "helpMarkDown": "To UFT test result attached to the each Test case detailes in Test Run:\n Download the zipped report to your desired location and unzip it. In the HP Run Results Viewer, select the Results.xml file found inside the unzipped folder.\n Note that this option is valid only when using the \"Execute HP test from file system\" build step.",
       "groupName": "advanced",
       "options": {
         "always": "Always archive HP test reports",
         "failed": "Archive HP test report for failed tests",
         "never": "Do not archive HP test reports"
       }
-    },
-
-    {
-      "name": "ArtifactName",
-      "type": "string",
-      "label": "Artifact Name",
-      "defaultValue": "",
-      "required": true,
-      "helpMarkDown": "The name of the artifact to create."
-    },
-    {
-      "name": "ArtifactType",
-      "type": "pickList",
-      "label": "Artifact Type",
-      "defaultValue": "",
-      "required": true,
-      "helpMarkDown": "The type of the artifact to create.",
-      "options": {
-        "Container": "Server",
-        "FilePath": "File share"
-      }
-    },
-    {
-      "name": "TargetPath",
-      "type": "string",
-      "label": "Path",
-      "defaultValue": "\\\\my\\share\\$(Build.DefinitionName)\\$(Build.BuildNumber)",
-      "required": false,
-      "helpMarkDown": "The file share to which to copy the files",
-      "visibleRule": "ArtifactType = FilePath"
     }
   ],
   "instanceNameFormat": "RunFromFileSystemTask",
@@ -302,9 +260,13 @@
         "windows"
       ]
     },
-    "Node": {
-      "target": "publishbuildartifacts.js",
-      "argumentFormat": ""
+    "PublishTest": {
+      "target": "$(currentDirectory)\\publish.ps1",
+      "argumentFormat": "",
+      "workingDirectory": "$(currentDirectory)",
+      "platforms": [
+        "windows"
+      ]
     }
   }
 }
