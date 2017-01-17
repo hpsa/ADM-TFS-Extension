@@ -48,7 +48,7 @@ namespace PSModule
 
         public void SetAlmPassword(string almPassword)
         {
-            string encAlmPass;
+           // string encAlmPass;
             try
             {
 
@@ -59,7 +59,7 @@ namespace PSModule
                 //properties.Add("almPassword", encAlmPass);
 
             }
-            catch (Exception e)
+            catch
             {
 
             }
@@ -109,7 +109,7 @@ namespace PSModule
 
         public void SetFileSystemPassword(String oriPass)
         {
-            String encPass;
+            //String encPass;
             try
             {
 
@@ -121,7 +121,7 @@ namespace PSModule
                 //properties.Add("MobilePassword", encPass);
 
             }
-            catch (Exception e)
+            catch
             {
 
             }
@@ -190,7 +190,7 @@ namespace PSModule
 
         public void SetMobileProxySetting_Password(string proxyPassword)
         {
-            String proxyPass;
+           // String proxyPass;
             try
             {
 
@@ -202,7 +202,7 @@ namespace PSModule
                 //properties.Add("MobileProxySetting_Password", proxyPass);
 
             }
-            catch (Exception e)
+            catch
             {
 
             }
