@@ -66,7 +66,7 @@
     },
     {
       "name": "varTestsets",
-      "type": "string",
+      "type": "multiLine",
       "label": "Test sets",
       "defaultValue": "",
       "required": false,
@@ -76,7 +76,30 @@
       "name": "varTimeout",
       "type": "string",
       "label": "Timeout",
+      "defaultValue": "-1",
+      "required": false,
+      "helpMarkDown": "Timeout value in seconds. If left empty, there is no timeout."
+    },
+    {
+      "name": "runMode",
+      "type": "pickList",
+      "label": "Run mode",
+      "defaultValue": "runLocally",
+      "required": false,
+      "helpMarkDown": "This will give you a hover-over tooltip",
+      "groupName": "advanced",
+      "options": {
+        "runLocally": "Run Locally",
+        "runOnPlannedHost": "Run on planned host",
+        "runRemotely": "Run remotely"
+      }
+    },
+    {
+      "name": "testingToolHost",
+      "type": "string",
+      "label": "Testing Tool host",
       "defaultValue": "",
+      "groupName": "advanced",
       "required": false,
       "helpMarkDown": "This will give you a hover-over tooltip"
     }
@@ -84,7 +107,7 @@
   "instanceNameFormat": "RunFromALM: ",
   "execution": {
     "PowerShell": {
-      "target": "$(currentDirectory)\\ExampleTask.ps1",
+      "target": "$(currentDirectory)\\localTask.ps1",
       "argumentFormat": "",
       "workingDirectory": "$(currentDirectory)"
     }

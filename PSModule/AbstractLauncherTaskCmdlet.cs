@@ -17,16 +17,9 @@ namespace PSModule
         public abstract Dictionary<string, string> GetTaskProperties();
 
         protected override void ProcessRecord()
-        {
-            WriteDebug("WriteDebug ProcessRecord");
-
-            ErrorRecord err = new ErrorRecord(new Exception("my exceptiom"), "errId", ErrorCategory.CloseError, "something goeas wrong");
-            ThrowTerminatingError(err);
-
+        { 
             string aborterPath = "";
             string paramFileName = "";
-
-           // System.Diagnostics.Debugger.Launch();
 
             try
             {
@@ -100,20 +93,22 @@ namespace PSModule
         {
             bool result = true;             
 
-               using (StreamWriter file = new StreamWriter(paramsFile, true))
+            using (StreamWriter file = new StreamWriter(paramsFile, true))
+            {
+                try
                 {
-                    try
-                    {
                     foreach (String prop in properties.Keys.ToArray())
-                        if (!String.IsNullOrWhiteSpace(properties[prop]))
-                            file.WriteLine(prop + "=" + properties[prop]);
-                }
-                    catch (Exception e)
                     {
-                        result = false;
-                        WriteError(new ErrorRecord(e, "", ErrorCategory.WriteError, ""));
+                        file.WriteLine(prop + "=" + properties[prop]);
                     }
+                          
                 }
+                catch (Exception e)
+                {
+                    result = false;
+                    WriteError(new ErrorRecord(e, "", ErrorCategory.WriteError, ""));
+                }
+            }
 
             return result;           
         }

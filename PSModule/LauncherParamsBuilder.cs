@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,7 +24,8 @@ namespace PSModule
 
     public class LauncherParamsBuilder
     {
-        private readonly List<string> requiredParameters = new List<string> {"almRunHost" };
+        string secretkey = "EncriptionPass4Java";
+        private readonly List<string> requiredParameters = new List<string> {"almRunHost", "almPassword" };
         private Dictionary<string, string> properties = new Dictionary<string, string>();
 
         public Dictionary<string, string> GetProperties()
@@ -48,21 +50,26 @@ namespace PSModule
 
         public void SetAlmPassword(string almPassword)
         {
-           // string encAlmPass;
-            try
+            RijndaelManaged rijndaelCipher = new RijndaelManaged();
+            rijndaelCipher.Mode = CipherMode.CBC;
+            rijndaelCipher.Padding = PaddingMode.PKCS7;
+
+            rijndaelCipher.KeySize = 0x80;
+            rijndaelCipher.BlockSize = 0x80;
+            byte[] pwdBytes = Encoding.UTF8.GetBytes(secretkey);
+            byte[] keyBytes = new byte[0x10];
+            int len = pwdBytes.Length;
+            if (len > keyBytes.Length)
             {
-
-                //encAlmPass = EncryptionUtils.Encrypt(
-                //                almPassword,
-                //                EncryptionUtils.getSecretKey());
-
-                //properties.Add("almPassword", encAlmPass);
-
+                len = keyBytes.Length;
             }
-            catch
-            {
-
-            }
+            Array.Copy(pwdBytes, keyBytes, len);
+            rijndaelCipher.Key = keyBytes;
+            rijndaelCipher.IV = keyBytes;
+            ICryptoTransform transform = rijndaelCipher.CreateEncryptor();
+            byte[] plainText = Encoding.UTF8.GetBytes(almPassword);
+            string result = Convert.ToBase64String(transform.TransformFinalBlock(plainText, 0, plainText.Length));
+            SetParamValue("almPassword", result);
         }
 
         public void SetAlmDomain(string almDomain)
