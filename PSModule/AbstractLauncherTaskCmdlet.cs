@@ -39,7 +39,7 @@ namespace PSModule
                 WriteVerbose("*****Launcher***** " + launcherPath);
 
                 aborterPath = Path.GetFullPath(Path.Combine(ufttfsdir, HpToolsAborter_SCRIPT_NAME));
-                WriteVerbose("****aborter****** " + launcherPath);
+                WriteVerbose("****Aborter****** " + launcherPath);
 
                 string propdir = Path.GetFullPath(Path.Combine(ufttfsdir, "props"));
                 if (!Directory.Exists(propdir))
@@ -65,15 +65,19 @@ namespace PSModule
 
                 int retCode = Run(launcherPath, paramFileName);
 
-                if (retCode == 3)
-                {
-                    ThrowTerminatingError(new ErrorRecord(new ThreadInterruptedException(), "ClosedByUser", ErrorCategory.OperationStopped, ""));
-
-                }
-                else if (retCode == 0)
+                if (retCode == 0)
                 {
                     WriteVerbose("return code: " + retCode);
                     //collateResults();
+                }
+                else if (retCode == 3)
+                {
+                    ThrowTerminatingError(new ErrorRecord(new ThreadInterruptedException(), "ClosedByUser", ErrorCategory.OperationStopped, ""));
+                }
+                else
+                {
+                    //WriteError(new ErrorRecord(new Exception(), "Task failed", ErrorCategory.OperationStopped, ""));
+                    ThrowTerminatingError(new ErrorRecord(new ThreadInterruptedException(), "Task failed", ErrorCategory.OperationStopped, ""));
                 }
             }
             catch (IOException ioe)

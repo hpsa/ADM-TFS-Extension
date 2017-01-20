@@ -60,6 +60,8 @@
     <Content Include="RunFromFileSystemTask\localTask.ps1" />
     <Content Include="RunFromFileSystemTask\task.loc.json" />
     <Content Include="RunFromALM\localTask.ps1" />
+    <Content Include="TaskCommonPart.ps1" />
+    <Content Include="AlmLabManagementTask\localTask.ps1" />
     <None Include="vss-extension.json" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
