@@ -16,7 +16,7 @@ namespace PSModule
         [Parameter(Position = 1, Mandatory = true)]
         public string ALMUserName;
 
-        [Parameter(Position = 2, Mandatory = false)]
+        [Parameter(Position = 2)]
         public string ALMPassword;
 
         [Parameter(Position = 3, Mandatory = true)]
@@ -25,31 +25,31 @@ namespace PSModule
         [Parameter(Position = 4, Mandatory = true)]
         public string ALMProject;
 
-        [Parameter(Position = 5, Mandatory = false)]
+        [Parameter(Position = 5)]
         public string RunType;
 
-        [Parameter(Position = 6, Mandatory = false)]
+        [Parameter(Position = 6)]
         public string TestSet;
 
-        [Parameter(Position = 7, Mandatory = false)]
+        [Parameter(Position = 7)]
         public string Description;
 
         [Parameter(Position = 8, Mandatory = true)]
         public string TimeSlotDuration;
 
-        [Parameter(Position = 9, Mandatory = false)]
+        [Parameter(Position = 9)]
         public string EnvironmentConfigurationID;
 
-        [Parameter(Position = 10, Mandatory = false)]
+        [Parameter(Position = 10)]
         public string UseCDA;
 
-        [Parameter(Position = 11, Mandatory = false)]
+        [Parameter(Position = 11)]
         public string DeploymentAction;
 
-        [Parameter(Position = 12, Mandatory = false)]
+        [Parameter(Position = 12)]
         public string DeploymentEnvironmentName;
 
-        [Parameter(Position = 13, Mandatory = false)]
+        [Parameter(Position = 13)]
         public string DeprovisioningAction;
 
         protected override void ProcessRecord()

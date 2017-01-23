@@ -13,7 +13,7 @@ namespace PSModule
         [Parameter(Position = 0, Mandatory = true)]
         public string TestsPath;
 
-        [Parameter(Position = 1, Mandatory = false)]
+        [Parameter(Position = 1)]
         public string Timeout;
 
         public MobileSettings mobile;

@@ -39,7 +39,7 @@ namespace PSModule
                 WriteVerbose("*****Launcher***** " + launcherPath);
 
                 aborterPath = Path.GetFullPath(Path.Combine(ufttfsdir, HpToolsAborter_SCRIPT_NAME));
-                WriteVerbose("****Aborter****** " + launcherPath);
+                WriteVerbose("****Aborter****** " + aborterPath);
 
                 string propdir = Path.GetFullPath(Path.Combine(ufttfsdir, "props"));
                 if (!Directory.Exists(propdir))
@@ -76,7 +76,6 @@ namespace PSModule
                 }
                 else
                 {
-                    //WriteError(new ErrorRecord(new Exception(), "Task failed", ErrorCategory.OperationStopped, ""));
                     ThrowTerminatingError(new ErrorRecord(new ThreadInterruptedException(), "Task failed", ErrorCategory.OperationStopped, ""));
                 }
             }

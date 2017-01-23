@@ -12,7 +12,7 @@ namespace PSModule
         [Parameter(Position = 1, Mandatory = true)]
         public string ALMUserName;
 
-        [Parameter(Position = 2, Mandatory = false)]
+        [Parameter(Position = 2)]
         public string ALMPassword;
 
         [Parameter(Position = 3, Mandatory = true)]
@@ -21,16 +21,16 @@ namespace PSModule
         [Parameter(Position = 4, Mandatory = true)]
         public string ALMProject;
 
-        [Parameter(Position = 5, Mandatory = false)]
+        [Parameter(Position = 5)]
         public string RunMode;
 
-        [Parameter(Position = 6, Mandatory = false)]
+        [Parameter(Position = 6)]
         public string ALMRunHost;
 
-        [Parameter(Position = 7, Mandatory = false)]
+        [Parameter(Position = 7)]
         public string TimeOut;
 
-        [Parameter(Position = 8, Mandatory = false)]
+        [Parameter(Position = 8)]
         public string ALMTestSet;
 
         public override Dictionary<string, string> GetTaskProperties()
