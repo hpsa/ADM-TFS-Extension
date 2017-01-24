@@ -30,7 +30,7 @@
       "label": "ALM server",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "The address of your ALM server, in the format http:s//(ALM server name):(port)/qcbin"
     },
     {
       "name": "varUserName",
@@ -38,7 +38,7 @@
       "label": "User name",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "The user name that will access this ALM server during the build step run."
     },
     {
       "name": "varPass",
@@ -46,7 +46,7 @@
       "label": "Password",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "The password for the user that will access this ALM server during the build step run."
     },
     {
       "name": "varDomain",
@@ -54,7 +54,7 @@
       "label": "Domain",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "The ALM domain in which the tests to run are stored."
     },
     {
       "name": "varProject",
@@ -62,7 +62,7 @@
       "label": "Project",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "The ALM project in which the tests to run are stored."
     },
     {
       "name": "varRunType",
@@ -70,7 +70,7 @@
       "label": "Run type",
       "defaultValue": "set",
       "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip",
+      "helpMarkDown": "The run mode (Suite run or Build Veriification Suite) to use when running the test.",
       "options": {
         "set": "Test set",
         "suite": "Build verification suite"
@@ -82,7 +82,7 @@
       "label": "Test Set/Build Verification Suite ID",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "The ID number (found in ALM) for the test set or build verification suite."
     },
     {
       "name": "varDescription",
@@ -90,7 +90,7 @@
       "label": "Description",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "The description of this test set/build verification suite."
     },
     {
       "name": "varTimeslotDuration",
@@ -98,7 +98,7 @@
       "label": "Timeslot Duration (in minutes, minimum = 30)",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "The amount of time needed on the host to run this test set/verification suite."
     },
     {
       "name": "varEnvironmentConfigurationID",
@@ -115,7 +115,7 @@
       "groupName": "useCDAGroup",
       "defaultValue": "false",
       "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "Use ALM CDA servers for deployment of the tests."
     },
     {
       "name": "varDeploymentAction",
@@ -124,7 +124,7 @@
       "defaultValue": "useDeployed",
       "groupName": "useCDAGroup",
       "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip",
+      "helpMarkDown": "The action to perform on deploying the server for running tests.",
       "options": {
         "useDeployed": "Use Deployed",
         "provisionAndDeployed": "Provision and Deployed",
@@ -138,7 +138,7 @@
       "defaultValue": "",
       "groupName": "useCDAGroup",
       "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "The name of environment on which you are deploying the server."
     },
     {
       "name": "varDeprovisioningAction",
@@ -147,7 +147,7 @@
       "defaultValue": "leaveEnvironmentDeployed",
       "groupName": "useCDAGroup",
       "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip",
+      "helpMarkDown": "The action to perform after the testing run when you are ready to end the server deployment.",
       "options": {
         "leaveEnvironmentDeployed": "Leave environment deployed",
         "deprovisionEnd": "Deprovision end"

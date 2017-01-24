@@ -64,10 +64,10 @@ namespace PSModule
                     WriteVerbose(string.Format("{0} : {1}", prop.Key, prop.Value));
 
                 int retCode = Run(launcherPath, paramFileName);
+                WriteVerbose($"Return code: {retCode}");
 
                 if (retCode == 0)
-                {
-                    WriteVerbose("return code: " + retCode);
+                {                   
                     //collateResults();
                 }
                 else if (retCode == 3)

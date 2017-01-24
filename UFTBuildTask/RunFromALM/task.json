@@ -30,7 +30,7 @@
       "label": "ALM server",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "The address of your ALM server, in the format http:s//(ALM server name):(port)/qcbin"
     },
     {
       "name": "varUserName",
@@ -38,7 +38,7 @@
       "label": "User name",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "The user name that will access this ALM server during the build step run."
     },
     {
       "name": "varPass",
@@ -46,7 +46,7 @@
       "label": "Password",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "The password for the user that will access this ALM server during the build step run."
     },
     {
       "name": "varDomain",
@@ -54,7 +54,7 @@
       "label": "Domain",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "The ALM domain in which the tests to run are stored."
     },
     {
       "name": "varProject",
@@ -62,7 +62,7 @@
       "label": "Project",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "The ALM project in which the tests to run are stored."
     },
     {
       "name": "varTestsets",
@@ -70,7 +70,7 @@
       "label": "Test sets",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "The test sets to run in the current build step."
     },
     {
       "name": "varTimeout",
@@ -86,10 +86,10 @@
       "label": "Run mode",
       "defaultValue": "runLocally",
       "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip",
+      "helpMarkDown": "The place to run the test: Remote host, local computer, or remote planned host.",
       "groupName": "advanced",
       "options": {
-        "runLocally": "Run Locally",
+        "runLocally": "Run locally",
         "runOnPlannedHost": "Run on planned host",
         "runRemotely": "Run remotely"
       }
@@ -101,7 +101,7 @@
       "defaultValue": "",
       "groupName": "advanced",
       "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "The address of the host running the selected tests."
     }
   ],
   "instanceNameFormat": "RunFromALM: ",

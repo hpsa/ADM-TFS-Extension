@@ -38,7 +38,7 @@
       "label": "ALM server",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "The address of your ALM server, in the format http:s//(ALM server name):(port)/qcbin"
     },
     {
       "name": "varUserName",
@@ -46,7 +46,7 @@
       "label": "User name",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "The user name that will access this ALM server during the build step run."
     },
     {
       "name": "varPass",
@@ -54,7 +54,7 @@
       "label": "Password",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "The password for the user that will access this ALM server during the build step run."
     },
     {
       "name": "varDomain",
@@ -62,7 +62,7 @@
       "label": "Domain",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "The ALM domain in which the tests to run are stored."
     },
     {
       "name": "varProject",
@@ -70,7 +70,7 @@
       "label": "Project",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "helpMarkDown": "The ALM project in which the tests to run are stored."
     },
     {
       "name": "javaHomeSelection",
@@ -79,7 +79,7 @@
       "required": true,
       "groupName": "advanced",
       "defaultValue": "JDKVersion",
-      "helpMarkDown": "Sets JAVA_HOME either by selecting a JDK version that will be discovered during builds or by manually entering a JDK path.",
+      "helpMarkDown": "Select which type configuration used.",
       "options": {
         "JDKVersion": "Create a new configuration named",
         "Path": "Use an existing configuration with ID:"
@@ -93,7 +93,7 @@
       "defaultValue": "",
       "required": true,
       "visibleRule": "javaHomeSelection = JDKVersion",
-      "helpMarkDown": "Message to echo out"
+      "helpMarkDown": "Uses the configuration with the selected ID number (as seen in ALM)."
     },
     {
       "name": "jdkUserInputPath",
@@ -102,7 +102,7 @@
       "required": true,
       "groupName": "advanced",
       "defaultValue": "",
-      "helpMarkDown": "Sets JAVA_HOME to the given path.",
+      "helpMarkDown": "Creates a new configuration with the provided name.",
       "visibleRule": "javaHomeSelection = Path"
     }
 

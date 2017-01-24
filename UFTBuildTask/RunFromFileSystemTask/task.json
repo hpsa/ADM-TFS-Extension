@@ -85,7 +85,7 @@
       "defaultValue": "",
       "groupName": "modileOptions",
       "required": false,
-      "helpMarkDown": "Mobile Center Settings"
+      "helpMarkDown": "Instructs the server to use SSL when connecting to the Mobile Center server."
     },
     {
       "name": "mcUserNameIn",
@@ -111,7 +111,8 @@
       "label": "Use proxy settings",
       "defaultValue": "",
       "groupName": "modileOptions",
-      "required": false
+      "required": false,
+      "helpMarkDown": "Instructs the server to use the specified proxy settings when connecting to the Mobile Center server."
     },
     {
       "name": "proxyAddress",
@@ -162,7 +163,8 @@
       "label": "Device ID",
       "defaultValue": "",
       "groupName": "modileOptions",
-      "required": false
+      "required": false,
+      "helpMarkDown": "The device ID number (provided by Mobile Center) for the device used in the test."
     },
     {
       "name": "OS",
@@ -170,7 +172,8 @@
       "label": "OS",
       "defaultValue": "",
       "groupName": "modileOptions",
-      "required": false
+      "required": false,
+      "helpMarkDown": "The operating system running on the device used in the test."
     },
     {
       "name": "manufacturerAndModel",
@@ -178,7 +181,8 @@
       "label": "Manufacturer and model",
       "defaultValue": "",
       "groupName": "modileOptions",
-      "required": false
+      "required": false,
+      "helpMarkDown": "The manufacturer and model of the device used in the test."
     },
     {
       "name": "targetLab",
@@ -186,7 +190,8 @@
       "label": "Target lab",
       "defaultValue": "",
       "groupName": "modileOptions",
-      "required": false
+      "required": false,
+      "helpMarkDown": "The target lab of the device used in the test. Select either AWS or Mobile Center."
     },
     {
       "name": "extraApps",
@@ -195,7 +200,8 @@
       "defaultValue": "",
       "groupName": "modileOptions",
       "required": false,
-      "rows": 4
+      "rows": 4,
+      "helpMarkDown": "The apps that are included in the test."
     },
     {
       "name": "testDefinition",
@@ -209,23 +215,26 @@
       "label": "Launch on start",
       "defaultValue": "",
       "groupName": "modileOptions",
-      "required": false
+      "required": false,
+      "helpMarkdown": "The app to launch when the test run begins."
     },
     {
       "name": "autPackaging",
       "type": "string",
-      "label": "AUT packaging",
+      "label": "App packaging",
       "defaultValue": "",
       "groupName": "modileOptions",
-      "required": false
+      "required": false,
+      "helpMarkDown": "Instructs the server to use the packaged or non-packaged version of the selected app."
     },
     {
       "name": "autActions",
       "type": "string",
-      "label": "AUT actions",
+      "label": "App actions",
       "defaultValue": "",
       "groupName": "modileOptions",
-      "required": false
+      "required": false,
+      "helpMarkDown": "The behavior of the apps included in the test."
     },
     {
       "name": "deviceMetrics",
@@ -233,7 +242,8 @@
       "label": "Device metrics",
       "defaultValue": "",
       "groupName": "modileOptions",
-      "required": false
+      "required": false,
+      "helpMarkDown": "The device metrics to track when running the test."
     },
     {
       "name": "testsResult",
