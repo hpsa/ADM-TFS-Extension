@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace PSModule
 {
@@ -24,8 +22,8 @@ namespace PSModule
 
     public class LauncherParamsBuilder
     {
-        string secretkey = "EncriptionPass4Java";
-        private readonly List<string> requiredParameters = new List<string> {"almRunHost", "almPassword" };
+        private string secretkey = "EncriptionPass4Java";
+        private readonly List<string> requiredParameters = new List<string> { "almRunHost", "almPassword" };
         private Dictionary<string, string> properties = new Dictionary<string, string>();
 
         public Dictionary<string, string> GetProperties()
@@ -50,26 +48,16 @@ namespace PSModule
 
         public void SetAlmPassword(string almPassword)
         {
-            RijndaelManaged rijndaelCipher = new RijndaelManaged();
-            rijndaelCipher.Mode = CipherMode.CBC;
-            rijndaelCipher.Padding = PaddingMode.PKCS7;
-
-            rijndaelCipher.KeySize = 0x80;
-            rijndaelCipher.BlockSize = 0x80;
-            byte[] pwdBytes = Encoding.UTF8.GetBytes(secretkey);
-            byte[] keyBytes = new byte[0x10];
-            int len = pwdBytes.Length;
-            if (len > keyBytes.Length)
+            string encAlmPass;
+            try
             {
-                len = keyBytes.Length;
+                encAlmPass = EncryptParameter(almPassword);
+                SetParamValue("MobilePassword", encAlmPass);
             }
-            Array.Copy(pwdBytes, keyBytes, len);
-            rijndaelCipher.Key = keyBytes;
-            rijndaelCipher.IV = keyBytes;
-            ICryptoTransform transform = rijndaelCipher.CreateEncryptor();
-            byte[] plainText = Encoding.UTF8.GetBytes(almPassword);
-            string result = Convert.ToBase64String(transform.TransformFinalBlock(plainText, 0, plainText.Length));
-            SetParamValue("almPassword", result);
+            catch
+            {
+
+            }
         }
 
         public void SetAlmDomain(string almDomain)
@@ -114,19 +102,13 @@ namespace PSModule
         }
 
 
-        public void SetFileSystemPassword(String oriPass)
+        public void SetFileSystemPassword(string oriPass)
         {
-            //String encPass;
+            string encPass;
             try
             {
-
-                //encPass =
-                //        EncryptionUtils.Encrypt(
-                //                oriPass,
-                //                EncryptionUtils.getSecretKey());
-
-                //properties.Add("MobilePassword", encPass);
-
+                encPass = EncryptParameter(oriPass);
+                SetParamValue("MobilePassword", encPass);
             }
             catch
             {
@@ -197,17 +179,11 @@ namespace PSModule
 
         public void SetMobileProxySetting_Password(string proxyPassword)
         {
-           // String proxyPass;
+            string proxyPass;
             try
             {
-
-                //proxyPass =
-                //        EncryptionUtils.Encrypt(
-                //                proxyPassword,
-                //                EncryptionUtils.getSecretKey());
-
-                //properties.Add("MobileProxySetting_Password", proxyPass);
-
+                proxyPass = EncryptParameter(proxyPassword);
+                SetParamValue("MobileProxySetting_Password", proxyPass);
             }
             catch
             {
@@ -230,6 +206,29 @@ namespace PSModule
             {
                 properties.Add(paramName, paramValue);
             }
+        }
+
+        private string EncryptParameter(string parameter)
+        {
+            RijndaelManaged rijndaelCipher = new RijndaelManaged();
+            rijndaelCipher.Mode = CipherMode.CBC;
+            rijndaelCipher.Padding = PaddingMode.PKCS7;
+
+            rijndaelCipher.KeySize = 0x80;
+            rijndaelCipher.BlockSize = 0x80;
+            byte[] pwdBytes = Encoding.UTF8.GetBytes(secretkey);
+            byte[] keyBytes = new byte[0x10];
+            int len = pwdBytes.Length;
+            if (len > keyBytes.Length)
+            {
+                len = keyBytes.Length;
+            }
+            Array.Copy(pwdBytes, keyBytes, len);
+            rijndaelCipher.Key = keyBytes;
+            rijndaelCipher.IV = keyBytes;
+            ICryptoTransform transform = rijndaelCipher.CreateEncryptor();
+            byte[] plainText = Encoding.UTF8.GetBytes(parameter);
+            return Convert.ToBase64String(transform.TransformFinalBlock(plainText, 0, plainText.Length));
         }
 
     }
