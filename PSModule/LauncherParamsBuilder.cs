@@ -52,7 +52,7 @@ namespace PSModule
             try
             {
                 encAlmPass = EncryptParameter(almPassword);
-                SetParamValue("MobilePassword", encAlmPass);
+                SetParamValue("almPassword", encAlmPass);
             }
             catch
             {
