@@ -48,30 +48,42 @@
     <Content Include="AlmLabEnvPrepareTask\icon.png" />
     <Content Include="AlmLabManagementTask\task.json" />
     <Content Include="AlmLabEnvPrepareTask\task.json" />
-    <Content Include="RunFromFileSystemTask\resources\HpToolsAborter.exe" />
-    <Content Include="RunFromFileSystemTask\resources\HpToolsLauncher.exe" />
-    <Content Include="RunFromFileSystemTask\resources\LRAnalysisLauncher.exe" />
+    <Content Include="BuildReleaseCustomTask1\BuildReleaseCustomTask1.ps1" />
+    <Content Include="BuildReleaseCustomTask1\task.json" />
     <Content Include="VSS.SDK.js" />
+    <None Include=".bin\bower.cmd" />
+    <None Include=".bin\git.cmd" />
+    <None Include=".bin\node.cmd" />
+    <Content Include="AlmLabEnvPrepareTask\localTask.ps1" />
+    <None Include="gruntfile.js" />
+    <None Include="package.json" />
     <Content Include="AlmLabManagementTask\icon.png" />
+    <Content Include="BuildReleaseCustomTask1\icon.png" />
+    <Content Include="img\tfs.png" />
     <Content Include="RunFromALM\icon.png" />
     <Content Include="RunFromFileSystemTask\Strings\resources.resjson\en-US\resources.resjson" />
     <Content Include="RunFromFileSystemTask\task.json" />
     <Content Include="RunFromALM\task.json" />
     <Content Include="RunFromFileSystemTask\localTask.ps1" />
     <Content Include="RunFromFileSystemTask\task.loc.json" />
-    <Content Include="RunFromALM\localTask.ps1" />
-    <Content Include="TaskCommonPart.ps1" />
-    <Content Include="AlmLabManagementTask\localTask.ps1" />
+    <Content Include="packages.config" />
     <None Include="vss-extension.json" />
+    <None Include="settings.tfx.json" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".vscode\tasks.json" />
     <Content Include="RunFromFileSystemTask\icon.png" />
+    <Content Include="buildDumpSection.html" />
+    <Content Include="infoTab.html" />
+    <Content Include="statusSection.html" />
+    <Content Include="test\TestSpec.js" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <TypeScriptCompile Include="AlmLabEnvPrepareTask\publishbuildartifacts.ts" />
     <TypeScriptCompile Include="RunFromFileSystemTask\publishbuildartifacts.ts" />
+    <TypeScriptCompile Include="src\testresults\tab.ts" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
