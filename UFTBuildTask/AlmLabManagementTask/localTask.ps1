@@ -28,10 +28,20 @@ $args = "-jar $jar AlmLabManagement  ""serv:$varAlmserv"" ""user:$varUserName"" 
 
 echo $args
 
-Start-Process "C:\Program Files\Java\jre1.8.0_111\bin\java.exe" -ArgumentList $args -RedirectStandardOutput $stdout -RedirectStandardError $stderr -Wait
+$process = (Start-Process java -ArgumentList $args -RedirectStandardOutput $stdout -RedirectStandardError $stderr -PassThru -Wait)
 
-Get-Content $stdout
-Get-Content $stderr
+if ($process.ExitCode -ne 0)
+{
+	$content = [IO.File]::ReadAllText($stdout)
+	Write-Error ($content)
+	$content = [IO.File]::ReadAllText($stderr)
+	Write-Error ($content)
+}
+else
+{
+	Get-Content $stdout
+	Get-Content $stderr
+}
 
 Remove-Item $stdout
 Remove-Item $stderr
