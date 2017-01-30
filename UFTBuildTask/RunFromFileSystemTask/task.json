@@ -196,7 +196,7 @@
     {
       "name": "extraApps",
       "type": "string",
-      "label": "APPLICATION UNDER TEST",
+      "label": "Application under test",
       "defaultValue": "",
       "groupName": "modileOptions",
       "required": false,

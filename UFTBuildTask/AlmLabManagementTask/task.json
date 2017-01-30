@@ -68,12 +68,12 @@
       "name": "varRunType",
       "type": "pickList",
       "label": "Run type",
-      "defaultValue": "set",
+      "defaultValue": "Test set",
       "required": false,
       "helpMarkDown": "The run mode (Suite run or Build Veriification Suite) to use when running the test.",
       "options": {
-        "set": "Test set",
-        "suite": "Build verification suite"
+        "TEST_SET": "Test set",
+        "BVS": "Build verification suite"
       }
     },
     {
@@ -126,9 +126,9 @@
       "required": false,
       "helpMarkDown": "The action to perform on deploying the server for running tests.",
       "options": {
-        "useDeployed": "Use Deployed",
-        "provisionAndDeployed": "Provision and Deployed",
-        "redeploy": "Redeploy"
+        "Use Deployed": "Use Deployed",
+        "Provision and Deploy": "Provision and Deploy",
+        "Redeploy": "Redeploy"
       }
     },
     {
@@ -149,8 +149,8 @@
       "required": false,
       "helpMarkDown": "The action to perform after the testing run when you are ready to end the server deployment.",
       "options": {
-        "leaveEnvironmentDeployed": "Leave environment deployed",
-        "deprovisionEnd": "Deprovision end"
+        "Leave environment deployed": "Leave environment deployed",
+        "Deprovision at end": "Deprovision end"
       }
     }
   ],

@@ -4,14 +4,14 @@
 param(
 	[string][Parameter(Mandatory=$true)] $varAlmserv, 
 	[string][Parameter(Mandatory=$true)] $varUserName,
-	[string] $varPass,
 	[string][Parameter(Mandatory=$true)] $varDomain,
 	[string][Parameter(Mandatory=$true)] $varProject,
-	[string] $varRunType,
-	[string] $varTestSet,
-	[string] $varDescription,
+	[string][Parameter(Mandatory=$true)] $varTestSet,
 	[string][Parameter(Mandatory=$true)] $varTimeslotDuration,
+	[string] $varPass,
+	[string] $varRunType,
 	[string] $varEnvironmentConfigurationID,
+	[string] $varDescription,
 	[string] $varUseCDA,
 	[string] $varDeploymentAction,
 	[string] $varDeploymentEnvironmentName,
@@ -19,117 +19,19 @@ param(
 )
 
 $uftworkdir = $env:UFT_LAUNCHER
-Import-Module $uftworkdir\bin\PSModule.dll
-Invoke-RunFromAlmTask $varAlmserv $varUserName $varPass $varDomain $varProject $varRunType $varTestSet $varDescription $varTimeslotDuration $varEnvironmentConfigurationID $varUseCDA $varDeploymentAction $varDeploymentEnvironmentName $varDeprovisioningAction -Verbose
 
-Function CmdletHasMember($memberName) {
-    $publishParameters = (gcm Publish-TestResults).Parameters.Keys.Contains($memberName) 
-    return $publishParameters
-}
+$stdout = "$uftworkdir\temp_build.log"
+$stderr = "$uftworkdir\temp_error_build.log"
+$jar = """$uftworkdir\bin\hpe.application.automation.tfs.almrestrunner-1.0-jar-with-dependencies.jar"""
 
-Write-Verbose "Entering script PublishTestResults.ps1"
+$args = "-jar $jar AlmLabManagement  ""serv:$varAlmserv"" ""user:$varUserName"" ""domain:$varDomain"" ""project:$varProject"" ""testSet:$varTestSet"" ""timeSlotDuration:$varTimeslotDuration"" ""pass:$varPass"" ""runType:$varRunType"" ""envconfID:$varEnvironmentConfigurationID"" ""desc:$varDescription"" ""useCDA:$varUseCDA"" ""deploymentAction:$varDeploymentAction"" ""depEnvName:$varDeploymentEnvironmentName"" ""deprovisioningAction:$varDeprovisioningAction"""
 
-# Import the Task.Common, Task.Internal and Task.TestResults dll that has all the cmdlets we need
-import-module "Microsoft.TeamFoundation.DistributedTask.Task.Internal"
-import-module "Microsoft.TeamFoundation.DistributedTask.Task.Common"
-import-module "Microsoft.TeamFoundation.DistributedTask.Task.TestResults"
+echo $args
 
-Write-Host "##vso[task.logissue type=warning;TaskName=VSTest]"
+Start-Process "C:\Program Files\Java\jre1.8.0_111\bin\java.exe" -ArgumentList $args -RedirectStandardOutput $stdout -RedirectStandardError $stderr -Wait
 
-$testRunner = "JUnit";
-$testResultsFiles = Join-Path $env:UFT_LAUNCHER -ChildPath "res\Result*.xml";
-$testRunTitle = "UFT Title";
-$platform = "AMD";
-$configuration = "bestOfThebest";
-$publishRunAttachments = "true";
-$mergeResults = "false"
+Get-Content $stdout
+Get-Content $stderr
 
-try
-{
-    if(!$testRunner)
-    {        
-        throw ("Test runner parameter has to be specified")
-    }
-
-    if (!$testResultsFiles)
-    {        
-        throw ("Test results files parameter has to be specified")
-    }
-
-    # check for pattern in testResultsFiles
-    if ($testResultsFiles.Contains("*") -or $testResultsFiles.Contains("?"))
-    {
-        Write-Verbose "Pattern found in testResultsFiles parameter."
-        Write-Verbose "Find-Files -SearchPattern $testResultsFiles"
-        $matchingTestResultsFiles = Find-Files -SearchPattern $testResultsFiles
-        Write-Verbose "matchingTestResultsFiles = $matchingTestResultsFiles"
-    }
-    else
-    {
-        Write-Verbose "No Pattern found in testResultsFiles parameter."
-        $matchingTestResultsFiles = ,$testResultsFiles
-    }
-
-    if (!$matchingTestResultsFiles)
-    {
-        Write-Warning ("No test result files were found using search pattern.")
-    }
-    else
-    {
-        $publishResultsOption = Convert-String $publishRunAttachments Boolean
-        $mergeResults = Convert-String $mergeTestResults Boolean
-        Write-Verbose "Calling Publish-TestResults"
-        
-        $publishRunLevelAttachmentsExists = CmdletHasMember "PublishRunLevelAttachments"
-        $runTitleMemberExists = CmdletHasMember "RunTitle"
-	    if(!($runTitleMemberExists))
-	    {
-		    if(!([string]::IsNullOrWhiteSpace($testRunTitle)))
-		    {
-			    Write-Warning "Update the build agent to be able to use the custom run title feature."
-		    }
-		    if($publishRunLevelAttachmentsExists)
-		    {
-			    Publish-TestResults -TestRunner $testRunner -TestResultsFiles $matchingTestResultsFiles -MergeResults $mergeResults -Platform $platform -Configuration $configuration -Context $distributedTaskContext -PublishRunLevelAttachments $publishResultsOption
-		    }
-		    else 
-		    {
-			    if(!$publishResultsOption)
-			    {
-			        Write-Warning "Update the build agent to be able to opt out of test run attachment upload." 
-			    }
-			    Publish-TestResults -TestRunner $testRunner -TestResultsFiles $matchingTestResultsFiles -MergeResults $mergeResults -Platform $platform -Configuration $configuration -Context $distributedTaskContext
-		    }
-	    }
-	    else
-	    {
-		    if($publishRunLevelAttachmentsExists)
-		    {
-			    Publish-TestResults -TestRunner $testRunner -TestResultsFiles $matchingTestResultsFiles -MergeResults $mergeResults -Platform $platform -Configuration $configuration -Context $distributedTaskContext -PublishRunLevelAttachments $publishResultsOption -RunTitle $testRunTitle
-		    }
-		    else 
-		    {
-			    if(!$publishResultsOption)
-			    {
-			        Write-Warning "Update the build agent to be able to opt out of test run attachment upload." 
-			    }
-			    Publish-TestResults -TestRunner $testRunner -TestResultsFiles $matchingTestResultsFiles -MergeResults $mergeResults -Platform $platform -Configuration $configuration -Context $distributedTaskContext -RunTitle $testRunTitle
-		    }
-	    }
-    }
-}
-catch
-{
-    Write-Host "##vso[task.logissue type=error;code=" $_.Exception.Message ";TaskName=VSTest]"
-    throw
-}
-
-Write-Verbose "Remove temp files"
-$results = Join-Path $env:UFT_LAUNCHER -ChildPath "res"
-Write-Verbose $results
-
-Get-ChildItem -Path $results -Include * | remove-Item
-
-Write-Verbose "Remove temp files complited"
-
-
+Remove-Item $stdout
+Remove-Item $stderr
