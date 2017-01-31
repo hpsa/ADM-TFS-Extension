@@ -55,7 +55,6 @@
   <ItemGroup>
     <Compile Include="AbstractLauncherTaskCmdlet.cs" />
     <Compile Include="Enums.cs" />
-    <Compile Include="InvokeALMLabManagementTaskCmdlet.cs" />
     <Compile Include="InvokeRunFromALMTaskCmdlet.cs" />
     <Compile Include="Models\MobileSettings.cs" />
     <Compile Include="InvokeFSTaskCmdlet.cs" />

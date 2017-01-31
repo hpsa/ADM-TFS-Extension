@@ -55,6 +55,7 @@
     <None Include=".bin\git.cmd" />
     <None Include=".bin\node.cmd" />
     <Content Include="AlmLabEnvPrepareTask\localTask.ps1" />
+    <Content Include="AlmLabManagementTask\localTask.ps1" />
     <None Include="gruntfile.js" />
     <None Include="package.json" />
     <Content Include="AlmLabManagementTask\icon.png" />
@@ -67,6 +68,7 @@
     <Content Include="RunFromFileSystemTask\localTask.ps1" />
     <Content Include="RunFromFileSystemTask\task.loc.json" />
     <Content Include="packages.config" />
+    <Content Include="RunFromALM\localTask.ps1" />
     <None Include="vss-extension.json" />
     <None Include="settings.tfx.json" />
     <Compile Include="Properties\AssemblyInfo.cs" />
