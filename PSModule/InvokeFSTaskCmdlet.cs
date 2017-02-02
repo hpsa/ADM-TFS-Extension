@@ -25,104 +25,103 @@ namespace PSModule
             builder.SetRunType(RunType.FileSystem);
             builder.SetPerScenarioTimeOut(Timeout);
 
-            /*
-            if (mobile.useMC)
-            {
-                if (mobile.useSSL)
-                {
-                    WriteObject("********** Use SSL ********** ");
-                }
+            
+            //if (mobile.useMC)
+            //{
+            //    if (mobile.useSSL)
+            //    {
+            //        WriteObject("********** Use SSL ********** ");
+            //    }
 
-                if (mobile.useProxy)
-                {
-                    WriteObject("********** Use Proxy ********** ");
-                    //proxy info
-                    if (mobile.proxyAddress != null)
-                    {
-                        builder.setMobileProxySetting_Address(mobile.proxyAddress);
-                        //builder.setMobileProxySetting_Authentication(mobile.specifyAuthentication ? 1 : 0);
+            //    if (mobile.useProxy)
+            //    {
+            //        WriteObject("********** Use Proxy ********** ");
+            //        //proxy info
+            //        if (mobile.proxyAddress != null)
+            //        {
+            //            builder.setMobileProxySetting_Address(mobile.proxyAddress);
+            //            builder.SetMobileProxySetting_Authentication(mobile.specifyAuthentication ? 1 : 0);
 
-                        if (mobile.specifyAuthentication)
-                        {
-                            if (mobile.proxyUserName != null && mobile.proxyPassword != null)
-                            {
-                                //builder.setMobileProxySetting_UserName(mobile.proxyUserName);
-                               // builder.setMobileProxySetting_Password(mobile.proxyPassword);
-                            }
+            //            if (mobile.specifyAuthentication)
+            //            {
+            //                if (mobile.proxyUserName != null && mobile.proxyPassword != null)
+            //                {
+            //                    builder.SetMobileProxySetting_UserName(mobile.proxyUserName);
+            //                    builder.SetMobileProxySetting_Password(mobile.proxyPassword);
+            //                }
 
-                        }
+            //            }
 
-                    }
-                } else
-                {
-                    builder.setMobileProxyType(0);
-                }
+            //        }
+            //    } else
+            //    {
+            //        builder.setMobileProxyType(0);
+            //    }
 
-                ///untill now it only obtaine parameters
-                ///
-                if (!mcInfoCheck(mcServerUrl, mcUserName, mcPassword))
-                {
-                    //url name password
-                    builder.setServerUrl(mcServerUrl);
-                    builder.setUserName(mcUserName);
-                    builder.setFileSystemPassword(mcPassword);
+            //    //untill now it only obtaine parameters               
+            //    if (!string.IsNullOrEmpty(mobile.mcServerUrl) && !string.IsNullOrEmpty(mobile.mcUserName) && !string.IsNullOrEmpty(mobile.proxyPassword))
+            //    {
+            //        //url name password
+            //        builder.setServerUrl(mobile.mcServerUrl);
+            //        builder.setUserName(mobile.mcUserName);
+            //        builder.SetMobileProxySetting_Password(mobile.proxyPassword);
 
-                    String jobUUID = map.get(RunFromFileSystemTaskConfigurator.JOB_UUID);
+            //        string jobUUID = map.get(RunFromFileSystemTaskConfigurator.JOB_UUID);
 
-                    //write the specified job info(json type) to properties
-                    JobOperation operation = new JobOperation(mcServerUrl, mcUserName, mcPassword, proxyAddress, proxyUserName, proxyPassword);
+            //        //write the specified job info(json type) to properties
+            //        JobOperation operation = new JobOperation(mcServerUrl, mcUserName, mcPassword, proxyAddress, proxyUserName, proxyPassword);
 
-                    String mobileInfo = null;
-                    JSONObject jobJSON = null;
-                    JSONObject dataJSON = null;
-                    JSONArray extArr = null;
-                    JSONObject applicationJSONObject = null;
+            //        string mobileInfo = null;
+            //        JSONObject jobJSON = null;
+            //        JSONObject dataJSON = null;
+            //        JSONArray extArr = null;
+            //        JSONObject applicationJSONObject = null;
 
-                    if (jobUUID != null)
-                    {
+            //        if (jobUUID != null)
+            //        {
 
-                        try
-                        {
-                            jobJSON = operation.getJobById(jobUUID);
-                        }
-                        catch (HttpConnectionException e)
-                        {
-                            buildLogger.addErrorLogEntry("********** Fail to connect mobile center, please check URL, UserName, Password, and Proxy Configuration ********** ");
-                        }
+            //            try
+            //            {
+            //                jobJSON = operation.getJobById(jobUUID);
+            //            }
+            //            catch (HttpConnectionException e)
+            //            {
+            //                buildLogger.addErrorLogEntry("********** Fail to connect mobile center, please check URL, UserName, Password, and Proxy Configuration ********** ");
+            //            }
 
-                        if (jobJSON != null)
-                        {
-                            dataJSON = (JSONObject)jobJSON.get("data");
-                            if (dataJSON != null)
-                            {
+            //            if (jobJSON != null)
+            //            {
+            //                dataJSON = (JSONObject)jobJSON.get("data");
+            //                if (dataJSON != null)
+            //                {
 
-                                applicationJSONObject = (JSONObject)dataJSON.get("application");
-                                if (applicationJSONObject != null)
-                                {
-                                    applicationJSONObject.remove(ICON);
-                                }
+            //                    applicationJSONObject = (JSONObject)dataJSON.get("application");
+            //                    if (applicationJSONObject != null)
+            //                    {
+            //                        applicationJSONObject.remove(ICON);
+            //                    }
 
-                                extArr = (JSONArray)dataJSON.get("extraApps");
-                                if (extArr != null)
-                                {
-                                    Iterator<Object> iterator = extArr.iterator();
+            //                    extArr = (JSONArray)dataJSON.get("extraApps");
+            //                    if (extArr != null)
+            //                    {
+            //                        Iterator<Object> iterator = extArr.iterator();
 
-                                    while (iterator.hasNext())
-                                    {
-                                        JSONObject extAppJSONObject = (JSONObject)iterator.next();
-                                        extAppJSONObject.remove(ICON);
-                                    }
+            //                        while (iterator.hasNext())
+            //                        {
+            //                            JSONObject extAppJSONObject = (JSONObject)iterator.next();
+            //                            extAppJSONObject.remove(ICON);
+            //                        }
 
-                                }
-                            }
+            //                    }
+            //                }
 
-                            mobileInfo = dataJSON.toJSONString();
-                            builder.setMobileInfo(mobileInfo);
-                        }
-                    }
+            //                mobileInfo = dataJSON.toJSONString();
+            //                builder.SetMobileInfo(mobileInfo);
+            //            }
+            //        }
 
-                }
-            }*/
+            //    }
+            //}
             /*
                         boolean useMC = BooleanUtils.toBoolean(map.get(RunFromFileSystemTaskConfigurator.USE_MC_SETTINGS));
                         if (useMC)
@@ -253,7 +252,7 @@ namespace PSModule
                         }
                         */
 
-           var tests =  TestsPath.Split(";".ToArray());
+            var tests =  TestsPath.Split(";".ToArray());
 
             for (int i = 0; i < tests.Length; i++)
             {

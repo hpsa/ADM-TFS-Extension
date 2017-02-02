@@ -121,21 +121,14 @@ namespace PSModule
             try
             {
                 ProcessStartInfo info = new ProcessStartInfo();
-                info.Arguments = "-paramfile " + paramFile;
-                info.FileName = launcherPath;
                 info.UseShellExecute = false;
-
-                info.RedirectStandardOutput = true;
-                info.RedirectStandardError = true;
+                info.Arguments = $"/c \"\"{launcherPath}\" -paramfile \"{paramFile}\"\"";
+                info.FileName = "cmd.exe";
 
                 Process launcher = new Process();
                 launcher.StartInfo = info;
 
                 launcher.Start();
-
-                WriteObject(launcher.StandardError.ReadToEnd());
-                WriteObject(launcher.StandardOutput.ReadToEnd());
-
                 launcher.WaitForExit();
 
                 return launcher.ExitCode;
