@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Management.Automation;
 
 namespace PSModule
@@ -32,6 +33,14 @@ namespace PSModule
 
         [Parameter(Position = 8)]
         public string ALMTestSet;
+
+        [Parameter(Position = 9)]
+        public string ReportName;
+
+        protected override string GetReportFilename()
+        {
+            return String.IsNullOrEmpty(ReportName) ? base.GetReportFilename() : ReportName;
+        }
 
         public override Dictionary<string, string> GetTaskProperties()
         {

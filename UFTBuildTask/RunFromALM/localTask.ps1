@@ -10,12 +10,23 @@ param(
 	[string] $varTestsets,
 	[string] $varTimeout,
 	[string] $runMode,
-	[string] $testingToolHost
+	[string] $testingToolHost,
+	[string][Parameter(Mandatory=$false)] $varReportName
 )
 
 $uftworkdir = $env:UFT_LAUNCHER
 Import-Module $uftworkdir\bin\PSModule.dll
-Invoke-RunFromAlmTask $varAlmserv $varUserName $varPass $varDomain $varProject $runMode $testingToolHost $varTimeout $varTestsets -Verbose
+if (-Not $varReportName)
+{
+	$varReportName = "ALM Execution Report"
+}
+$report = Join-Path $env:UFT_LAUNCHER -ChildPath "res\$($varReportName)"
+if (Test-Path $report)
+{
+	#Remove-Item $report
+}
+
+Invoke-RunFromAlmTask $varAlmserv $varUserName $varPass $varDomain $varProject $runMode $testingToolHost $varTimeout $varTestsets $varReportName -Verbose
 
 Function CmdletHasMember($memberName) {
     $publishParameters = (gcm Publish-TestResults).Parameters.Keys.Contains($memberName) 
@@ -120,10 +131,15 @@ catch
 }
 
 Write-Verbose "Remove temp files"
-$results = Join-Path $env:UFT_LAUNCHER -ChildPath "res"
+$results = Join-Path $env:UFT_LAUNCHER -ChildPath "res\*.xml"
 Write-Verbose $results
 
-Get-ChildItem -Path $results -Include * | remove-Item
+Get-ChildItem -Path $results | foreach ($_) { Remove-Item $_.fullname }
 
 Write-Verbose "Remove temp files complited"
+
+if (Test-Path $report)
+{
+	Write-Host "##vso[task.uploadsummary]"$report
+}
 

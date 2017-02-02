@@ -152,6 +152,14 @@
         "Leave environment deployed": "Leave environment deployed",
         "Deprovision at end": "Deprovision end"
       }
+    },
+    {
+      "name": "varReportName",
+      "type": "string",
+      "label": "Report Name",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": ""
     }
   ],
       "instanceNameFormat": "AlmLabManagementTask",

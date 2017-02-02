@@ -102,6 +102,14 @@
       "groupName": "advanced",
       "required": false,
       "helpMarkDown": "The address of the host running the selected tests."
+    },
+    {
+      "name": "varReportName",
+      "type": "string",
+      "label": "Report Name",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": ""
     }
   ],
   "instanceNameFormat": "RunFromALM: ",

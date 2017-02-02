@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace PSModule
 {
@@ -17,7 +18,8 @@ namespace PSModule
         public abstract Dictionary<string, string> GetTaskProperties();
 
         protected override void ProcessRecord()
-        { 
+        {
+            //MessageBox.Show("DEBUG");
             string aborterPath = "";
             string paramFileName = "";
 
@@ -57,18 +59,23 @@ namespace PSModule
                 properties.Add("resultsFilename", resultsFileName);
 
                 if (!SaveProperties(paramFileName, properties))
+                {
                     return;
+                }
 
                 WriteVerbose(string.Format("Properties saved in  : {0}", paramFileName));
                 foreach (var prop in properties)
+                {
                     WriteVerbose(string.Format("{0} : {1}", prop.Key, prop.Value));
+                }
 
-                int retCode = Run(launcherPath, paramFileName);
+                string log;
+                int retCode = Run(launcherPath, paramFileName, out log);
                 WriteVerbose($"Return code: {retCode}");
 
                 if (retCode == 0)
-                {                   
-                    //collateResults();
+                {
+                    CollateResults(resultsFileName, log, resdir);
                 }
                 else if (retCode == 3)
                 {
@@ -86,15 +93,14 @@ namespace PSModule
             catch (ThreadInterruptedException e)
             {
                 WriteError(new ErrorRecord(e, "ThreadInterruptedException", ErrorCategory.OperationStopped, "ThreadInterruptedException targer"));
-                Run(aborterPath, paramFileName);
+                string dummy;
+                Run(aborterPath, paramFileName, out dummy);
             }
-
-           // return collateResults();
         }
 
         private bool SaveProperties(string paramsFile, Dictionary<string, string> properties)
         {
-            bool result = true;             
+            bool result = true;
 
             using (StreamWriter file = new StreamWriter(paramsFile, true))
             {
@@ -104,7 +110,7 @@ namespace PSModule
                     {
                         file.WriteLine(prop + "=" + properties[prop]);
                     }
-                          
+
                 }
                 catch (Exception e)
                 {
@@ -113,12 +119,13 @@ namespace PSModule
                 }
             }
 
-            return result;           
+            return result;
         }
 
         private System.Text.StringBuilder launcherConsole = new System.Text.StringBuilder();
-        private int Run(string launcherPath, string paramFile)
+        private int Run(string launcherPath, string paramFile, out string log)
         {
+            log = String.Empty;
             try
             {
                 ProcessStartInfo info = new ProcessStartInfo();
@@ -140,11 +147,16 @@ namespace PSModule
                     launcherConsole.Append(line);
                     WriteObject(line);
                 }
+                WriteObject(error);
+                WriteObject(output);
+
+                log = output;
+
                 launcher.WaitForExit();
                 
                 return launcher.ExitCode;
             }
-           
+
             catch (Exception e)
             {
                 WriteError(new ErrorRecord(e, "ThreadInterruptedException", ErrorCategory.InvalidData, "ThreadInterruptedException targer"));
@@ -152,24 +164,79 @@ namespace PSModule
             }
         }
 
-        private void collateResults()
+        protected virtual string GetReportFilename()
         {
-
+            return String.Empty;
         }
 
-        //private TaskResult collateResults(@NotNull final TaskContext taskContext)
-        //   {
-        //       try
-        //       {
-        //           TestResultHelper.CollateResults(testCollationService, taskContext);
-        //           PrepareArtifacts(taskContext);
-        //           return TaskResultBuilder.create(taskContext).checkTestFailures().build();
-        //       }
-        //       catch (Exception ex)
-        //       {
-        //           return TaskResultBuilder.create(taskContext).failed().build();
-        //       }
-        //   }
+        protected virtual void CollateResults(string resultFile, string log, string resdir)
+        {
+            string reportFileName = GetReportFilename();
+            if (String.IsNullOrEmpty(reportFileName))
+            {
+                return;
+            }
+            if ((String.IsNullOrEmpty(resultFile) || !File.Exists(resultFile)) && String.IsNullOrEmpty(log))
+            {
+                WriteError(new ErrorRecord(new FileNotFoundException($"No results file ({resultFile}) nor result log provided"), "", ErrorCategory.WriteError, ""));
+                return;
+            }
+            string s = File.ReadAllText(resultFile);
+            if (String.IsNullOrEmpty(s))
+            {
+                WriteVerbose($"Empty results file: {resultFile}");
+                return;
+            }
+            List<Tuple<string, string>> links = GetRequiredLinksFromString(s);
+            if (links == null || links.Count == 0)
+            {
+                links = GetRequiredLinksFromString(log);
+                if (links == null || links.Count == 0)
+                {
+                    WriteVerbose($"No report likns in results file or log found: {resultFile}");
+                    return;
+                }
+            }
 
+            try
+            {
+                using (StreamWriter file = new StreamWriter(Path.Combine(resdir, reportFileName), true))
+                {
+                    foreach (var link in links)
+                    {
+                        
+                        file.WriteLine($"[Report {link.Item2}]({link.Item1})  ");
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                WriteError(new ErrorRecord(e, "", ErrorCategory.WriteError, ""));
+            }
+        }
+
+        private List<Tuple<string, string>> GetRequiredLinksFromString(string s)
+        {
+            if (String.IsNullOrEmpty(s))
+            {
+                return null;
+            }
+            var results = new List<Tuple<string, string>>();
+            try
+            {
+                //report link example: td://Automation.AUTOMATION.mydph0271.hpswlabs.adapps.hp.com:8080/qcbin/TestLabModule-000000003649890581?EntityType=IRun&amp;EntityID=1195091
+                Match match = Regex.Match(s, "td://.+?EntityID=([0-9]+)");
+                while(match.Success)
+                {
+                    results.Add(new Tuple<string, string>(match.Groups[0].Value, match.Groups[1].Value));
+                    match = match.NextMatch();
+                }
+            }
+            catch (Exception e)
+            {
+                WriteError(new ErrorRecord(e, "", ErrorCategory.WriteError, ""));
+            }
+            return results;
+        }
     }
 }
