@@ -77,7 +77,12 @@ namespace PSModule
 
         public void SetAlmTimeout(string almTimeout)
         {
-            SetParamValue("almTimeout", almTimeout);
+            string paramToSet = "-1";
+            if (!string.IsNullOrEmpty(almTimeout))
+            {
+                paramToSet = almTimeout;
+            }
+            SetParamValue("almTimeout", paramToSet);
         }
 
 
@@ -118,6 +123,11 @@ namespace PSModule
 
         public void SetPerScenarioTimeOut(string perScenarioTimeOut)
         {
+            string paramToSet = "-1";
+            if (!string.IsNullOrEmpty(perScenarioTimeOut))
+            {
+                paramToSet = perScenarioTimeOut;
+            }
             SetParamValue("PerScenarioTimeOut", perScenarioTimeOut);
         }
 

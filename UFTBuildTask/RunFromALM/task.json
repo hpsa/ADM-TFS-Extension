@@ -76,7 +76,7 @@
       "name": "varTimeout",
       "type": "string",
       "label": "Timeout",
-      "defaultValue": "-1",
+      "defaultValue": "",
       "required": false,
       "helpMarkDown": "Timeout value in seconds. If left empty, there is no timeout."
     },
