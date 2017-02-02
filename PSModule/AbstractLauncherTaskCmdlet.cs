@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Text;
 
 namespace PSModule
 {
@@ -69,13 +70,12 @@ namespace PSModule
                     WriteVerbose(string.Format("{0} : {1}", prop.Key, prop.Value));
                 }
 
-                string log;
-                int retCode = Run(launcherPath, paramFileName, out log);
+                int retCode = Run(launcherPath, paramFileName);
                 WriteVerbose($"Return code: {retCode}");
 
                 if (retCode == 0)
                 {
-                    CollateResults(resultsFileName, log, resdir);
+                    CollateResults(resultsFileName, _launcherConsole.ToString(), resdir);
                 }
                 else if (retCode == 3)
                 {
@@ -93,8 +93,7 @@ namespace PSModule
             catch (ThreadInterruptedException e)
             {
                 WriteError(new ErrorRecord(e, "ThreadInterruptedException", ErrorCategory.OperationStopped, "ThreadInterruptedException targer"));
-                string dummy;
-                Run(aborterPath, paramFileName, out dummy);
+                Run(aborterPath, paramFileName);
             }
         }
 
@@ -122,10 +121,10 @@ namespace PSModule
             return result;
         }
 
-        private System.Text.StringBuilder launcherConsole = new System.Text.StringBuilder();
-        private int Run(string launcherPath, string paramFile, out string log)
+        private StringBuilder _launcherConsole = new StringBuilder();
+        private int Run(string launcherPath, string paramFile)
         {
-            log = String.Empty;
+            _launcherConsole.Clear();
             try
             {
                 ProcessStartInfo info = new ProcessStartInfo();
@@ -141,19 +140,22 @@ namespace PSModule
                 launcher.StartInfo = info;
 
                 launcher.Start();
-                while(!launcher.StandardOutput.EndOfStream)
+                while (!launcher.StandardOutput.EndOfStream || !launcher.StandardError.EndOfStream)
                 {
-                    string line = launcher.StandardOutput.ReadLine();
-                    launcherConsole.Append(line);
-                    WriteObject(line);
+                    if (!launcher.StandardOutput.EndOfStream)
+                    {
+                        string line = launcher.StandardOutput.ReadLine();
+                        _launcherConsole.Append(line);
+                        WriteObject(line);
+                    }
+                    if (!launcher.StandardError.EndOfStream)
+                    {
+                        string line = launcher.StandardError.ReadLine();
+                        _launcherConsole.Append(line);
+                        WriteObject(line);
+                    }
                 }
-                WriteObject(error);
-                WriteObject(output);
-
-                log = output;
-
                 launcher.WaitForExit();
-                
                 return launcher.ExitCode;
             }
 

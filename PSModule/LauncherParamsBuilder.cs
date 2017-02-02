@@ -128,7 +128,7 @@ namespace PSModule
             {
                 paramToSet = perScenarioTimeOut;
             }
-            SetParamValue("PerScenarioTimeOut", perScenarioTimeOut);
+            SetParamValue("PerScenarioTimeOut", paramToSet);
         }
 
         public void setServerUrl(String serverUrl)
