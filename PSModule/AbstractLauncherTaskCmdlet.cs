@@ -116,21 +116,32 @@ namespace PSModule
             return result;           
         }
 
+        private System.Text.StringBuilder launcherConsole = new System.Text.StringBuilder();
         private int Run(string launcherPath, string paramFile)
         {
             try
             {
                 ProcessStartInfo info = new ProcessStartInfo();
                 info.UseShellExecute = false;
-                info.Arguments = $"/c \"\"{launcherPath}\" -paramfile \"{paramFile}\"\"";
-                info.FileName = "cmd.exe";
+                info.Arguments = $" -paramfile \"{paramFile}\"";
+                info.FileName = launcherPath;
+
+                info.RedirectStandardOutput = true;
+                info.RedirectStandardError = true;
 
                 Process launcher = new Process();
+
                 launcher.StartInfo = info;
 
                 launcher.Start();
+                while(!launcher.StandardOutput.EndOfStream)
+                {
+                    string line = launcher.StandardOutput.ReadLine();
+                    launcherConsole.Append(line);
+                    WriteObject(line);
+                }
                 launcher.WaitForExit();
-
+                
                 return launcher.ExitCode;
             }
            
