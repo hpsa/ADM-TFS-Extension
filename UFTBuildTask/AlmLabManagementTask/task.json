@@ -66,9 +66,9 @@
     },
     {
       "name": "varRunType",
-      "type": "pickList",
+      "type": "radio",
       "label": "Run type",
-      "defaultValue": "Test set",
+      "defaultValue": "TEST_SET",
       "required": false,
       "helpMarkDown": "The run mode (Suite run or Build Veriification Suite) to use when running the test.",
       "options": {
