@@ -23,7 +23,7 @@ if (-Not $varReportName)
 $report = Join-Path $env:UFT_LAUNCHER -ChildPath "res\$($varReportName)"
 if (Test-Path $report)
 {
-	#Remove-Item $report
+	Remove-Item $report
 }
 
 Invoke-RunFromAlmTask $varAlmserv $varUserName $varPass $varDomain $varProject $runMode $testingToolHost $varTimeout $varTestsets $varReportName -Verbose
@@ -40,6 +40,6 @@ Write-Verbose "Remove temp files complited"
 
 if (Test-Path $report)
 {
-	Write-Host "##vso[task.uploadsummary]"$report
+	Write-Host "##vso[task.uploadsummary]$($report)"
 }
 
