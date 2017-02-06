@@ -133,14 +133,14 @@ namespace PSModule
                 info.FileName = launcherPath;
 
                 info.RedirectStandardOutput = true;
-                info.RedirectStandardError = true;
+                //info.RedirectStandardError = true;
 
                 Process launcher = new Process();
 
                 launcher.StartInfo = info;
 
                 launcher.Start();
-                while (!launcher.StandardOutput.EndOfStream || !launcher.StandardError.EndOfStream)
+                while (!launcher.StandardOutput.EndOfStream)// || !launcher.StandardError.EndOfStream)
                 {
                     if (!launcher.StandardOutput.EndOfStream)
                     {
@@ -148,12 +148,12 @@ namespace PSModule
                         _launcherConsole.Append(line);
                         WriteObject(line);
                     }
-                    if (!launcher.StandardError.EndOfStream)
-                    {
-                        string line = launcher.StandardError.ReadLine();
-                        _launcherConsole.Append(line);
-                        WriteObject(line);
-                    }
+                    //if (!launcher.StandardError.EndOfStream)
+                    //{
+                    //    string lineErr = launcher.StandardError.ReadLine();
+                    //    _launcherConsole.Append(lineErr);
+                    //    WriteObject(lineErr);
+                    //}
                 }
                 launcher.WaitForExit();
                 return launcher.ExitCode;
@@ -206,12 +206,12 @@ namespace PSModule
                 {
                     foreach (var link in links)
                     {
-                        
+
                         file.WriteLine($"[Report {link.Item2}]({link.Item1})  ");
                     }
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 WriteError(new ErrorRecord(e, "", ErrorCategory.WriteError, ""));
             }
@@ -228,7 +228,7 @@ namespace PSModule
             {
                 //report link example: td://Automation.AUTOMATION.mydph0271.hpswlabs.adapps.hp.com:8080/qcbin/TestLabModule-000000003649890581?EntityType=IRun&amp;EntityID=1195091
                 Match match = Regex.Match(s, "td://.+?EntityID=([0-9]+)");
-                while(match.Success)
+                while (match.Success)
                 {
                     results.Add(new Tuple<string, string>(match.Groups[0].Value, match.Groups[1].Value));
                     match = match.NextMatch();

@@ -59,11 +59,11 @@ if (Test-Path $report)
 	Write-Host "##vso[task.uploadsummary]"$report
 }
 
-if (Test-Path $report)
+if (Test-Path $stdout)
 {
 	Remove-Item $stdout
 }
-if (Test-Path $report)
+if (Test-Path $stderr)
 {
 	Remove-Item $stderr
 }
