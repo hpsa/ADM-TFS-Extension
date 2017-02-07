@@ -74,7 +74,48 @@ $stdout = "$uftworkdir\temp_build.log"
 $stderr = "$uftworkdir\temp_error_build.log"
 $jar = """$uftworkdir\bin\hpe.application.automation.tfs.almrestrunner-1.0-jar-with-dependencies.jar"""
 
-$args = "-jar $jar lep  ""$varAlmserv"" ""$varUserName"" ""pass:$varPass"" ""$varDomain"" ""$varProject"" ""$varEnvId"" ""$javaHomeSelection"" ""newnamed:$createNewNamed"" ""assign:$assignMessage"" ""useasexisting:$jdkUserInputPath"" ""jsonpath:$varPathToJSON"" ""$paramOnlyFirst"" ""partype1:$paramType1"" ""parname1:$paramName1"" ""parval1:$paramValue1"" ""partype2:$paramType2"" ""parname2:$paramName2"" ""parval2:$paramValue2"" ""partype3:$paramType3"" ""parname3:$paramName3"" ""parval3:$paramValue3"" ""partype4:$paramType4"" ""parname4:$paramName4"" ""parval4:$paramValue4"" ""partype5:$paramType5"" ""parname5:$paramName5"" ""parval5:$paramValue5"" ""partype6:$paramType6"" ""parname6:$paramName6"" ""parval6:$paramValue6"" ""partype7:$paramType7"" ""parname7:$paramName7"" ""parval7:$paramValue7"" ""partype8:$paramType8"" ""parname8:$paramName8"" ""parval8:$paramValue8"" ""partype9:$paramType9"" ""parname9:$paramName9"" ""parval9:$paramValue9"" ""partype10:$paramType10"" ""parname10:$paramName10"" ""parval10:$paramValue10"""
+$args = "-jar $jar lep  ""$varAlmserv"" ""$varUserName"" ""pass:$varPass"" ""$varDomain"" ""$varProject"" ""$varEnvId"" ""$javaHomeSelection"" ""newnamed:$createNewNamed"" ""assign:$assignMessage"" ""useasexisting:$jdkUserInputPath"" ""jsonpath:$varPathToJSON"" ""$paramOnlyFirst"""
+
+if ($AddParam1 -eq $True)
+{
+	$args = "$($args) ""partype1:$paramType1"" ""parname1:$paramName1"" ""parval1:$paramValue1"""
+	if ($AddParam2 -eq $True)
+	{
+		$args = "$($args) ""partype2:$paramType2"" ""parname2:$paramName2"" ""parval2:$paramValue2"""
+		if ($AddParam3 -eq $True)
+		{
+			$args = "$($args) ""partype3:$paramTyp3"" ""parname3:$paramNam3"" ""parval3:$paramValue3"""
+			if ($AddParam4 -eq $True)
+			{
+				$args = "$($args) ""partype4:$paramType4"" ""parname4:$paramName4"" ""parval4:$paramValue4"""
+				if ($AddParam5 -eq $True)
+				{
+					$args = "$($args) ""partype5:$paramTyp5"" ""parname5:$paramNam5"" ""parval5:$paramValue5"""
+					if ($AddParam6 -eq $True)
+					{
+						$args = "$($args) ""partype6:$paramType6"" ""parname6:$paramName6"" ""parval6:$paramValue6"""
+						if ($AddParam7 -eq $True)
+						{
+							$args = "$($args) ""partype7:$paramType7"" ""parname7:$paramName7"" ""parval7:$paramValue7"""
+							if ($AddParam8 -eq $True)
+							{
+								$args = "$($args) ""partype8:$paramType8"" ""parname8:$paramName8"" ""parval8:$paramValue8"""
+								if ($AddParam9 -eq $True)
+								{
+									$args = "$($args) ""partype9:$paramType9"" ""parname9:$paramName9"" ""parval9:$paramValue9"""
+									if ($AddParam10 -eq $True)
+									{
+										$args = "$($args) ""partype10:$paramType10"" ""parname10:$paramName10"" ""parval10:$paramValue10"""
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
 
 echo $args
 
