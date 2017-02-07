@@ -56,7 +56,7 @@ else
 
 if (Test-Path $report)
 {
-	Write-Host "##vso[task.uploadsummary]"$report
+	Write-Host "##vso[task.uploadsummary]$($report)"
 }
 
 if (Test-Path $stdout)
