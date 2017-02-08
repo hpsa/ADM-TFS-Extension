@@ -36,40 +36,35 @@
       "type": "string",
       "label": "ALM server",
       "defaultValue": "",
-      "required": true,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "required": true
     },
     {
       "name": "varUserName",
       "type": "string",
       "label": "User name",
       "defaultValue": "",
-      "required": true,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "required": true
     },
     {
       "name": "varPass",
       "type": "string",
       "label": "Password",
       "defaultValue": "",
-      "required": false,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "required": false
     },
     {
       "name": "varDomain",
       "type": "string",
       "label": "Domain",
       "defaultValue": "",
-      "required": true,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "required": true
     },
     {
       "name": "varProject",
       "type": "string",
       "label": "Project",
       "defaultValue": "",
-      "required": true,
-      "helpMarkDown": "This will give you a hover-over tooltip"
+      "required": true
     },
     {
       "name": "varEnvId",
@@ -99,8 +94,7 @@
       "groupName": "advanced",
       "defaultValue": "",
       "required": true,
-      "visibleRule": "javaHomeSelection = NewConf",
-      "helpMarkDown": "Message to echo out"
+      "visibleRule": "javaHomeSelection = NewConf"
     },
     {
       "name": "assignMessage",
@@ -109,8 +103,7 @@
       "groupName": "advanced",
       "defaultValue": "",
       "required": false,
-      "visibleRule": "javaHomeSelection = NewConf",
-      "helpMarkDown": "Message to echo out"
+      "visibleRule": "javaHomeSelection = NewConf"
     },
     {
       "name": "jdkUserInputPath",
@@ -158,11 +151,11 @@
       "name": "paramName1",
       "type": "string",
       "label": "Parameter name",
-      "defaultValue": "",
+      "defaultValue": "Parameters/",
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam1 = true",
-      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM ( Parameters tab of the AUT Environment). For example: Parameters/DB_Setting/Oracle/username"
+      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/<ParamName>"
     },
     {
       "name": "paramValue1",
@@ -201,11 +194,11 @@
       "name": "paramName2",
       "type": "string",
       "label": "Parameter name",
-      "defaultValue": "",
+      "defaultValue": "Parameters/",
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam2 = true",
-      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM ( Parameters tab of the AUT Environment). For example: Parameters/DB_Setting/Oracle/username"
+      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/<ParamName>"
     },
     {
       "name": "paramValue2",
@@ -244,11 +237,11 @@
       "name": "paramName3",
       "type": "string",
       "label": "Parameter name",
-      "defaultValue": "",
+      "defaultValue": "Parameters/",
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam3 = true",
-      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM ( Parameters tab of the AUT Environment). For example: Parameters/DB_Setting/Oracle/username"
+      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/<ParamName>"
     },
     {
       "name": "paramValue3",
@@ -287,11 +280,11 @@
       "name": "paramName4",
       "type": "string",
       "label": "Parameter name",
-      "defaultValue": "",
+      "defaultValue": "Parameters/",
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam4 = true",
-      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM ( Parameters tab of the AUT Environment). For example: Parameters/DB_Setting/Oracle/username"
+      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/<ParamName>"
     },
     {
       "name": "paramValue4",
@@ -330,11 +323,11 @@
       "name": "paramName5",
       "type": "string",
       "label": "Parameter name",
-      "defaultValue": "",
+      "defaultValue": "Parameters/",
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam5 = true",
-      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM ( Parameters tab of the AUT Environment). For example: Parameters/DB_Setting/Oracle/username"
+      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/<ParamName>"
     },
     {
       "name": "paramValue5",
@@ -373,11 +366,11 @@
       "name": "paramName6",
       "type": "string",
       "label": "Parameter name",
-      "defaultValue": "",
+      "defaultValue": "Parameters/",
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam6 = true",
-      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM ( Parameters tab of the AUT Environment). For example: Parameters/DB_Setting/Oracle/username"
+      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/<ParamName>"
     },
     {
       "name": "paramValue6",
@@ -416,11 +409,11 @@
       "name": "paramName7",
       "type": "string",
       "label": "Parameter name",
-      "defaultValue": "",
+      "defaultValue": "Parameters/",
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam7 = true",
-      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM ( Parameters tab of the AUT Environment). For example: Parameters/DB_Setting/Oracle/username"
+      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/<ParamName>"
     },
     {
       "name": "paramValue7",
@@ -459,11 +452,11 @@
       "name": "paramName8",
       "type": "string",
       "label": "Parameter name",
-      "defaultValue": "",
+      "defaultValue": "Parameters/",
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam8 = true",
-      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM ( Parameters tab of the AUT Environment). For example: Parameters/DB_Setting/Oracle/username"
+      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/<ParamName>"
     },
     {
       "name": "paramValue8",
@@ -502,11 +495,11 @@
       "name": "paramName9",
       "type": "string",
       "label": "Parameter name",
-      "defaultValue": "",
+      "defaultValue": "Parameters/",
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam9 = true",
-      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM ( Parameters tab of the AUT Environment). For example: Parameters/DB_Setting/Oracle/username"
+      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/<ParamName>"
     },
     {
       "name": "paramValue9",
@@ -545,11 +538,11 @@
       "name": "paramName10",
       "type": "string",
       "label": "Parameter name",
-      "defaultValue": "",
+      "defaultValue": "Parameters/",
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam10 = true",
-      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM ( Parameters tab of the AUT Environment). For example: Parameters/DB_Setting/Oracle/username"
+      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/<ParamName>"
     },
     {
       "name": "paramValue10",

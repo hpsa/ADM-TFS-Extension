@@ -31,8 +31,6 @@ if (-Not $varReportName)
 }
 $args = "-jar $jar AlmLabManagement  ""serv:$varAlmserv"" ""user:$varUserName"" ""domain:$varDomain"" ""project:$varProject"" ""testSet:$varTestSet"" ""timeSlotDuration:$varTimeslotDuration"" ""pass:$varPass"" ""runType:$varRunType"" ""envconfID:$varEnvironmentConfigurationID"" ""desc:$varDescription"" ""useCDA:$varUseCDA"" ""deploymentAction:$varDeploymentAction"" ""depEnvName:$varDeploymentEnvironmentName"" ""deprovisioningAction:$varDeprovisioningAction"" ""repname:$varReportName"""
 
-echo $args
-
 $report = Join-Path $env:UFT_LAUNCHER -ChildPath "res\$($varReportName)"
 if (Test-Path $report)
 {

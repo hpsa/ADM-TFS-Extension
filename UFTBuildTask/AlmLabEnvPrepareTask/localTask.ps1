@@ -1,7 +1,7 @@
 #
 # localTask.ps1
 #
-
+    
 param(
 	[string][Parameter(Mandatory=$true)] $varAlmserv,
 	[string][Parameter(Mandatory=$true)] $varUserName,
@@ -68,6 +68,8 @@ param(
 	[string][Parameter(Mandatory=$false)] $paramValue10
 )
 
+Import-Module "Microsoft.TeamFoundation.DistributedTask.Task.Common"
+
 $uftworkdir = $env:UFT_LAUNCHER
 
 $stdout = "$uftworkdir\temp_build.log"
@@ -117,7 +119,11 @@ if ($AddParam1 -eq $True)
 	}
 }
 
-echo $args
+$updateVariableFile = Join-Path $env:UFT_LAUNCHER -ChildPath "res\updateVariable.txt"
+if (Test-Path $updateVariableFile)
+{
+	Remove-Item $updateVariableFile
+}
 
 $process = (Start-Process java -ArgumentList $args -RedirectStandardOutput $stdout -RedirectStandardError $stderr -PassThru -Wait)
 
@@ -130,9 +136,31 @@ if ($process.ExitCode -ne 0)
 }
 else
 {
-	Get-Content $stdout
-	Get-Content $stderr
+	if (Test-Path $stdout)
+	{
+		Get-Content $stdout
+	}
+	if (Test-Path $stderr)
+	{
+		Get-Content $stderr
+	}
+	if (Test-Path $updateVariableFile)
+	{
+		$content = [IO.File]::ReadAllText($updateVariableFile)
+		Set-TaskVariable $assignMessage $content
+
+		$varVal = Get-TaskVariable $distributedTaskContext $assignMessage
+
+		Write-Host "Variable '$($assignMessage)' updated with a new value '$($varVal)'"
+	}
 }
 
-Remove-Item $stdout
-Remove-Item $stderr
+if (Test-Path $stdout)
+{
+	Remove-Item $stdout
+}
+if (Test-Path $stderr)
+{
+	Remove-Item $stderr
+}
+
