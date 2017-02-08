@@ -155,7 +155,7 @@
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam1 = true",
-      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/<ParamName>"
+      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/Parameter_name"
     },
     {
       "name": "paramValue1",
@@ -198,7 +198,7 @@
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam2 = true",
-      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/<ParamName>"
+      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/Parameter_name"
     },
     {
       "name": "paramValue2",
@@ -241,7 +241,7 @@
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam3 = true",
-      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/<ParamName>"
+      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/Parameter_name"
     },
     {
       "name": "paramValue3",
@@ -284,7 +284,7 @@
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam4 = true",
-      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/<ParamName>"
+      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/Parameter_name"
     },
     {
       "name": "paramValue4",
@@ -327,7 +327,7 @@
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam5 = true",
-      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/<ParamName>"
+      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/Parameter_name"
     },
     {
       "name": "paramValue5",
@@ -370,7 +370,7 @@
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam6 = true",
-      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/<ParamName>"
+      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/Parameter_name"
     },
     {
       "name": "paramValue6",
@@ -413,7 +413,7 @@
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam7 = true",
-      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/<ParamName>"
+      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/Parameter_name"
     },
     {
       "name": "paramValue7",
@@ -456,7 +456,7 @@
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam8 = true",
-      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/<ParamName>"
+      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/Parameter_name"
     },
     {
       "name": "paramValue8",
@@ -499,7 +499,7 @@
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam9 = true",
-      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/<ParamName>"
+      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/Parameter_name"
     },
     {
       "name": "paramValue9",
@@ -542,7 +542,7 @@
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam10 = true",
-      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/<ParamName>"
+      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/Parameter_name"
     },
     {
       "name": "paramValue10",

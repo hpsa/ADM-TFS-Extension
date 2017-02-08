@@ -144,14 +144,17 @@ else
 	{
 		Get-Content $stderr
 	}
-	if (Test-Path $updateVariableFile)
+	if ($assignMessage)
 	{
-		$content = [IO.File]::ReadAllText($updateVariableFile)
-		Set-TaskVariable $assignMessage $content
+		if (Test-Path $updateVariableFile)
+		{
+			$content = [IO.File]::ReadAllText($updateVariableFile)
+			Set-TaskVariable $assignMessage $content
 
-		$varVal = Get-TaskVariable $distributedTaskContext $assignMessage
+			$varVal = Get-TaskVariable $distributedTaskContext $assignMessage
 
-		Write-Host "Variable '$($assignMessage)' updated with a new value '$($varVal)'"
+			Write-Host "Variable '$($assignMessage)' updated with a new value '$($varVal)'"
+		}
 	}
 }
 
