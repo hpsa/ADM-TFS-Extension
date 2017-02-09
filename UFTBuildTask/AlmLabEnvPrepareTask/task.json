@@ -15,6 +15,7 @@
     "Patch": 1
   },
   "demands": [
+    "UFT_LAUNCHER"
   ],
   "groups": [
     {

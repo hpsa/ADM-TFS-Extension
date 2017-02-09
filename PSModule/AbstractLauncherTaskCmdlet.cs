@@ -77,18 +77,19 @@ namespace PSModule
                 {
                     CollateResults(resultsFileName, _launcherConsole.ToString(), resdir);
                 }
-                else if (retCode == 3)
-                {
-                    ThrowTerminatingError(new ErrorRecord(new ThreadInterruptedException(), "ClosedByUser", ErrorCategory.OperationStopped, ""));
-                }
-                else
-                {
-                    ThrowTerminatingError(new ErrorRecord(new ThreadInterruptedException(), "Task failed", ErrorCategory.OperationStopped, ""));
-                }
+                WriteObject(retCode);
+                //else if (retCode == 3)
+                //{
+                //    ThrowTerminatingError(new ErrorRecord(new ThreadInterruptedException(), "ClosedByUser", ErrorCategory.OperationStopped, ""));
+                //}
+                //else
+                //{
+                //    ThrowTerminatingError(new ErrorRecord(new ThreadInterruptedException(), "Task failed", ErrorCategory.OperationStopped, ""));
+                //}
             }
             catch (IOException ioe)
             {
-                ThrowTerminatingError(new ErrorRecord(ioe, "IOException", ErrorCategory.ResourceExists, ""));
+                WriteError(new ErrorRecord(ioe, "IOException", ErrorCategory.ResourceExists, ""));
             }
             catch (ThreadInterruptedException e)
             {
@@ -140,6 +141,7 @@ namespace PSModule
                 launcher.StartInfo = info;
 
                 launcher.Start();
+
                 while (!launcher.StandardOutput.EndOfStream)// || !launcher.StandardError.EndOfStream)
                 {
                     if (!launcher.StandardOutput.EndOfStream)

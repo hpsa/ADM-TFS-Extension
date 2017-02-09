@@ -26,16 +26,20 @@ if (Test-Path $report)
 	Remove-Item $report
 }
 
-Invoke-RunFromAlmTask $varAlmserv $varUserName $varPass $varDomain $varProject $runMode $testingToolHost $varTimeout $varTestsets $varReportName -Verbose
+$output = Invoke-RunFromAlmTask $varAlmserv $varUserName $varPass $varDomain $varProject $runMode $testingToolHost $varTimeout $varTestsets $varReportName -Verbose
 
-Write-Host "##vso[task.logissue type=warning;TaskName=VSTest]"
+$arr = @($output)
+$count = $arr.Count
+
+for ($i = 0; $i -lt $count - 1; $i++) 
+{ 
+	Write-Host $arr[$i]; 
+}
 
 Write-Verbose "Remove temp files"
 $results = Join-Path $env:UFT_LAUNCHER -ChildPath "res\*.xml"
 Write-Verbose $results
-
 Get-ChildItem -Path $results | foreach ($_) { Remove-Item $_.fullname }
-
 Write-Verbose "Remove temp files complited"
 
 if (Test-Path $report)
@@ -43,3 +47,14 @@ if (Test-Path $report)
 	Write-Host "##vso[task.uploadsummary]$($report)"
 }
 
+$retcode = $arr[$count - 1]
+
+if ($retcode -eq 3)
+{
+	Write-Error "Task Failed with message: Closed by user"
+}
+elseif ($retcode -ne 0)
+{
+	Write-Host "Return code: $($retcode)"
+	Write-Error "Task Failed"
+}
