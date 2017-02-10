@@ -40,5 +40,10 @@ namespace PSModule
 
             return builder.GetProperties();
         }
+
+        protected override string GetRetCodeFileName()
+        {
+            return "FSTaskRetCode.txt";
+        }
     }
 }

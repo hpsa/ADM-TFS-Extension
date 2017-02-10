@@ -83,5 +83,10 @@ namespace PSModule
 
             return builder.GetProperties();
         }
+
+        protected override string GetRetCodeFileName()
+        {
+            return "RunFromALMTestRetCode.txt";
+        }
     }
 }

@@ -41,15 +41,7 @@ $process = (Start-Process java -ArgumentList $args -RedirectStandardOutput $stdo
 
 if ($process.ExitCode -ne 0)
 {
-	$content = [IO.File]::ReadAllText($stdout)
-	Write-Error ($content)
-	$content = [IO.File]::ReadAllText($stderr)
-	Write-Error ($content)
-}
-else
-{
-	Get-Content $stdout
-	Get-Content $stderr
+	Write-Error "Task Failed"
 }
 
 if (Test-Path $report)
@@ -59,9 +51,32 @@ if (Test-Path $report)
 
 if (Test-Path $stdout)
 {
+	$arr = @([IO.File]::ReadAllLines($stdout))
+
+	for ($i = 0; $i -lt $arr.Count; $i++) 
+	{
+		$str = $arr[$i]
+		if ($process.ExitCode -ne 0 -And $str.ToLower() -like "*failed*")
+		{
+			Write-Error $str; 
+		}
+		else
+		{
+			Write-Host $str; 
+		}
+	}
 	Remove-Item $stdout
 }
 if (Test-Path $stderr)
 {
+	$content = [IO.File]::ReadAllText($stderr)
+	if (Test-Path $report)
+	{
+		echo $content
+	}
+	else
+	{
+		Write-Error ($content)
+	}
 	Remove-Item $stderr
 }

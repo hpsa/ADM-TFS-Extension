@@ -73,9 +73,10 @@ namespace PSModule
                 int retCode = Run(launcherPath, paramFileName);
                 WriteVerbose($"Return code: {retCode}");
 
-                if (retCode == 0)
-                {
-                    CollateResults(resultsFileName, _launcherConsole.ToString(), resdir);
+                CollateResults(resultsFileName, _launcherConsole.ToString(), resdir);
+                if (retCode != 0)
+                { 
+                    CollateRetCode(resdir, retCode);
                 }
                 WriteObject(retCode);
                 //else if (retCode == 3)
@@ -144,12 +145,12 @@ namespace PSModule
 
                 while (!launcher.StandardOutput.EndOfStream)// || !launcher.StandardError.EndOfStream)
                 {
-                    if (!launcher.StandardOutput.EndOfStream)
-                    {
-                        string line = launcher.StandardOutput.ReadLine();
-                        _launcherConsole.Append(line);
-                        WriteObject(line);
-                    }
+                    //if (!launcher.StandardOutput.EndOfStream)
+                    //{
+                    string line = launcher.StandardOutput.ReadLine();
+                    _launcherConsole.Append(line);
+                    WriteObject(line);
+                    //}
                     //if (!launcher.StandardError.EndOfStream)
                     //{
                     //    string lineErr = launcher.StandardError.ReadLine();
@@ -165,6 +166,35 @@ namespace PSModule
             {
                 WriteError(new ErrorRecord(e, "ThreadInterruptedException", ErrorCategory.InvalidData, "ThreadInterruptedException targer"));
                 return -1;
+            }
+        }
+
+        protected abstract string GetRetCodeFileName();
+
+        protected virtual void CollateRetCode(string resdir, int retCode)
+        {
+            string fileName = GetRetCodeFileName();
+            if (String.IsNullOrEmpty(fileName))
+            {
+                WriteError(new ErrorRecord(new Exception("Method GetRetCodeFileName() did not return a value"), "", ErrorCategory.WriteError, ""));
+                return;
+            }
+            if (!Directory.Exists(resdir))
+            {
+                WriteError(new ErrorRecord(new DirectoryNotFoundException(resdir), "", ErrorCategory.WriteError, ""));
+                return;
+            }
+            string retCodeFilename = Path.Combine(resdir, fileName);
+            try
+            {
+                using (StreamWriter file = new StreamWriter(retCodeFilename, true))
+                {
+                    file.WriteLine(retCode.ToString());
+                }
+            }
+            catch (Exception e)
+            {
+                WriteError(new ErrorRecord(e, "", ErrorCategory.WriteError, ""));
             }
         }
 
