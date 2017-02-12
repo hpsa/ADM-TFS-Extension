@@ -35,21 +35,12 @@
     "home": {
       "uri": "https://github.com/hpsa/ADM-TFS-Extension"
     },
-    "getstarted": {
-      "uri": "https://github.com/hpsa/ADM-TFS-Extension"
+    "installation": {
+      "uri": "https://github.com/hpsa/ADM-TFS-Extension/wiki/Installing-the-ADM-TFS-Extension"
     },
     "learn": {
-      "uri": "https://github.com/hpsa/ADM-TFS-Extension"
+      "uri": "https://github.com/hpsa/ADM-TFS-Extension/wiki/HPE-ADM-TFS-Extension"
     },
-    "support": {
-      "uri": "https://github.com/hpsa/ADM-TFS-Extension"
-    },
-    "repository": {
-      "uri": "https://github.com/hpsa/ADM-TFS-Extension"
-    },
-    "issues": {
-      "uri": "https://github.com/hpsa/ADM-TFS-Extension"
-    }
   },
   "content": {
     "details": {
