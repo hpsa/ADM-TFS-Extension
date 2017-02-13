@@ -3,7 +3,7 @@
   "id": "application-UFT-TFS",
   "name": "Unified Functional Testing (UFT)",
   "version": "1.0.0",
-  "publisher": "uft-publisher",
+  "publisher": "uftpublisher",
   "targets": [
     {
       "id": "Microsoft.VisualStudio.Services"
