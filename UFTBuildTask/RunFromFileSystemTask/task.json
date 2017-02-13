@@ -1,8 +1,8 @@
 ﻿{
   "id": "CFBE1493-3BB1-44D5-AC87-7F14A148A6F0",
   "name": "RunFromFileSystemTask",
-  "friendlyName": "HPE UFT File System Execution",
-  "description": "Execute HPE UFT tests from file system",
+  "friendlyName": "UFT File System Execution",
+  "description": "Execute UFT tests from file system",
   "category": "Test",
   "visibility": [
     "Build",

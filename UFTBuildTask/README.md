@@ -1,4 +1,4 @@
-# Integration with HPE UFT
+# Integration with UFT
 
 This extension enables you to include UFT tests as a build step in a TFS build process. Run UFT tests stored on the local file system or on ALM, and then view your test results after the build is complete.
 

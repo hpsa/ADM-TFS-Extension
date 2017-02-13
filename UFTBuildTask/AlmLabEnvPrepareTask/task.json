@@ -1,7 +1,7 @@
 ﻿{
   "id": "9A12D98C-8838-40BA-BE69-C0B5D88743F3",
   "name": "AlmLabEnvPrepareTask",
-  "friendlyName": "HPE UFT ALM Lab Management Environment Preparation",
+  "friendlyName": "UFT ALM Lab Management Environment Preparation",
   "description": "Use this build step to assign values to AUT Environment Configuration in ALM.",
   "category": "Test",
   "visibility": [

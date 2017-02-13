@@ -1,7 +1,7 @@
 {
   "manifestVersion": 1,
   "id": "uft-build-tasks",
-  "name": "HPE Application Automation Tools Extension",
+  "name": "Application Automation Tools Extension",
   "version": "1.0.0",
   "publisher": "fabrikam",
   "targets": [
@@ -18,7 +18,7 @@
   ],
   "tags": [
     "UFT",
-    "HPE ALM"
+    "ALM"
   ],
   "icons": {
     "default": "resources/img/tfs.png"
