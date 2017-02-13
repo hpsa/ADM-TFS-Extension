@@ -1,9 +1,9 @@
 {
   "manifestVersion": 1,
-  "id": "uft-build-tasks",
-  "name": "Application Automation Tools Extension",
+  "id": "application-UFT-TFS",
+  "name": "Unified Functional Testing (UFT)",
   "version": "1.0.0",
-  "publisher": "fabrikam",
+  "publisher": "uft-publisher",
   "targets": [
     {
       "id": "Microsoft.VisualStudio.Services"

@@ -31,7 +31,7 @@
       "label": "ALM server",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "The address of your ALM server, in the format http:s//(ALM server name):(port)/qcbin"
+      "helpMarkDown": "The address of your ALM server, in the format http://(ALM server name):(port)/qcbin"
     },
     {
       "name": "varUserName",
