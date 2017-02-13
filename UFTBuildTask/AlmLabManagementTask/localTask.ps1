@@ -70,7 +70,7 @@ if (Test-Path $stdout)
 if (Test-Path $stderr)
 {
 	$content = [IO.File]::ReadAllText($stderr)
-	if (Test-Path $report)
+	if (($process.ExitCode -ne 0) -Or (Test-Path $report))
 	{
 		echo $content
 	}
