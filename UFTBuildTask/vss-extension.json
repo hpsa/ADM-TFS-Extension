@@ -33,7 +33,7 @@
   ],
   "links": {
     "home": {
-      "uri": "https://github.com/hpsa/ADM-TFS-Extension/wiki/Unified-Functional-Testing-(UFT)-TFS-Extension"
+      "uri": "https://github.com/hpsa/ADM-TFS-Extension"
     },
     "installation": {
       "uri": "https://github.com/hpsa/ADM-TFS-Extension/wiki/Installing-the-Unified-Functional-Testing-TFS-Extension"
@@ -45,6 +45,9 @@
   "content": {
     "details": {
       "path": "README.md"
+    },
+    "overview": {
+      "path":  "overview.md"
     },
     "license": {
       "path": "LICENSE"
