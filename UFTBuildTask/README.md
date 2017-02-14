@@ -13,10 +13,10 @@ This Extension supports UFT version 14.00
 
 # Installation Instructions
 
-For full installation instructions, see the installation section on the [Unified Functional Testing (UFT) Wiki](https://github.com/hpsa/ADM-TFS-Extension/wiki/Installing-the-ADM-TFS-Extension).
+For full installation instructions, see the installation section on the [Unified Functional Testing (UFT) Wiki](https://github.com/hpsa/ADM-TFS-Extension/wiki/Unified-Functional-Testing-(UFT)-TFS-Extension).
 
 NOTE: You must have Administrator privileges to install the Extension on your TFS server.
 
 # Documentation
 
-Please check the [Wiki](https://github.com/hpsa/ADM-TFS-Extension/wiki/ADM-TFS-Extension).
+Please check the [Wiki](https://github.com/hpsa/ADM-TFS-Extension/wiki/Unified-Functional-Testing-(UFT)-TFS-Extension).
