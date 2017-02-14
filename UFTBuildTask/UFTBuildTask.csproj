@@ -72,6 +72,7 @@
     <Content Include="resources\screenshots\AlmExecution.PNG" />
     <Content Include="LICENSE" />
     <Content Include="README.md" />
+    <Content Include="overview.md" />
     <None Include="vss-extension.json" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
