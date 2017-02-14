@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "application-UFT-TFS",
   "name": "Unified Functional Testing (UFT)",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "uftpublisher",
   "targets": [
     {
