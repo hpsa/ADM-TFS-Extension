@@ -19,4 +19,4 @@ NOTE: You must have Administrator privileges to install the Extension on your TF
 
 # Documentation
 
-Please check the [Wiki](https://github.com/hpsa/ADM-TFS-Extension/wiki/HPE-ADM-TFS-Extension).
+Please check the [Wiki](https://github.com/hpsa/ADM-TFS-Extension/wiki/ADM-TFS-Extension).
