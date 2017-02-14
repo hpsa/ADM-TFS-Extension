@@ -47,7 +47,7 @@
       "path": "README.md"
     },
     "overview": {
-      "path":  "overview.md"
+      "path": "overview.md"
     },
     "license": {
       "path": "LICENSE"
@@ -117,5 +117,8 @@
         "name": "RunFromFileSystemTask"
       }
     }
+  ],
+  "galleryFlags": [
+    "Public"
   ]
 }
