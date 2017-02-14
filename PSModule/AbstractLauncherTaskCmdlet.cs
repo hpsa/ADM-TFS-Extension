@@ -78,7 +78,7 @@ namespace PSModule
                 { 
                     CollateRetCode(resdir, retCode);
                 }
-                WriteObject(retCode);
+                //WriteObject(retCode);
                 //else if (retCode == 3)
                 //{
                 //    ThrowTerminatingError(new ErrorRecord(new ThreadInterruptedException(), "ClosedByUser", ErrorCategory.OperationStopped, ""));
