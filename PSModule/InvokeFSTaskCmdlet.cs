@@ -1,8 +1,6 @@
 ﻿using System.Management.Automation;
-using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.IO;
 using PSModule.Models;
 
 namespace PSModule

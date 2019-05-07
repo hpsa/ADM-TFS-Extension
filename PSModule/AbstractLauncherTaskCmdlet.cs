@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Text;
 
+
 namespace PSModule
 {
     public abstract class AbstractLauncherTaskCmdlet : PSCmdlet
@@ -16,14 +17,18 @@ namespace PSModule
         const string HpToolsLauncher_SCRIPT_NAME = "HpToolsLauncher.exe";
         const string HpToolsAborter_SCRIPT_NAME = "HpToolsAborter.exe";
 
+        public AbstractLauncherTaskCmdlet() {}
+
         public abstract Dictionary<string, string> GetTaskProperties();
 
         protected override void ProcessRecord()
         {
-            //MessageBox.Show("DEBUG");
+            Trace.WriteLine("CTRACE: DEBUG EXTENSION");
+            string launcherPath = "";
             string aborterPath = "";
             string paramFileName = "";
-
+            string resultsFileName = "";
+           
             try
             {
                 Dictionary<string, string> properties = new Dictionary<string, string>();
@@ -37,56 +42,60 @@ namespace PSModule
                 }
 
                 string ufttfsdir = Environment.GetEnvironmentVariable("UFT_LAUNCHER");
-
-                string launcherPath = Path.GetFullPath(Path.Combine(ufttfsdir, HpToolsLauncher_SCRIPT_NAME));
-                WriteVerbose("*****Launcher***** " + launcherPath);
-
+                      
+                launcherPath = Path.GetFullPath(Path.Combine(ufttfsdir, HpToolsLauncher_SCRIPT_NAME));
+            
                 aborterPath = Path.GetFullPath(Path.Combine(ufttfsdir, HpToolsAborter_SCRIPT_NAME));
-                WriteVerbose("****Aborter****** " + aborterPath);
-
+             
                 string propdir = Path.GetFullPath(Path.Combine(ufttfsdir, "props"));
+               
                 if (!Directory.Exists(propdir))
                     Directory.CreateDirectory(propdir);
 
                 string resdir = Path.GetFullPath(Path.Combine(ufttfsdir, "res"));
+             
                 if (!Directory.Exists(resdir))
                     Directory.CreateDirectory(resdir);
 
                 string timeSign = DateTime.Now.ToString("ddMMyyyyHHmmssSSS");
-                paramFileName = Path.Combine(propdir, "props" + timeSign + ".txt");
-                string resultsFileName = Path.Combine(resdir, "Results" + timeSign + ".xml");
+
+                paramFileName = Path.Combine(propdir, "Props" + timeSign + ".txt");
+               
+                resultsFileName = Path.Combine(resdir, "Results" + timeSign + ".xml");
+              
                 resultsFileName = resultsFileName.Replace("\\", "\\\\");
+               
+                /*if (!File.Exists(resultsFileName))
+                {
+                    Trace.WriteLine("CTRACE: result file does not exist (!!!!!!!!!!!!)");
+                    WriteError(new ErrorRecord(new Exception("result file does not exist !!!!!!!!!!!!!"), "", ErrorCategory.WriteError, ""));
+
+                    File.Create(resultsFileName).Dispose();
+                }*/
 
                 properties.Add("resultsFilename", resultsFileName);
 
                 if (!SaveProperties(paramFileName, properties))
                 {
+                    WriteError(new ErrorRecord(new Exception("cannot save properties"), "", ErrorCategory.WriteError, ""));
                     return;
                 }
 
-                WriteVerbose(string.Format("Properties saved in  : {0}", paramFileName));
-                foreach (var prop in properties)
+                /*foreach (var prop in properties)
                 {
                     WriteVerbose(string.Format("{0} : {1}", prop.Key, prop.Value));
-                }
+                }*/
 
                 int retCode = Run(launcherPath, paramFileName);
-                WriteVerbose($"Return code: {retCode}");
-
+                WriteVerbose("Return code: {retCode}");
+               
                 CollateResults(resultsFileName, _launcherConsole.ToString(), resdir);
-                if (retCode != 0)
-                { 
-                    CollateRetCode(resdir, retCode);
-                }
-                //WriteObject(retCode);
-                //else if (retCode == 3)
-                //{
-                //    ThrowTerminatingError(new ErrorRecord(new ThreadInterruptedException(), "ClosedByUser", ErrorCategory.OperationStopped, ""));
-                //}
-                //else
-                //{
-                //    ThrowTerminatingError(new ErrorRecord(new ThreadInterruptedException(), "Task failed", ErrorCategory.OperationStopped, ""));
-                //}
+                CollateRetCode(resdir, retCode);
+                /*if (retCode == 3) {
+                    ThrowTerminatingError(new ErrorRecord(new ThreadInterruptedException(), "ClosedByUser", ErrorCategory.OperationStopped, ""));
+                } else {
+                    ThrowTerminatingError(new ErrorRecord(new ThreadInterruptedException(), "Task failed", ErrorCategory.OperationStopped, ""));
+                }*/
             }
             catch (IOException ioe)
             {
@@ -133,9 +142,8 @@ namespace PSModule
                 info.UseShellExecute = false;
                 info.Arguments = $" -paramfile \"{paramFile}\"";
                 info.FileName = launcherPath;
-
                 info.RedirectStandardOutput = true;
-                //info.RedirectStandardError = true;
+                info.RedirectStandardError = true;
 
                 Process launcher = new Process();
 
@@ -143,22 +151,24 @@ namespace PSModule
 
                 launcher.Start();
 
-                while (!launcher.StandardOutput.EndOfStream)// || !launcher.StandardError.EndOfStream)
+                while ((!launcher.StandardOutput.EndOfStream)  || (!launcher.StandardError.EndOfStream))
                 {
-                    //if (!launcher.StandardOutput.EndOfStream)
-                    //{
-                    string line = launcher.StandardOutput.ReadLine();
-                    _launcherConsole.Append(line);
-                    WriteObject(line);
-                    //}
-                    //if (!launcher.StandardError.EndOfStream)
-                    //{
-                    //    string lineErr = launcher.StandardError.ReadLine();
-                    //    _launcherConsole.Append(lineErr);
-                    //    WriteObject(lineErr);
-                    //}
+                   
+                    if (!launcher.StandardOutput.EndOfStream) {
+                        string line = launcher.StandardOutput.ReadLine();
+                        _launcherConsole.Append(line);
+                        WriteObject(line);
+                    }
+                    
+                    
+                    if (!launcher.StandardError.EndOfStream) {
+                        string lineErr = launcher.StandardError.ReadLine();
+                        _launcherConsole.Append(lineErr);
+                        WriteObject(lineErr);
+                    }
                 }
                 launcher.WaitForExit();
+
                 return launcher.ExitCode;
             }
 
@@ -173,6 +183,7 @@ namespace PSModule
 
         protected virtual void CollateRetCode(string resdir, int retCode)
         {
+
             string fileName = GetRetCodeFileName();
             if (String.IsNullOrEmpty(fileName))
             {
@@ -205,20 +216,32 @@ namespace PSModule
 
         protected virtual void CollateResults(string resultFile, string log, string resdir)
         {
+            if (!File.Exists(resultFile)) {
+                WriteError(new ErrorRecord(new Exception("result file does not exist"), "", ErrorCategory.WriteError, ""));
+                File.Create(resultFile).Dispose();
+            }
+
             string reportFileName = GetReportFilename();
+
             if (String.IsNullOrEmpty(reportFileName))
             {
+                WriteError(new ErrorRecord(new Exception("collate results, empty reportFileName "), "", ErrorCategory.WriteError, ""));
                 return;
             }
+
             if ((String.IsNullOrEmpty(resultFile) || !File.Exists(resultFile)) && String.IsNullOrEmpty(log))
             {
                 WriteError(new ErrorRecord(new FileNotFoundException($"No results file ({resultFile}) nor result log provided"), "", ErrorCategory.WriteError, ""));
+                
                 return;
             }
+
+            //read result xml file
             string s = File.ReadAllText(resultFile);
+
             if (String.IsNullOrEmpty(s))
             {
-                WriteVerbose($"Empty results file: {resultFile}");
+                WriteError(new ErrorRecord(new FileNotFoundException("collate results, empty results file"), "", ErrorCategory.WriteError, ""));
                 return;
             }
             List<Tuple<string, string>> links = GetRequiredLinksFromString(s);
@@ -227,25 +250,26 @@ namespace PSModule
                 links = GetRequiredLinksFromString(log);
                 if (links == null || links.Count == 0)
                 {
-                    WriteVerbose($"No report likns in results file or log found: {resultFile}");
+                    WriteError(new ErrorRecord(new FileNotFoundException("No report links in results file or log found"), "", ErrorCategory.WriteError, ""));
                     return;
                 }
             }
 
             try
             {
+                string reportPath = Path.Combine(resdir, reportFileName);
+
                 using (StreamWriter file = new StreamWriter(Path.Combine(resdir, reportFileName), true))
                 {
                     foreach (var link in links)
                     {
-
                         file.WriteLine($"[Report {link.Item2}]({link.Item1})  ");
                     }
                 }
             }
             catch (Exception e)
             {
-                WriteError(new ErrorRecord(e, "", ErrorCategory.WriteError, ""));
+                WriteError(new ErrorRecord(e, "error writing the results", ErrorCategory.WriteError, ""));
             }
         }
 
@@ -259,11 +283,18 @@ namespace PSModule
             try
             {
                 //report link example: td://Automation.AUTOMATION.mydph0271.hpswlabs.adapps.hp.com:8080/qcbin/TestLabModule-000000003649890581?EntityType=IRun&amp;EntityID=1195091
-                Match match = Regex.Match(s, "td://.+?EntityID=([0-9]+)");
-                while (match.Success)
+                Match match1 = Regex.Match(s, "td://.+?EntityID=([0-9]+)");
+                Match match2 = Regex.Match(s, "tds://.+?EntityID=([0-9]+)");
+                while (match1.Success)
                 {
-                    results.Add(new Tuple<string, string>(match.Groups[0].Value, match.Groups[1].Value));
-                    match = match.NextMatch();
+                    results.Add(new Tuple<string, string>(match1.Groups[0].Value, match1.Groups[1].Value));
+                    match1 = match1.NextMatch();
+                }
+
+                while (match2.Success)
+                {
+                    results.Add(new Tuple<string, string>(match2.Groups[0].Value, match2.Groups[1].Value));
+                    match2 = match2.NextMatch();
                 }
             }
             catch (Exception e)

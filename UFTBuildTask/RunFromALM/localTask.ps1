@@ -1,4 +1,4 @@
-#
+ #
 # localTask.ps1
 #
 param(
@@ -14,6 +14,7 @@ param(
 	[string][Parameter(Mandatory=$false)] $varReportName
 )
 
+
 $uftworkdir = $env:UFT_LAUNCHER
 Import-Module $uftworkdir\bin\PSModule.dll
 if (-Not $varReportName)
@@ -21,12 +22,17 @@ if (-Not $varReportName)
 	$varReportName = "ALM Execution Report"
 }
 $report = Join-Path $env:UFT_LAUNCHER -ChildPath "res\$($varReportName)"
+
 if (Test-Path $report)
 {
 	Remove-Item $report
 }
 
-$retcodefile = Join-Path $env:UFT_LAUNCHER -ChildPath "res\RunFromALMTestRetCode.txt"
+if (-Not $varReturnCodeFile)
+{
+	$varReturnCodeFile = "RunFromALMTestRetCode.txt"
+}
+$retcodefile = Join-Path $env:UFT_LAUNCHER -ChildPath "res\$($varReturnCodeFile)"
 if (Test-Path $retcodefile)
 {
 	Remove-Item $retcodefile
@@ -37,11 +43,14 @@ Invoke-RunFromAlmTask $varAlmserv $varUserName $varPass $varDomain $varProject $
 Write-Verbose "Remove temp files"
 $results = Join-Path $env:UFT_LAUNCHER -ChildPath "res\*.xml"
 Write-Verbose $results
-Get-ChildItem -Path $results | foreach ($_) { Remove-Item $_.fullname }
-Write-Verbose "Remove temp files complited"
+<# 
+ Get-ChildItem -Path $results | foreach ($_) { Remove-Item $_.fullname }
+ Write-Verbose "Remove temp files complited" 
+ #>
 
 if (Test-Path $report)
 {
+	#uploads report files to build artifacts
 	Write-Host "##vso[task.uploadsummary]$($report)"
 }
 
@@ -50,14 +59,22 @@ if (Test-Path $retcodefile)
 	$content = Get-Content $retcodefile
 	[int]$retcode = [convert]::ToInt32($content, 10)
 
+	if($retcode -eq 0)
+	{
+		Write-Host "Test passed"
+	}
+
 	if ($retcode -eq 3)
 	{
+		#writes log messages in case of errors
 		Write-Error "Task Failed with message: Closed by user"
 	}
 	elseif ($retcode -ne 0)
 	{
-		#Write-Host "Return code: $($retcode)"
+		Write-Host "Return code: $($retcode)"
+		Write-Host "Task failed"
 		Write-Error "Task Failed"
 	}
-	Remove-Item $retcodefile
+	
+	<#Remove-Item $retcodefile#>
 }

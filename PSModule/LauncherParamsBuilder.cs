@@ -85,10 +85,30 @@ namespace PSModule
             SetParamValue("almTimeout", paramToSet);
         }
 
+        public void SetTimeslotDuration(string timeslotDuration)
+        {
+           SetParamValue("timeslotDuration", timeslotDuration);
+        }
+
 
         public void SetTestSet(int index, string testSet)
         {
             SetParamValue("TestSet" + index, testSet);
+        }
+
+        public void SetTestSetID(string testID)
+        {
+            SetParamValue("TestSetID", testID);
+        }
+
+        public void SetTestRunType(RunTestType testType)
+        {
+            properties.Add("RunTestType", testType.ToString());
+        }
+
+        private void SetParamValue(string v, int testID)
+        {
+            throw new NotImplementedException();
         }
 
         public void SetAlmTestSet(string testSets)
@@ -106,6 +126,20 @@ namespace PSModule
             SetParamValue("Test" + index, test);
         }
 
+        public void SetDeploymentAction(string deploymentAction)
+        {
+            SetParamValue("DeploymentAction", deploymentAction);
+        }
+        
+        public void SetDeployedEnvironmentName(string deploymentEnvironmentName)
+        {
+            SetParamValue("DeploymentEnvironmentName", deploymentEnvironmentName);
+        }
+
+        public void SetDeprovisioningAction(string deprovisioningAction)
+        {
+            SetParamValue("DeprovisioningAction", deprovisioningAction);
+        }
 
         public void SetFileSystemPassword(string oriPass)
         {

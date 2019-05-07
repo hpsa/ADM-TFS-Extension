@@ -20,9 +20,10 @@ Invoke-FSTask $testPathInput $timeOutIn -Verbose
 Write-Verbose "Remove temp files"
 $results = Join-Path $env:UFT_LAUNCHER -ChildPath "res\*.xml"
 Write-Verbose $results
+<#
 Get-ChildItem -Path $results | foreach ($_) { Remove-Item $_.fullname }
 Write-Verbose "Remove temp files complited"
-
+#>
 if (Test-Path $retcodefile)
 {
 	$content = Get-Content $retcodefile
@@ -34,8 +35,9 @@ if (Test-Path $retcodefile)
 	}
 	elseif ($retcode -ne 0)
 	{
-		#Write-Host "Return code: $($retcode)"
+		Write-Host "Return code: $($retcode)"
+		Write-Host "Task failed"
 		Write-Error "Task Failed"
 	}
-	Remove-Item $retcodefile
+	<#Remove-Item $retcodefile#>
 }

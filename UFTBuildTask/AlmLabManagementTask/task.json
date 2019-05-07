@@ -1,5 +1,5 @@
 ﻿{
-  "id": "91008DAF-AFF5-4E1A-A6FF-8ACF9D229E3A",
+  "id": "91008DAF-AFF5-4E1A-A6FF-8ACF9D229E3B",
   "name": "AlmLabManagementTask",
   "friendlyName": "UFT ALM Lab Management",
   "description": "Use this build step to run ALM server-side functional test sets and Build Verification Suites.",
@@ -12,7 +12,7 @@
   "version": {
     "Major": 1,
     "Minor": 0,
-    "Patch": 0
+    "Patch": 2
   },
   "demands": [
     "UFT_LAUNCHER"
@@ -26,7 +26,7 @@
   ],
   "inputs": [
     {
-      "name": "varAlmserv",
+      "name": "varAlmServ",
       "type": "string",
       "label": "ALM server",
       "defaultValue": "",
@@ -40,14 +40,6 @@
       "defaultValue": "",
       "required": true,
       "helpMarkDown": "The user name that will access this ALM server during the build step run."
-    },
-    {
-      "name": "varPass",
-      "type": "string",
-      "label": "Password",
-      "defaultValue": "",
-      "required": false,
-      "helpMarkDown": "The password for the user that will access this ALM server during the build step run."
     },
     {
       "name": "varDomain",
@@ -66,6 +58,30 @@
       "helpMarkDown": "The ALM project in which the tests to run are stored."
     },
     {
+      "name": "varTestSet",
+      "type": "string",
+      "label": "Test Set/Build Verification Suite ID",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "The ID number (found in ALM) for the test set or build verification suite."
+    },
+    {
+      "name": "varTimeslotDuration",
+      "type": "string",
+      "label": "Timeslot Duration (in minutes, minimum = 30)",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "The amount of time needed on the host to run this test set/verification suite."
+    },
+    {
+      "name": "varPass",
+      "type": "string",
+      "label": "Password",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "The password for the user that will access this ALM server during the build step run."
+    },
+    {
       "name": "varRunType",
       "type": "radio",
       "label": "Run type",
@@ -77,29 +93,13 @@
         "BVS": "Build verification suite"
       }
     },
-    {
-      "name": "varTestSet",
-      "type": "string",
-      "label": "Test Set/Build Verification Suite ID",
-      "defaultValue": "",
-      "required": true,
-      "helpMarkDown": "The ID number (found in ALM) for the test set or build verification suite."
-    },
-    {
+     {
       "name": "varDescription",
       "type": "string",
       "label": "Description",
       "defaultValue": "",
       "required": false,
       "helpMarkDown": "The description of this test set/build verification suite."
-    },
-    {
-      "name": "varTimeslotDuration",
-      "type": "string",
-      "label": "Timeslot Duration (in minutes, minimum = 30)",
-      "defaultValue": "",
-      "required": true,
-      "helpMarkDown": "The amount of time needed on the host to run this test set/verification suite."
     },
     {
       "name": "varEnvironmentConfigurationID",

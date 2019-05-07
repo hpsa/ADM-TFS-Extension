@@ -1,0 +1,11 @@
+C:\Users\laakso\TFS\ADM-TFS-Extension-master\bin\PSModule.dll
+C:\Users\laakso\TFS\ADM-TFS-Extension-master\bin\PSModule.pdb
+C:\Users\laakso\TFS\ADM-TFS-Extension-master\PSModule\obj\Release\PSModule.dll
+C:\Users\laakso\TFS\ADM-TFS-Extension-master\PSModule\obj\Release\PSModule.pdb
+C:\Users\laakso.CORPDOM\TFS\ADM-TFS-Extension-master\bin\PSModule.dll
+C:\Users\laakso.CORPDOM\TFS\ADM-TFS-Extension-master\bin\PSModule.pdb
+C:\Users\laakso.CORPDOM\TFS\ADM-TFS-Extension-master\PSModule\obj\Release\PSModule.dll
+C:\Users\laakso.CORPDOM\TFS\ADM-TFS-Extension-master\PSModule\obj\Release\PSModule.pdb
+C:\Users\laakso.CORPDOM\TFS\ADM-TFS-Extension-master\PSModule\obj\Release\PSModule.csproj.CoreCompileInputs.cache
+C:\Users\laakso.CORPDOM\TFS\ADM-TFS-Extension-master\PSModule\obj\Release\PSModule.csproj.CopyComplete
+C:\Users\laakso.CORPDOM\TFS\ADM-TFS-Extension-master\PSModule\obj\Release\PSModule.csprojAssemblyReference.cache

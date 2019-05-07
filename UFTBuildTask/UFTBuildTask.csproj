@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <ProjectGuid>{62CBA506-27F9-4AFC-9C38-F16B951D707F}</ProjectGuid>
-    <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>2.1</TypeScriptToolsVersion>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>UFTBuildTask</RootNamespace>
@@ -28,7 +28,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\vsts-agent-win7-x64-2.117.2\bin\plugins\UFTBuildTask\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -48,12 +48,12 @@
     <Content Include="AlmLabEnvPrepareTask\icon.png" />
     <Content Include="AlmLabManagementTask\task.json" />
     <Content Include="AlmLabEnvPrepareTask\task.json" />
-    <Content Include="resources\screenshots\buildProcess.PNG" />
-    <Content Include="resources\screenshots\fs.PNG" />
-    <Content Include="resources\screenshots\log.PNG" />
-    <Content Include="resources\screenshots\Prep.PNG" />
-    <Content Include="resources\screenshots\screen2.png" />
-    <Content Include="resources\screenshots\Test_Tasks.PNG" />
+    <Content Include="RunFromALM\resources\screenshots\buildProcess.PNG" />
+    <Content Include="RunFromALM\resources\screenshots\fs.PNG" />
+    <Content Include="RunFromALM\resources\screenshots\log.PNG" />
+    <Content Include="RunFromALM\resources\screenshots\Prep.PNG" />
+    <Content Include="RunFromALM\resources\screenshots\screen2.png" />
+    <Content Include="RunFromALM\resources\screenshots\Test_Tasks.PNG" />
     <Content Include="VSS.SDK.js" />
     <None Include=".bin\bower.cmd" />
     <None Include=".bin\git.cmd" />
@@ -66,15 +66,25 @@
     <Content Include="RunFromFileSystemTask\Strings\resources.resjson\en-US\resources.resjson" />
     <Content Include="RunFromFileSystemTask\task.json" />
     <Content Include="RunFromALM\task.json" />
-    <Content Include="RunFromFileSystemTask\localTask.ps1" />
+    <None Include="RunFromFileSystemTask\localTask.ps1" />
     <Content Include="RunFromALM\localTask.ps1" />
-    <Content Include="resources\img\tfs.png" />
-    <Content Include="resources\screenshots\AlmExecution.PNG" />
+    <Content Include="RunFromALM\resources\img\tfs.png" />
+    <Content Include="RunFromALM\resources\screenshots\AlmExecution.PNG" />
     <Content Include="LICENSE" />
     <Content Include="README.md" />
     <Content Include="overview.md" />
     <None Include="vss-extension.json" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include=".vscode\tasks.json" />
