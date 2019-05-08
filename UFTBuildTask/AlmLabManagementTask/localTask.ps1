@@ -4,19 +4,19 @@
 param(
 	[string][Parameter(Mandatory=$true)] $varAlmServ, 
 	[string][Parameter(Mandatory=$true)] $varUserName,
+	[string] $varPass,
 	[string][Parameter(Mandatory=$true)] $varDomain,
 	[string][Parameter(Mandatory=$true)] $varProject,
-	[string][Parameter(Mandatory=$true)] $varTestSet,
-	[string][Parameter(Mandatory=$true)] $varTimeslotDuration,
-	[string] $varPass,
 	[string] $varRunType,
+	[string][Parameter(Mandatory=$true)] $varTestSet,
 	[string] $varDescription,
+	[string][Parameter(Mandatory=$true)] $varTimeslotDuration,
 	[string] $varEnvironmentConfigurationID,
+	[string] [Parameter(Mandatory=$false)] $varReportName,
 	[string] $varUseCDA,
 	[string] $varDeploymentAction,
 	[string] $varDeploymentEnvironmentName,
-	[string] $varDeprovisioningAction,
-	[string] [Parameter(Mandatory=$false)] $varReportName
+	[string] $varDeprovisioningAction
 )
 
 
