@@ -46,7 +46,7 @@ if (Test-Path $retcodefile)
 
 
 $CDA1 = [bool]($varUseCDA) 
-Invoke-AlmLabManagementTask $varAlmServ $varUserName $varDomain $varProject $varTestSet $varTimeslotDuration $varPass $varRunType $varDescription $varEnvironmentConfigurationID $CDA1 $varDeploymentAction $varDeploymentEnvironmentName $varDeprovisioningAction $varReportName -Verbose
+Invoke-AlmLabManagementTask $varAlmServ $varUserName $varPass $varDomain $varProject $varRunType $varTestSet $varDescription $varTimeslotDuration $varEnvironmentConfigurationID $varReportName $CDA1 $varDeploymentAction $varDeploymentEnvironmentName $varDeprovisioningAction -Verbose
 
 Write-Verbose "Remove temp files"
 $results = Join-Path $env:UFT_LAUNCHER -ChildPath "res\*.xml"

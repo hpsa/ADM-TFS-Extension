@@ -14,45 +14,45 @@ namespace PSModule
 
         [Parameter(Position = 1, Mandatory = true)]
         public string ALMUserName;
-        
-        [Parameter(Position = 2, Mandatory = true)]
-        public string ALMDomain;
 
-        [Parameter(Position = 3, Mandatory = true)]
-        public string ALMProject;
-
-        [Parameter(Position = 4, Mandatory = true)]
-        public string ALMTestSet;
-
-        [Parameter(Position = 5, Mandatory = true)]
-        public string TimeslotDuration;
-
-        [Parameter(Position = 6)]
+        [Parameter(Position = 2)]
         public string ALMPassword;
 
-        [Parameter(Position = 7)]
+        [Parameter(Position = 3, Mandatory = true)]
+        public string ALMDomain;
+
+        [Parameter(Position = 4, Mandatory = true)]
+        public string ALMProject;
+
+        [Parameter(Position = 5)]
         public string TestRunType;
 
-        [Parameter(Position = 8)]
+        [Parameter(Position = 6, Mandatory = true)]
+        public string ALMTestSet;
+
+        [Parameter(Position = 7)]
         public string Description;
+
+        [Parameter(Position = 8, Mandatory = true)]
+        public string TimeslotDuration;
 
         [Parameter(Position = 9)]
         public string EnvironmentConfigurationID;
 
         [Parameter(Position = 10)]
-        public bool UseCDA;
+        public string ReportName;
 
         [Parameter(Position = 11)]
-        public string DeploymentAction;
+        public bool UseCDA;
 
         [Parameter(Position = 12)]
-        public string DeploymentEnvironmentName;
+        public string DeploymentAction;
 
         [Parameter(Position = 13)]
-        public string DeprovisioningAction;
+        public string DeploymentEnvironmentName;
 
         [Parameter(Position = 14)]
-        public string ReportName;
+        public string DeprovisioningAction;
 
         [Parameter(Position = 15)]
         public string almRunHost;
@@ -100,7 +100,6 @@ namespace PSModule
                 {
                     builder.SetTestSet(i++, testSet.Replace(@"\", @"\\"));
                 }
-                //builder.SetTestSet(1, ALMTestSet.Replace("\\", "\\\\")); 
             }
             else
             {
