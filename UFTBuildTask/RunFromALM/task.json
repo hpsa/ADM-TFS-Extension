@@ -1,5 +1,5 @@
 ﻿{
-  "id": "A571AE7C-E100-42E1-8CED-498B46029770",
+  "id": "A571AE7C-E100-42E1-8CED-498B46029771",
   "name": "RunFromALM",
   "friendlyName": "UFT ALM Execution",
   "description": "Execute UFT tests from ALM",
@@ -12,7 +12,7 @@
   "version": {
     "Major": 1,
     "Minor": 0,
-    "Patch": 0
+    "Patch": 2
   },
   "demands": [
     "UFT_LAUNCHER"

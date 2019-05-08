@@ -3,10 +3,10 @@
 import path = require('path');
 import tl = require('vsts-task-lib/task');
 
-tl.setResourcePath(path.join(__dirname, 'task.json'));
+//tl.setResourcePath(path.join(__dirname, 'task.json'));
 
 // content is a folder contain artifacts needs to publish.
-var pathtoPublish: string = "C:\\Tests\\GUITest1\\Res2\\Report";
+var pathtoPublish: string = "C:\\Tests\\GUITest1\\res";
 var artifactName: string = "result"
 var artifactType: string = "container";
 // targetPath is used for file shares
