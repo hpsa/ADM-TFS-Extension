@@ -21,7 +21,7 @@
     "ALM"
   ],
   "icons": {
-    "default": "img/tfs.png"
+    "default": "img/UFT_logo.png"
   },
   "screenshots ": [
     {
@@ -54,7 +54,7 @@
     }
   },
   "branding": {
-    "color": "rgb(89, 141, 88)",
+    "color": "rgb(1, 66, 114)",
     "theme": "dark"
   },
   "files": [
