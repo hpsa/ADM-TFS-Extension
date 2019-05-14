@@ -11,7 +11,7 @@
   ],
   "description": "Enables you to run UFT tests as a build in a TFS build process. This extension includes 4 tasks.",
   "categories": [
-    "Azure Repos"
+    "Test"
   ],
   "resources": [
     "some stuff"
