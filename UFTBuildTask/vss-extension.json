@@ -2,8 +2,8 @@
   "manifestVersion": 1,
   "id": "application-UFT-TFS-Version2",
   "name": "Unified Functional Testing (UFT)",
-  "version": "1.0.2",
-  "publisher": "Micro Focus",
+  "version": "1.0.3",
+  "publisher": "uftpublisher",
   "targets": [
     {
       "id": "Microsoft.VisualStudio.Services"
@@ -11,7 +11,9 @@
   ],
   "description": "Enables you to run UFT tests as a build in a TFS build process. This extension includes 4 tasks.",
   "categories": [
-    "Azure Repos"
+    "Azure Repos",
+    "Azure Pipelines",
+    "Azure Test Plans"
   ],
   "resources": [
     "some stuff"
