@@ -12,7 +12,7 @@
   "version": {
     "Major": 1,
     "Minor": 0,
-    "Patch": 2
+    "Patch": 3
   },
   "demands": [
     "UFT_LAUNCHER"
@@ -42,6 +42,14 @@
       "helpMarkDown": "The user name that will access this ALM server during the build step run."
     },
     {
+      "name": "varPass",
+      "type": "string",
+      "label": "Password",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "The password for the user that will access this ALM server during the build step run."
+    },
+    {
       "name": "varDomain",
       "type": "string",
       "label": "Domain",
@@ -58,30 +66,6 @@
       "helpMarkDown": "The ALM project in which the tests to run are stored."
     },
     {
-      "name": "varTestSet",
-      "type": "string",
-      "label": "Test Set/Build Verification Suite ID",
-      "defaultValue": "",
-      "required": true,
-      "helpMarkDown": "The ID number (found in ALM) for the test set or build verification suite."
-    },
-    {
-      "name": "varTimeslotDuration",
-      "type": "string",
-      "label": "Timeslot Duration (in minutes, minimum = 30)",
-      "defaultValue": "",
-      "required": true,
-      "helpMarkDown": "The amount of time needed on the host to run this test set/verification suite."
-    },
-    {
-      "name": "varPass",
-      "type": "string",
-      "label": "Password",
-      "defaultValue": "",
-      "required": false,
-      "helpMarkDown": "The password for the user that will access this ALM server during the build step run."
-    },
-    {
       "name": "varRunType",
       "type": "radio",
       "label": "Run type",
@@ -93,7 +77,15 @@
         "BVS": "Build verification suite"
       }
     },
-     {
+    {
+      "name": "varTestSet",
+      "type": "string",
+      "label": "Test Set/Build Verification Suite ID",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "The ID number (found in ALM) for the test set or build verification suite."
+    },
+    {
       "name": "varDescription",
       "type": "string",
       "label": "Description",
@@ -102,12 +94,28 @@
       "helpMarkDown": "The description of this test set/build verification suite."
     },
     {
+      "name": "varTimeslotDuration",
+      "type": "string",
+      "label": "Timeslot Duration (in minutes, minimum = 30)",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "The amount of time needed on the host to run this test set/verification suite."
+    },
+    {
       "name": "varEnvironmentConfigurationID",
       "type": "string",
       "label": "Environment Configuration ID",
       "defaultValue": "",
       "required": false,
       "helpMarkDown": "To find the ID of your environment configuration, right-click the entity, copy the URL, and paste it to a text editor. Use the number associated with the EntityID at the end of the URL."
+    },
+    {
+      "name": "varReportName",
+      "type": "string",
+      "label": "Report Name",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": ""
     },
     {
       "name": "varUseCDA",
@@ -122,7 +130,7 @@
       "name": "varDeploymentAction",
       "type": "pickList",
       "label": "Deployment Action",
-      "defaultValue": "useDeployed",
+      "defaultValue": "Use Deployed",
       "groupName": "useCDAGroup",
       "required": false,
       "helpMarkDown": "The action to perform on deploying the server for running tests.",
@@ -145,7 +153,7 @@
       "name": "varDeprovisioningAction",
       "type": "pickList",
       "label": "Deprovisioning Action",
-      "defaultValue": "leaveEnvironmentDeployed",
+      "defaultValue": "Leave environment deployed",
       "groupName": "useCDAGroup",
       "required": false,
       "helpMarkDown": "The action to perform after the testing run when you are ready to end the server deployment.",
@@ -153,14 +161,6 @@
         "Leave environment deployed": "Leave environment deployed",
         "Deprovision at end": "Deprovision end"
       }
-    },
-    {
-      "name": "varReportName",
-      "type": "string",
-      "label": "Report Name",
-      "defaultValue": "",
-      "required": false,
-      "helpMarkDown": ""
     }
   ],
       "instanceNameFormat": "AlmLabManagementTask",

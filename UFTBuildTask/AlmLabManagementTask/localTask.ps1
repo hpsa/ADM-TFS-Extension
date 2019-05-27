@@ -4,19 +4,19 @@
 param(
 	[string][Parameter(Mandatory=$true)] $varAlmServ, 
 	[string][Parameter(Mandatory=$true)] $varUserName,
+	[string] $varPass,
 	[string][Parameter(Mandatory=$true)] $varDomain,
 	[string][Parameter(Mandatory=$true)] $varProject,
-	[string][Parameter(Mandatory=$true)] $varTestSet,
-	[string][Parameter(Mandatory=$true)] $varTimeslotDuration,
-	[string] $varPass,
 	[string] $varRunType,
+	[string][Parameter(Mandatory=$true)] $varTestSet,
 	[string] $varDescription,
+	[string][Parameter(Mandatory=$true)] $varTimeslotDuration,
 	[string] $varEnvironmentConfigurationID,
+	[string] [Parameter(Mandatory=$false)] $varReportName,
 	[string] $varUseCDA,
 	[string] $varDeploymentAction,
 	[string] $varDeploymentEnvironmentName,
-	[string] $varDeprovisioningAction,
-	[string] [Parameter(Mandatory=$false)] $varReportName
+	[string] $varDeprovisioningAction
 )
 
 
@@ -46,7 +46,7 @@ if (Test-Path $retcodefile)
 
 
 $CDA1 = [bool]($varUseCDA) 
-Invoke-AlmLabManagementTask $varAlmServ $varUserName $varDomain $varProject $varTestSet $varTimeslotDuration $varPass $varRunType $varDescription $varEnvironmentConfigurationID $CDA1 $varDeploymentAction $varDeploymentEnvironmentName $varDeprovisioningAction $varReportName -Verbose
+Invoke-AlmLabManagementTask $varAlmServ $varUserName $varPass $varDomain $varProject $varRunType $varTestSet $varDescription $varTimeslotDuration $varEnvironmentConfigurationID $varReportName $CDA1 $varDeploymentAction $varDeploymentEnvironmentName $varDeprovisioningAction -Verbose
 
 Write-Verbose "Remove temp files"
 $results = Join-Path $env:UFT_LAUNCHER -ChildPath "res\*.xml"

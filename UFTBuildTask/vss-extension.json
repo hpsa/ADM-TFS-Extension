@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "application-UFT-TFS-Version2",
   "name": "Unified Functional Testing (UFT)",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "publisher": "uftpublisher",
   "targets": [
     {
@@ -11,7 +11,9 @@
   ],
   "description": "Enables you to run UFT tests as a build in a TFS build process. This extension includes 4 tasks.",
   "categories": [
-    "Azure Repos"
+    "Azure Repos",
+    "Azure Pipelines",
+    "Azure Test Plans"
   ],
   "resources": [
     "some stuff"
@@ -21,7 +23,7 @@
     "ALM"
   ],
   "icons": {
-    "default": "img/tfs.png"
+    "default": "img/UFT_logo.png"
   },
   "screenshots ": [
     {
@@ -54,7 +56,7 @@
     }
   },
   "branding": {
-    "color": "rgb(89, 141, 88)",
+    "color": "rgb(1, 66, 114)",
     "theme": "dark"
   },
   "files": [
