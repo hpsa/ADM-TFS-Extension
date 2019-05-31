@@ -49,7 +49,7 @@
     <Content Include="AlmLabEnvPrepareTask\icon.png" />
     <Content Include="AlmLabManagementTask\task.json" />
     <Content Include="AlmLabEnvPrepareTask\task.json" />
-    <Content Include="img\UFT_logo.png" />
+    <Content Include="img\tfs.png" />
     <Content Include="RunFromALM\resources\screenshots\buildProcess.PNG" />
     <Content Include="RunFromALM\resources\screenshots\fs.PNG" />
     <Content Include="RunFromALM\resources\screenshots\log.PNG" />
@@ -63,7 +63,6 @@
     <Content Include="AlmLabEnvPrepareTask\localTask.ps1" />
     <Content Include="AlmLabManagementTask\localTask.ps1" />
     <Content Include="AlmLabManagementTask\icon.png" />
-    <Content Include="img\tfs.png" />
     <Content Include="RunFromALM\icon.png" />
     <Content Include="RunFromFileSystemTask\Strings\resources.resjson\en-US\resources.resjson" />
     <Content Include="RunFromFileSystemTask\task.json" />
