@@ -81,7 +81,7 @@ namespace PSModule
                 builder.SetAlmTestSet("");
             }
 
-            return builder.GetProperties();
+           return builder.GetProperties();
         }
 
         protected override string GetRetCodeFileName()
