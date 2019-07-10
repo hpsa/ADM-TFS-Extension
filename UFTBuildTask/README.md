@@ -1,15 +1,17 @@
 # Integration with UFT
 
 This extension enables you to include UFT tests as a build step in a TFS build process. Run UFT tests stored on the local file system or on ALM, and then view your test results after the build is complete.
+Additionally, use the plugin for prepairing the test environment before running the tests from ALM. 
 
 # Supported Product Versions
 
-This Extension supports UFT version 14.00
+This Extension supports UFT version 14.xx
 
 # What's New in this Release
 
-> **February 2016**
-> - Added 4 tasks for running UFT tests
+> **May 2019**
+> - Fixed report link
+> - Updated the tasks running UFT tests 
 
 # Installation Instructions
 

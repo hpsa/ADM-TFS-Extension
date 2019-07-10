@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "application-UFT-TFS-Version2",
   "name": "Unified Functional Testing (UFT)",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "publisher": "uftpublisher",
   "targets": [
     {
@@ -23,7 +23,7 @@
     "ALM"
   ],
   "icons": {
-    "default": "img/UFT_logo.png"
+    "default": "img/tfs.png"
   },
   "screenshots ": [
     {
