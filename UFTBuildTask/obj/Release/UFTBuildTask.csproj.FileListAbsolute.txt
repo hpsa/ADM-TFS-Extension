@@ -1,3 +1,4 @@
 C:\Users\laakso\TFS\ADM-TFS-Extension-master\UFTBuildTask\obj\Release\UFTBuildTask.csprojResolveAssemblyReference.cache
 C:\Users\laakso.CORPDOM\TFS\ADM-TFS-Extension-master\UFTBuildTask\obj\Release\UFTBuildTask.csprojResolveAssemblyReference.cache
 C:\Users\laakso.CORPDOM\TFS\ADM-TFS-Extension-master\UFTBuildTask\obj\Release\UFTBuildTask.csprojAssemblyReference.cache
+C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\UFTBuildTask\obj\Release\UFTBuildTask.csprojAssemblyReference.cache

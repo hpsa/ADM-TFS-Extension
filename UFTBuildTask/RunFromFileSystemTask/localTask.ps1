@@ -15,15 +15,16 @@ if (Test-Path $retcodefile)
 	Remove-Item $retcodefile
 }
 
-Invoke-FSTask $testPathInput $timeOutIn -Verbose 
-
 Write-Verbose "Remove temp files"
 $results = Join-Path $env:UFT_LAUNCHER -ChildPath "res\*.xml"
-Write-Verbose $results
-<#
+#Write-Verbose $results
+
+#Remove temp files complited
 Get-ChildItem -Path $results | foreach ($_) { Remove-Item $_.fullname }
-Write-Verbose "Remove temp files complited"
-#>
+#Write-Verbose "Remove temp files complited"
+
+Invoke-FSTask $testPathInput $timeOutIn -Verbose 
+
 if (Test-Path $retcodefile)
 {
 	$content = Get-Content $retcodefile

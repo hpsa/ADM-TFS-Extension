@@ -11,8 +11,10 @@ C:\Users\laakso.CORPDOM\TFS\ADM-TFS-Extension-master\PSModule\obj\Release\PSModu
 C:\Users\laakso.CORPDOM\TFS\ADM-TFS-Extension-master\PSModule\obj\Release\PSModule.csprojAssemblyReference.cache
 C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\bin\PSModule.dll
 C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\bin\PSModule.pdb
-C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\PSModule\obj\Release\PSModule.csprojAssemblyReference.cache
 C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\PSModule\obj\Release\PSModule.csproj.CoreCompileInputs.cache
 C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\PSModule\obj\Release\PSModule.csproj.CopyComplete
 C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\PSModule\obj\Release\PSModule.dll
 C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\PSModule\obj\Release\PSModule.pdb
+C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\PSModule\obj\Release\PSModule.Properties.Resources.resources
+C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\PSModule\obj\Release\PSModule.csproj.GenerateResource.cache
+C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\PSModule\obj\Release\PSModule.csprojAssemblyReference.cache

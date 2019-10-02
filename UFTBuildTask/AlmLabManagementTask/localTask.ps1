@@ -44,12 +44,13 @@ if (Test-Path $retcodefile)
 	Remove-Item $retcodefile
 }
 
+Write-Verbose "Remove temp files"
+$results = Join-Path $env:UFT_LAUNCHER -ChildPath "res\*.xml"
+ Get-ChildItem -Path $results | foreach ($_) { Remove-Item $_.fullname }
 
 $CDA1 = [bool]($varUseCDA) 
 Invoke-AlmLabManagementTask $varAlmServ $varUserName $varPass $varDomain $varProject $varRunType $varTestSet $varDescription $varTimeslotDuration $varEnvironmentConfigurationID $varReportName $CDA1 $varDeploymentAction $varDeploymentEnvironmentName $varDeprovisioningAction -Verbose
 
-Write-Verbose "Remove temp files"
-$results = Join-Path $env:UFT_LAUNCHER -ChildPath "res\*.xml"
 Write-Verbose $results
 
 if (Test-Path $report)

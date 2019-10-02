@@ -38,15 +38,15 @@ if (Test-Path $retcodefile)
 	Remove-Item $retcodefile
 }
 
-Invoke-RunFromAlmTask $varAlmserv $varUserName $varPass $varDomain $varProject $runMode $testingToolHost $varTimeout $varTestsets $varReportName -Verbose
-
 Write-Verbose "Remove temp files"
 $results = Join-Path $env:UFT_LAUNCHER -ChildPath "res\*.xml"
-Write-Verbose $results
-<# 
+#Write-Verbose $results
+
  Get-ChildItem -Path $results | foreach ($_) { Remove-Item $_.fullname }
- Write-Verbose "Remove temp files complited" 
- #>
+ #Write-Verbose "Remove temp files complited" 
+ 
+
+Invoke-RunFromAlmTask $varAlmserv $varUserName $varPass $varDomain $varProject $runMode $testingToolHost $varTimeout $varTestsets $varReportName -Verbose
 
 if (Test-Path $report)
 {

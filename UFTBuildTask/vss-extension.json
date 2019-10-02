@@ -1,19 +1,17 @@
 {
   "manifestVersion": 1,
-  "id": "application-UFT-TFS-Version2",
+  "id": "UFT-Azure-extension",
   "name": "Unified Functional Testing (UFT)",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "publisher": "uftpublisher",
   "targets": [
     {
       "id": "Microsoft.VisualStudio.Services"
     }
   ],
-  "description": "Enables you to run UFT tests as a build in a TFS build process. This extension includes 4 tasks.",
+  "description": "Enables you to run UFT tests as a build in a TFS build process. This extension includes 5 tasks.",
   "categories": [
-    "Azure Repos",
-    "Azure Pipelines",
-    "Azure Test Plans"
+    "Azure pipelines", "Azure Repos", "Azure Test Plans"
   ],
   "resources": [
     "some stuff"
@@ -71,6 +69,9 @@
     },
     {
       "path": "RunFromFileSystemTask"
+    },
+    {
+      "path": "ReportTask"
     }
   ],
   "scopes": [
@@ -78,8 +79,9 @@
     "vso.build_execute",
     "vso.serviceendpoint"
   ],
+  
   "contributions": [
-    {
+       {
       "id": "custom-build-task-1",
       "type": "ms.vss-distributed-task.task",
       "targets": [
@@ -118,9 +120,19 @@
       "properties": {
         "name": "RunFromFileSystemTask"
       }
+    },
+    {
+      "id": "custom-build-task-5",
+      "type": "ms.vss-distributed-task.task",
+      "targets": [
+        "ms.vss-distributed-task.tasks"
+      ],
+      "properties": {
+        "name": "ReportTask"
+      }
     }
   ],
   "galleryFlags": [
-    "Public"
+    "Private"
   ]
 }
