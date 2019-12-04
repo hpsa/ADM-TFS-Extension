@@ -254,10 +254,11 @@ namespace TestReport
 
                 HtmlTableCell cell4 = new HtmlTableCell();
                 HtmlAnchor reportLink = new HtmlAnchor();
+             
                 //Console.WriteLine("path: " + Resources.run_results);
-                reportLink.HRef = "file:///C:/Users/laakso.CORPDOM/TFS/TFS_project/UFTWorking/res/run_results.html";//Path.GetFullPath(Resources.run_results);
+                reportLink.HRef = "C:\\Users\\laakso.CORPDOM\\TFS\\TFS_project\\UFTWorking\\res\\run_results.html"; //Path.GetFullPath(Resources.run_results); 
                 reportLink.InnerText = "report";
-                
+         
                 cell4.Controls.Add(reportLink);
                 cell4.Align = "center";
                 row.Cells.Add(cell4);

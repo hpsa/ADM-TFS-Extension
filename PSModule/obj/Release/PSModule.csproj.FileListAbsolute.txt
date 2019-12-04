@@ -17,4 +17,3 @@ C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\PSModule\obj\Releas
 C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\PSModule\obj\Release\PSModule.pdb
 C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\PSModule\obj\Release\PSModule.Properties.Resources.resources
 C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\PSModule\obj\Release\PSModule.csproj.GenerateResource.cache
-C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\PSModule\obj\Release\PSModule.csprojAssemblyReference.cache

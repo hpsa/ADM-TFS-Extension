@@ -18,7 +18,7 @@ namespace PSModule
 
         protected override void CollateResults(string resultFile, string log, string resdir)
         {
-            //do nothing here. Collate results should be made by the standard "Copu and Publish Artifacts" TFS task
+            //do nothing here. Collate results should be made by the standard "Copy and Publish Artifacts" TFS task
         }
 
         public override Dictionary<string, string> GetTaskProperties()

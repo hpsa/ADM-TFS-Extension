@@ -34,6 +34,4 @@ if (Test-Path $summaryReport)
 {
 	#uploads report files to build artifacts
 	Write-Host "##vso[task.uploadsummary]$($summaryReport)" | ConvertTo-Html
-	
 }
-

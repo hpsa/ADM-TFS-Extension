@@ -22,4 +22,5 @@ C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\PSModule\obj\Debug\
 C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\PSModule\obj\Debug\PSModule.csproj.CopyComplete
 C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\PSModule\obj\Debug\PSModule.dll
 C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\PSModule\obj\Debug\PSModule.pdb
-C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\PSModule\obj\Debug\PSModule.csprojAssemblyReference.cache
+C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\PSModule\obj\Debug\PSModule.Properties.Resources.resources
+C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\PSModule\obj\Debug\PSModule.csproj.GenerateResource.cache

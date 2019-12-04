@@ -7,7 +7,7 @@ using System.Threading;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Text;
-
+using System.Collections.Concurrent;
 
 namespace PSModule
 {
@@ -16,6 +16,9 @@ namespace PSModule
         const string UFTFolder = "UFTWorking";
         const string HpToolsLauncher_SCRIPT_NAME = "HpToolsLauncher.exe";
         const string HpToolsAborter_SCRIPT_NAME = "HpToolsAborter.exe";
+
+        private ConcurrentQueue<string> outputToProcess = new ConcurrentQueue<string>();
+        private ConcurrentQueue<string> errorToProcess = new ConcurrentQueue<string>();
 
         public AbstractLauncherTaskCmdlet() {}
 
@@ -146,27 +149,34 @@ namespace PSModule
                 info.RedirectStandardError = true;
 
                 Process launcher = new Process();
+                launcher.OutputDataReceived += Launcher_OutputDataReceived;
+                launcher.ErrorDataReceived += Launcher_ErrorDataReceived;
 
                 launcher.StartInfo = info;
 
                 launcher.Start();
 
-                while ((!launcher.StandardOutput.EndOfStream)  || (!launcher.StandardError.EndOfStream))
+                launcher.BeginOutputReadLine();
+                launcher.BeginErrorReadLine();
+
+                while (!launcher.HasExited)
                 {
-                   
-                    if (!launcher.StandardOutput.EndOfStream) {
-                        string line = launcher.StandardOutput.ReadLine();
+                    if (outputToProcess.TryDequeue(out string line))
+                    {
                         _launcherConsole.Append(line);
                         WriteObject(line);
                     }
-                    
-                    
-                    if (!launcher.StandardError.EndOfStream) {
-                        string lineErr = launcher.StandardError.ReadLine();
-                        _launcherConsole.Append(lineErr);
-                        WriteObject(lineErr);
+
+                    if (errorToProcess.TryDequeue(out line))
+                    {
+                        _launcherConsole.Append(line);
+                        WriteObject(line);
                     }
                 }
+
+                launcher.OutputDataReceived -= Launcher_OutputDataReceived;
+                launcher.ErrorDataReceived -= Launcher_ErrorDataReceived;
+
                 launcher.WaitForExit();
 
                 return launcher.ExitCode;
@@ -177,6 +187,16 @@ namespace PSModule
                 WriteError(new ErrorRecord(e, "ThreadInterruptedException", ErrorCategory.InvalidData, "ThreadInterruptedException targer"));
                 return -1;
             }
+        }
+
+        private void Launcher_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            errorToProcess.Enqueue(e.Data);
+        }   
+
+        private void Launcher_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            outputToProcess.Enqueue(e.Data);
         }
 
         protected abstract string GetRetCodeFileName();

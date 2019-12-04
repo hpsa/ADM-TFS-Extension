@@ -1,5 +1,5 @@
 {
-  "id": "CFBE1493-3BB1-44D5-AC87-7F14A148A6F2",
+  "id": "DFBE1493-3BB1-44D5-AC87-7F14A148A6F8",
   "name": "ReportTask",
   "friendlyName": "UFT Test Results Report",
   "description": "Display test results",
@@ -12,7 +12,7 @@
   "version": {
     "Major": 1,
     "Minor": 0,
-    "Patch": 4
+    "Patch": 5
   },
   "demands": "UFT_LAUNCHER",
 
