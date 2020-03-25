@@ -28,7 +28,7 @@ namespace PSModule
             builder.SetRunType(RunType.FileSystem);
             builder.SetPerScenarioTimeOut(Timeout);
 
-            var tests = TestsPath.Split(";".ToArray());
+            var tests = TestsPath.Split("\n".ToArray());
 
             for (int i = 0; i < tests.Length; i++)
             {
@@ -41,7 +41,7 @@ namespace PSModule
 
         protected override string GetRetCodeFileName()
         {
-            return "FSTaskRetCode.txt";
+            return "TestRunReturnCode.txt";
         }
     }
 }

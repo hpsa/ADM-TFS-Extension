@@ -3,18 +3,18 @@
 #
 param(
 	[string][Parameter(Mandatory=$true)] $varAlmserv, 
-	[string] $varSSOEnabled,
+	[string][Parameter(Mandatory=$false)] $varSSOEnabled,
 	[string] $varClientID,
 	[string] $varApiKeySecret,
 	[string] $varUserName,
 	[string] $varPass,
-	[string][Parameter(Mandatory=$true)] $varDomain,
-	[string][Parameter(Mandatory=$true)] $varProject,
+	[string] $varDomain,
+	[string] $varProject,
 	[string] $varTestsets,
 	[string] $varTimeout,
+	[string] $varReportName,
 	[string] $runMode,
-	[string] $testingToolHost,
-	[string][Parameter(Mandatory=$false)] $varReportName
+	[string] $testingToolHost
 )
 
 
@@ -49,7 +49,7 @@ $results = Join-Path $env:UFT_LAUNCHER -ChildPath "res\*.xml"
  #Write-Verbose "Remove temp files complited" 
  
 
-Invoke-RunFromAlmTask $varAlmserv $varSSOEnabled $varClientID $varApiKeySecret $varUserName $varPass $varDomain $varProject $runMode $testingToolHost $varTimeout $varTestsets $varReportName -Verbose
+Invoke-RunFromAlmTask $varAlmserv $varSSOEnabled $varClientID $varApiKeySecret $varUserName $varPass $varDomain $varProject $varTestsets $varTimeout $varReportName $runMode $testingToolHost -Verbose
 
 if (Test-Path $report)
 {
@@ -64,20 +64,29 @@ if (Test-Path $retcodefile)
 
 	if($retcode -eq 0)
 	{
-		Write-Host "Test passed"
+		Write-Host "Return code: $($retcode)"
+		Write-Host "Tests passed"
+	}
+
+	if($retcode -eq -1)
+	{
+		Write-Host "Return code: $($retcode)"
+		Write-Host "Task failed"
+		<#Write-Error "Task Failed"#>
+	}
+
+	if($retcode -eq -2)
+	{
+		Write-Host "Return code: $($retcode)"
+		Write-Host "Job unstable"
 	}
 
 	if ($retcode -eq -3)
 	{
 		#writes log messages in case of errors
+		Write-Host "Return code: $($retcode)"
 		Write-Error "Task Failed with message: Closed by user"
 	}
-	elseif ($retcode -ne 0)
-	{
-		Write-Host "Return code: $($retcode)"
-		Write-Host "Task failed"
-		Write-Error "Task Failed"
-	}
-	
+		
 	<#Remove-Item $retcodefile#>
 }

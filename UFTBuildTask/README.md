@@ -5,17 +5,18 @@ Additionally, use the plugin for prepairing the test environment before running 
 
 # Supported Product Versions
 
-This Extension supports UFT version 14.xx
+This Extension supports UFT starting from version 14.00.
 
 # What's New in this Release
 
-> **October 2019**
-> - updated launcher tool
-> - updated documentation
+> **April 2020**
+> - add support for ALM SSO
+> - add UFT test result report task (for TFS only)
+> - bug fixing
 
 # Installation Instructions and documentation
 
-For full installation instructions and documentation please consult our help page: [Unified Functional Testing (UFT) Wiki](https://github.com/hpsa/ADM-TFS-Extension/wiki/Unified-Functional-Testing-%28UFT%29-TFS-Extension).
+For full installation instructions and documentation please consult our help page: [UFT and Azure DevOps Extension](https://admhelp.microfocus.com/uft/en/15.0/UFT_Help/Content/UFT_Tools/Azure_DevOps_Extension/uft-azure-devops.htm).
 
 
 

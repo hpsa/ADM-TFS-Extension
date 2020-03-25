@@ -9,6 +9,7 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Drawing;
 using PSModule.Properties;
+using PSModule;
 
 namespace TestReport
 {
@@ -37,54 +38,14 @@ namespace TestReport
         protected override void ProcessRecord()
         {
             listReport = new List<ReportMetaData>();
-            readReportFromXMLFile(resultsFileName, ref listReport);
-            /*if (listReport != null)
-            {
-                foreach (ReportMetaData dataReport in listReport)
-                {
-                    WriteObject("Test: " + getTestName(dataReport.getDisplayName()) + ", " + dataReport.getDateTime() + ", " + dataReport.getStatus());
-                }
-            }*/
+
+            listReport = Helper.readReportFromXMLFile(resultsFileName);
 
             //create html report
             createSummaryReport(ref listReport);
         }
 
-        private void readReportFromXMLFile(string reportPath, ref List<ReportMetaData> listReport)
-        {
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(reportPath);
-
-            foreach (XmlNode node in xmlDoc.DocumentElement.ChildNodes)
-            {
-                foreach (XmlNode currentNode in node)
-                {
-                    ReportMetaData reportmetadata = new ReportMetaData();
-                    XmlAttributeCollection attributesList = currentNode.Attributes;
-                    foreach (XmlAttribute attribute in attributesList)
-                    {
-                        switch (attribute.Name)
-                        {
-                            case "name": reportmetadata.setDisplayName(attribute.Value); break;
-                            case "status": reportmetadata.setStatus(attribute.Value); break;
-                            default: break;
-                        }
-                    }
-
-                    XmlNodeList nodes = currentNode.ChildNodes;
-                    foreach (XmlNode xmlNode in nodes)
-                    {
-                        if (xmlNode.Name.Equals("system-out"))
-                        {
-                            reportmetadata.setDateTime(xmlNode.InnerText.Substring(0, 19));
-                        }
-                    }
-
-                    listReport.Add(reportmetadata);
-                }
-            }
-        }
-
+       
         private string getTestName(string testPath)
         {
             int pos = testPath.LastIndexOf("\\", StringComparison.Ordinal) + 1;
@@ -254,11 +215,10 @@ namespace TestReport
 
                 HtmlTableCell cell4 = new HtmlTableCell();
                 HtmlAnchor reportLink = new HtmlAnchor();
-             
-                //Console.WriteLine("path: " + Resources.run_results);
+
                 reportLink.HRef = "C:\\Users\\laakso.CORPDOM\\TFS\\TFS_project\\UFTWorking\\res\\run_results.html"; //Path.GetFullPath(Resources.run_results); 
                 reportLink.InnerText = "report";
-         
+
                 cell4.Controls.Add(reportLink);
                 cell4.Align = "center";
                 row.Cells.Add(cell4);

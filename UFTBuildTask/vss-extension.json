@@ -1,15 +1,16 @@
 {
   "manifestVersion": 1,
   "id": "UFT-Azure-extension",
-  "name": "Unified Functional Testing (UFT)",
+  "name": "UFT Azure DevOps extension",
   "version": "1.0.5",
-  "publisher": "uftpublisher",
+  "publisher": "anda-laakso",
   "targets": [
     {
-      "id": "Microsoft.VisualStudio.Services"
+      "id": "Microsoft.VisualStudio.Services",
+      "version": "[15.0,)"
     }
   ],
-  "description": "Enables you to run UFT tests as a build in a TFS build process. This extension includes 5 tasks.",
+  "description": "Enables you to run UFT tests as a build in an Azure DevOps build process. This extension includes 5 tasks.",
   "categories": [
     "Test"
   ],
@@ -65,7 +66,7 @@
       "path": "AlmLabManagementTask"
     },
     {
-      "path": "RunFromALM"
+      "path": "RunFromALMTask"
     },
     {
       "path": "RunFromFileSystemTask"
@@ -108,7 +109,7 @@
         "ms.vss-distributed-task.tasks"
       ],
       "properties": {
-        "name": "RunFromALM"
+        "name": "RunFromALMTask"
       }
     },
     {
@@ -133,6 +134,6 @@
     }
   ],
   "galleryFlags": [
-    "Public"
+    "Private"
   ]
 }

@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractLauncherTaskCmdlet.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="InvokeAlmLabManagementTaskCmdlet.cs" />
     <Compile Include="InvokeReportTaskCmdlet.cs" />

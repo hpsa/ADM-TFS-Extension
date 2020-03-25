@@ -9,7 +9,7 @@ param(
 $uftworkdir = $env:UFT_LAUNCHER
 Import-Module $uftworkdir\bin\PSModule.dll
 
-$retcodefile = Join-Path $env:UFT_LAUNCHER -ChildPath "res\FSTaskRetCode.txt"
+$retcodefile = Join-Path $env:UFT_LAUNCHER -ChildPath "res\TestRunReturnCode.txt"
 if (Test-Path $retcodefile)
 {
 	Remove-Item $retcodefile
@@ -30,7 +30,7 @@ if (Test-Path $retcodefile)
 	$content = Get-Content $retcodefile
 	[int]$retcode = [convert]::ToInt32($content, 10)
 
-	if ($retcode -eq 3)
+	if ($retcode -eq -3)
 	{
 		Write-Error "Task Failed with message: Closed by user"
 	}

@@ -34,19 +34,43 @@
       "helpMarkDown": "The address of your ALM server, in the format http:s//(ALM server name):(port)/qcbin"
     },
     {
+      "name": "varSSOEnabled",
+      "type": "boolean",
+      "label": "SSO Enabled",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "Obtain the Client ID and API key secret from your ALM site administrator."
+    },
+    {
+      "name": "varClientID",
+      "type": "string",
+      "label": "Client ID",
+      "defaultValue": "",
+      "visibleRule": "varSSOEnabled = true",
+      "helpMarkDown": "The Client ID that will access this ALM server during the build step run."
+    },
+    {
+      "name": "varApiKeySecret",
+      "type": "string",
+      "label": "ApiKeySecret",
+      "defaultValue": "",
+      "visibleRule": "varSSOEnabled = true",
+      "helpMarkDown": "The Api Secret Key that will access this ALM server during the build step run."
+    },
+    {
       "name": "varUserName",
       "type": "string",
-      "label": "User name",
+      "label": "Username",
       "defaultValue": "",
-      "required": true,
-      "helpMarkDown": "The user name that will access this ALM server during the build step run."
+      "visibleRule": "varSSOEnabled = false",
+      "helpMarkDown": "The username that will access this ALM server during the build step run."
     },
     {
       "name": "varPass",
       "type": "string",
       "label": "Password",
       "defaultValue": "",
-      "required": false,
+      "visibleRule": "varSSOEnabled = false",
       "helpMarkDown": "The password for the user that will access this ALM server during the build step run."
     },
     {
@@ -113,7 +137,7 @@
       "helpMarkDown": ""
     }
   ],
-  "instanceNameFormat": "RunFromALM: ",
+  "instanceNameFormat": "Run From ALM",
   "execution": {
     "PowerShell": {
       "target": "$(currentDirectory)\\localTask.ps1",

@@ -1,5 +1,5 @@
 ﻿{
-  "id": "2A12D98C-8838-40BA-BE69-C0B5D88743F5",
+  "id": "2A12D98C-8838-40BA-BE69-C0B5D88743F6",
   "name": "AlmLabEnvPrepareTask",
   "friendlyName": "UFT ALM Lab Management Environment Preparation",
   "description": "Use this build step to assign values to AUT Environment Configuration in ALM.",
@@ -12,7 +12,7 @@
   "version": {
     "Major": 1,
     "Minor": 0,
-    "Patch": 4
+    "Patch": 5
   },
   "demands": [
     "UFT_LAUNCHER"
@@ -25,47 +25,52 @@
     },
     {
       "name": "params",
-      "displayName": "Add parameters",
+      "displayName": "Add Parameters",
       "isExpanded": false
     }
   ],
   "minimumAgentVersion": "1.95.0",
-  "instanceNameFormat": "AlmLabEnvPrepareTask $(message)",
+  "instanceNameFormat": "Run From ALM Lab Environment Preparation $(message)",
   "inputs": [
     {
       "name": "varAlmserv",
       "type": "string",
-      "label": "ALM server",
+      "label": "ALM Server",
       "defaultValue": "",
-      "required": true
+      "required": true,
+      "helpMarkDown": "The address of your ALM server, in the format http:s//(ALM server name):(port)/qcbin"
     },
     {
       "name": "varUserName",
       "type": "string",
-      "label": "User name",
+      "label": "Username",
       "defaultValue": "",
-      "required": true
+      "required": true,
+      "helpMarkDown": "The username that will access this ALM server during the build step run."
     },
     {
       "name": "varPass",
-      "type": "string",
+      "type": "password",
       "label": "Password",
       "defaultValue": "",
-      "required": false
+      "required": false,
+      "helpMarkDown": "The password for the user that will access this ALM server during the build step run."
     },
     {
       "name": "varDomain",
       "type": "string",
       "label": "Domain",
       "defaultValue": "",
-      "required": true
+      "required": true,
+      "helpMarkDown": "The ALM domain in which the tests to run are stored."
     },
     {
       "name": "varProject",
       "type": "string",
       "label": "Project",
       "defaultValue": "",
-      "required": true
+      "required": true,
+      "helpMarkDown": "The ALM project in which the tests to run are stored."
     },
     {
       "name": "varEnvId",
@@ -109,7 +114,7 @@
     {
       "name": "jdkUserInputPath",
       "type": "string",
-      "label": "Use as existing configuration with ID:",
+      "label": "Use an existing configuration with ID:",
       "required": true,
       "groupName": "advanced",
       "defaultValue": "",
@@ -119,7 +124,7 @@
     {
       "name": "varPathToJSON",
       "type": "string",
-      "label": "Path to JSON file",
+      "label": "Path to JSON File",
       "defaultValue": "",
       "groupName": "advanced",
       "required": false,
@@ -136,7 +141,7 @@
     {
       "name": "paramType1",
       "type": "radio",
-      "label": "Parameter type",
+      "label": "Parameter Type",
       "required": true,
       "groupName": "params",
       "defaultValue": "JSON",
@@ -151,7 +156,7 @@
     {
       "name": "paramName1",
       "type": "string",
-      "label": "Parameter name",
+      "label": "Parameter Name",
       "defaultValue": "Parameters/",
       "required": true,
       "groupName": "params",
@@ -161,7 +166,7 @@
     {
       "name": "paramValue1",
       "type": "string",
-      "label": "Parameter value",
+      "label": "Parameter Value",
       "defaultValue": "",
       "required": true,
       "groupName": "params",
@@ -179,7 +184,7 @@
     {
       "name": "paramType2",
       "type": "radio",
-      "label": "Parameter type",
+      "label": "Parameter Type",
       "required": true,
       "groupName": "params",
       "defaultValue": "JSON",
@@ -194,7 +199,7 @@
     {
       "name": "paramName2",
       "type": "string",
-      "label": "Parameter name",
+      "label": "Parameter Name",
       "defaultValue": "Parameters/",
       "required": true,
       "groupName": "params",
@@ -204,7 +209,7 @@
     {
       "name": "paramValue2",
       "type": "string",
-      "label": "Parameter value",
+      "label": "Parameter Value",
       "defaultValue": "",
       "required": true,
       "groupName": "params",
@@ -222,7 +227,7 @@
     {
       "name": "paramType3",
       "type": "radio",
-      "label": "Parameter type",
+      "label": "Parameter Type",
       "required": true,
       "groupName": "params",
       "defaultValue": "JSON",
@@ -237,7 +242,7 @@
     {
       "name": "paramName3",
       "type": "string",
-      "label": "Parameter name",
+      "label": "Parameter Name",
       "defaultValue": "Parameters/",
       "required": true,
       "groupName": "params",
@@ -247,7 +252,7 @@
     {
       "name": "paramValue3",
       "type": "string",
-      "label": "Parameter value",
+      "label": "Parameter Value",
       "defaultValue": "",
       "required": true,
       "groupName": "params",
@@ -265,7 +270,7 @@
     {
       "name": "paramType4",
       "type": "radio",
-      "label": "Parameter type",
+      "label": "Parameter Type",
       "required": true,
       "groupName": "params",
       "defaultValue": "JSON",
@@ -280,7 +285,7 @@
     {
       "name": "paramName4",
       "type": "string",
-      "label": "Parameter name",
+      "label": "Parameter Name",
       "defaultValue": "Parameters/",
       "required": true,
       "groupName": "params",
@@ -290,7 +295,7 @@
     {
       "name": "paramValue4",
       "type": "string",
-      "label": "Parameter value",
+      "label": "Parameter Value",
       "defaultValue": "",
       "required": true,
       "groupName": "params",
@@ -308,7 +313,7 @@
     {
       "name": "paramType5",
       "type": "radio",
-      "label": "Parameter type",
+      "label": "Parameter Type",
       "required": true,
       "groupName": "params",
       "defaultValue": "JSON",
@@ -323,7 +328,7 @@
     {
       "name": "paramName5",
       "type": "string",
-      "label": "Parameter name",
+      "label": "Parameter Name",
       "defaultValue": "Parameters/",
       "required": true,
       "groupName": "params",
@@ -333,7 +338,7 @@
     {
       "name": "paramValue5",
       "type": "string",
-      "label": "Parameter value",
+      "label": "Parameter Value",
       "defaultValue": "",
       "required": true,
       "groupName": "params",
@@ -351,7 +356,7 @@
     {
       "name": "paramType6",
       "type": "radio",
-      "label": "Parameter type",
+      "label": "Parameter Type",
       "required": true,
       "groupName": "params",
       "defaultValue": "JSON",
@@ -366,7 +371,7 @@
     {
       "name": "paramName6",
       "type": "string",
-      "label": "Parameter name",
+      "label": "Parameter Name",
       "defaultValue": "Parameters/",
       "required": true,
       "groupName": "params",
@@ -376,7 +381,7 @@
     {
       "name": "paramValue6",
       "type": "string",
-      "label": "Parameter value",
+      "label": "Parameter Value",
       "defaultValue": "",
       "required": true,
       "groupName": "params",
@@ -394,7 +399,7 @@
     {
       "name": "paramType7",
       "type": "radio",
-      "label": "Parameter type",
+      "label": "Parameter Type",
       "required": true,
       "groupName": "params",
       "defaultValue": "JSON",
@@ -409,7 +414,7 @@
     {
       "name": "paramName7",
       "type": "string",
-      "label": "Parameter name",
+      "label": "Parameter Name",
       "defaultValue": "Parameters/",
       "required": true,
       "groupName": "params",
@@ -419,7 +424,7 @@
     {
       "name": "paramValue7",
       "type": "string",
-      "label": "Parameter value",
+      "label": "Parameter Value",
       "defaultValue": "",
       "required": true,
       "groupName": "params",
@@ -437,7 +442,7 @@
     {
       "name": "paramType8",
       "type": "radio",
-      "label": "Parameter type",
+      "label": "Parameter Type",
       "required": true,
       "groupName": "params",
       "defaultValue": "JSON",
@@ -452,7 +457,7 @@
     {
       "name": "paramName8",
       "type": "string",
-      "label": "Parameter name",
+      "label": "Parameter Name",
       "defaultValue": "Parameters/",
       "required": true,
       "groupName": "params",
@@ -462,7 +467,7 @@
     {
       "name": "paramValue8",
       "type": "string",
-      "label": "Parameter value",
+      "label": "Parameter Value",
       "defaultValue": "",
       "required": true,
       "groupName": "params",
@@ -480,7 +485,7 @@
     {
       "name": "paramType9",
       "type": "radio",
-      "label": "Parameter type",
+      "label": "Parameter Type",
       "required": true,
       "groupName": "params",
       "defaultValue": "JSON",
@@ -495,7 +500,7 @@
     {
       "name": "paramName9",
       "type": "string",
-      "label": "Parameter name",
+      "label": "Parameter Name",
       "defaultValue": "Parameters/",
       "required": true,
       "groupName": "params",
@@ -505,7 +510,7 @@
     {
       "name": "paramValue9",
       "type": "string",
-      "label": "Parameter value",
+      "label": "Parameter Value",
       "defaultValue": "",
       "required": true,
       "groupName": "params",
@@ -523,7 +528,7 @@
     {
       "name": "paramType10",
       "type": "radio",
-      "label": "Parameter type",
+      "label": "Parameter Type",
       "required": true,
       "groupName": "params",
       "defaultValue": "JSON",
@@ -538,7 +543,7 @@
     {
       "name": "paramName10",
       "type": "string",
-      "label": "Parameter name",
+      "label": "Parameter Name",
       "defaultValue": "Parameters/",
       "required": true,
       "groupName": "params",
@@ -548,7 +553,7 @@
     {
       "name": "paramValue10",
       "type": "string",
-      "label": "Parameter value",
+      "label": "Parameter Value",
       "defaultValue": "",
       "required": true,
       "groupName": "params",

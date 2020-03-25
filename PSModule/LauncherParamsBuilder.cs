@@ -23,7 +23,7 @@ namespace PSModule
     public class LauncherParamsBuilder
     {
         private string secretkey = "EncriptionPass4Java";
-        private readonly List<string> requiredParameters = new List<string> { "almRunHost", "almPassword" };
+        private readonly List<string> requiredParameters = new List<string> { "almRunHost", "almUserName", "almPassword" };
         private Dictionary<string, string> properties = new Dictionary<string, string>();
 
         public Dictionary<string, string> GetProperties()
@@ -68,6 +68,22 @@ namespace PSModule
         public void SetAlmProject(string almProject)
         {
             SetParamValue("almProject", almProject);
+        }
+
+        public void SetSSOEnabled(string ssoEnabled)
+        {
+            SetParamValue("SSOEnabled", ssoEnabled);
+        }
+
+        public void SetClientID(string clientID)
+        {
+            SetParamValue("almClientID", clientID);
+        }
+
+        public void SetApiKeySecret(string apiKeySecret)
+        {
+            string encAlmApiKey = EncryptParameter(apiKeySecret);
+            SetParamValue("almApiKey", encAlmApiKey);
         }
 
         public void SetAlmRunMode(AlmRunMode almRunMode)
@@ -274,6 +290,7 @@ namespace PSModule
             byte[] plainText = Encoding.UTF8.GetBytes(parameter);
             return Convert.ToBase64String(transform.TransformFinalBlock(plainText, 0, plainText.Length));
         }
+
 
     }
 }

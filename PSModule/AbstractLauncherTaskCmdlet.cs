@@ -8,6 +8,8 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Collections.Concurrent;
+using PSModule.Models;
+using System.Xml;
 
 namespace PSModule
 {
@@ -20,18 +22,17 @@ namespace PSModule
         private ConcurrentQueue<string> outputToProcess = new ConcurrentQueue<string>();
         private ConcurrentQueue<string> errorToProcess = new ConcurrentQueue<string>();
 
-        public AbstractLauncherTaskCmdlet() {}
+        public AbstractLauncherTaskCmdlet() { }
 
         public abstract Dictionary<string, string> GetTaskProperties();
 
         protected override void ProcessRecord()
         {
-            Trace.WriteLine("CTRACE: DEBUG EXTENSION");
             string launcherPath = "";
             string aborterPath = "";
             string paramFileName = "";
             string resultsFileName = "";
-           
+
             try
             {
                 Dictionary<string, string> properties = new Dictionary<string, string>();
@@ -45,36 +46,28 @@ namespace PSModule
                 }
 
                 string ufttfsdir = Environment.GetEnvironmentVariable("UFT_LAUNCHER");
-                      
+
                 launcherPath = Path.GetFullPath(Path.Combine(ufttfsdir, HpToolsLauncher_SCRIPT_NAME));
-            
+
                 aborterPath = Path.GetFullPath(Path.Combine(ufttfsdir, HpToolsAborter_SCRIPT_NAME));
-             
+
                 string propdir = Path.GetFullPath(Path.Combine(ufttfsdir, "props"));
-               
+
                 if (!Directory.Exists(propdir))
                     Directory.CreateDirectory(propdir);
 
                 string resdir = Path.GetFullPath(Path.Combine(ufttfsdir, "res"));
-             
+
                 if (!Directory.Exists(resdir))
                     Directory.CreateDirectory(resdir);
 
                 string timeSign = DateTime.Now.ToString("ddMMyyyyHHmmssSSS");
 
                 paramFileName = Path.Combine(propdir, "Props" + timeSign + ".txt");
-               
-                resultsFileName = Path.Combine(resdir, "Results" + timeSign + ".xml");
-              
-                resultsFileName = resultsFileName.Replace("\\", "\\\\");
-               
-                /*if (!File.Exists(resultsFileName))
-                {
-                    Trace.WriteLine("CTRACE: result file does not exist (!!!!!!!!!!!!)");
-                    WriteError(new ErrorRecord(new Exception("result file does not exist !!!!!!!!!!!!!"), "", ErrorCategory.WriteError, ""));
 
-                    File.Create(resultsFileName).Dispose();
-                }*/
+                resultsFileName = Path.Combine(resdir, "Results" + timeSign + ".xml");
+
+                resultsFileName = resultsFileName.Replace("\\", "\\\\");
 
                 properties.Add("resultsFilename", resultsFileName);
 
@@ -83,22 +76,15 @@ namespace PSModule
                     WriteError(new ErrorRecord(new Exception("cannot save properties"), "", ErrorCategory.WriteError, ""));
                     return;
                 }
+                
+                Run(launcherPath, paramFileName);
 
-                /*foreach (var prop in properties)
-                {
-                    WriteVerbose(string.Format("{0} : {1}", prop.Key, prop.Value));
-                }*/
-
-                int retCode = Run(launcherPath, paramFileName);
-                WriteVerbose("Return code: {retCode}");
-               
                 CollateResults(resultsFileName, _launcherConsole.ToString(), resdir);
+
+                List<ReportMetaData> listReport = Helper.readReportFromXMLFile(resultsFileName);
+
+                int retCode = Helper.getErrorCode(listReport);
                 CollateRetCode(resdir, retCode);
-                /*if (retCode == 3) {
-                    ThrowTerminatingError(new ErrorRecord(new ThreadInterruptedException(), "ClosedByUser", ErrorCategory.OperationStopped, ""));
-                } else {
-                    ThrowTerminatingError(new ErrorRecord(new ThreadInterruptedException(), "Task failed", ErrorCategory.OperationStopped, ""));
-                }*/
             }
             catch (IOException ioe)
             {
@@ -176,7 +162,7 @@ namespace PSModule
 
                 launcher.OutputDataReceived -= Launcher_OutputDataReceived;
                 launcher.ErrorDataReceived -= Launcher_ErrorDataReceived;
-
+                
                 launcher.WaitForExit();
 
                 return launcher.ExitCode;
@@ -192,7 +178,7 @@ namespace PSModule
         private void Launcher_ErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
             errorToProcess.Enqueue(e.Data);
-        }   
+        }
 
         private void Launcher_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
@@ -236,7 +222,8 @@ namespace PSModule
 
         protected virtual void CollateResults(string resultFile, string log, string resdir)
         {
-            if (!File.Exists(resultFile)) {
+            if (!File.Exists(resultFile))
+            {
                 WriteError(new ErrorRecord(new Exception("result file does not exist"), "", ErrorCategory.WriteError, ""));
                 File.Create(resultFile).Dispose();
             }
@@ -252,7 +239,7 @@ namespace PSModule
             if ((String.IsNullOrEmpty(resultFile) || !File.Exists(resultFile)) && String.IsNullOrEmpty(log))
             {
                 WriteError(new ErrorRecord(new FileNotFoundException($"No results file ({resultFile}) nor result log provided"), "", ErrorCategory.WriteError, ""));
-                
+
                 return;
             }
 
@@ -323,5 +310,74 @@ namespace PSModule
             }
             return results;
         }
+
+
+        /*private List<ReportMetaData> readReportFromXMLFile(string reportPath)
+        {
+            List<ReportMetaData> listReport = new List<ReportMetaData>();
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(reportPath);
+
+            foreach (XmlNode node in xmlDoc.DocumentElement.ChildNodes)
+            {
+                foreach (XmlNode currentNode in node)
+                {
+                    ReportMetaData reportmetadata = new ReportMetaData();
+                    XmlAttributeCollection attributesList = currentNode.Attributes;
+                    foreach (XmlAttribute attribute in attributesList)
+                    {
+                        switch (attribute.Name)
+                        {
+                            case "name": reportmetadata.setDisplayName(attribute.Value); break;
+                            case "status": reportmetadata.setStatus(attribute.Value); break;
+                            default: break;
+                        }
+                    }
+
+                    XmlNodeList nodes = currentNode.ChildNodes;
+                    foreach (XmlNode xmlNode in nodes)
+                    {
+                        if (xmlNode.Name.Equals("system-out"))
+                        {
+                            reportmetadata.setDateTime(xmlNode.InnerText.Substring(0, 19));
+                        }
+                    }
+                    listReport.Add(reportmetadata);
+                }
+            }
+
+            return listReport;
+        }
+
+        private int getErrorCode(List<ReportMetaData> listReport) 
+        {
+            int errorCode = 0;
+            int passedTests = 0;
+            int failedTests = 0;
+
+            foreach (ReportMetaData report in listReport)
+            {
+                if (report.getStatus().Equals("pass"))
+                {
+                    passedTests++;
+                }
+                if (report.getStatus().Equals("fail"))
+                {
+                    failedTests++;
+                }
+            }
+
+            if (passedTests > 0 && failedTests > 0)
+            {
+                errorCode = -2;//job unstable
+            }
+            if (passedTests == 0 && failedTests > 0)
+            {
+                errorCode = -1;//job failed
+            }
+
+            return errorCode;
+
+        }*/
     }
 }

@@ -124,7 +124,7 @@ namespace PSModule
 
         protected override string GetRetCodeFileName()
         {
-            return "RunFromAlmLabManagementTestRetCode.txt";
+            return "TestRunReturnCode.txt";
         }
     }
 }
