@@ -77,12 +77,19 @@ namespace PSModule
                     return;
                 }
                 
+                //run the build task
                 Run(launcherPath, paramFileName);
 
+                //collect results
                 CollateResults(resultsFileName, _launcherConsole.ToString(), resdir);
 
+                //create UFT report from the results file
                 List<ReportMetaData> listReport = Helper.readReportFromXMLFile(resultsFileName);
 
+                //create html report
+                Helper.createSummaryReport(ufttfsdir, ref listReport);
+
+                //get task return code
                 int retCode = Helper.getErrorCode(listReport);
                 CollateRetCode(resdir, retCode);
             }

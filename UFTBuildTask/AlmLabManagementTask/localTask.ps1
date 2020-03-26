@@ -23,6 +23,7 @@ param(
 $uftworkdir = $env:UFT_LAUNCHER
 Import-Module $uftworkdir\bin\PSModule.dll
 
+# delete old "ALM Lab Management Report" file and create a new one
 if (-Not $varReportName)
 {
 	$varReportName = "ALM Lab Management Report"
@@ -33,10 +34,10 @@ if (Test-Path $report)
 	Remove-Item $report
 }
 
-
+# delete old "TestRunReturnCode" file and create a new one
 if (-Not $varReturnCodeFile)
 {
-	$varReturnCodeFile = "RunFromAlmLabManagementTestRetCode.txt"
+	$varReturnCodeFile = "TestRunReturnCode.txt"
 }
 $retcodefile = Join-Path $env:UFT_LAUNCHER -ChildPath "res\$($varReturnCodeFile)" 
 if (Test-Path $retcodefile)
@@ -44,21 +45,23 @@ if (Test-Path $retcodefile)
 	Remove-Item $retcodefile
 }
 
-Write-Verbose "Remove temp files"
+# remove temporary files complited
 $results = Join-Path $env:UFT_LAUNCHER -ChildPath "res\*.xml"
  Get-ChildItem -Path $results | foreach ($_) { Remove-Item $_.fullname }
+
 
 $CDA1 = [bool]($varUseCDA) 
 Invoke-AlmLabManagementTask $varAlmServ $varUserName $varPass $varDomain $varProject $varRunType $varTestSet $varDescription $varTimeslotDuration $varEnvironmentConfigurationID $varReportName $CDA1 $varDeploymentAction $varDeploymentEnvironmentName $varDeprovisioningAction -Verbose
 
-Write-Verbose $results
 
-if (Test-Path $report)
+# create summary UFT report
+if (Test-Path $summaryReport)
 {
 	#uploads report files to build artifacts
-	Write-Host "##vso[task.uploadsummary]$($report)"
+	Write-Host "##vso[task.uploadsummary]$($summaryReport)" | ConvertTo-Html
 }
 
+# read return code
 if (Test-Path $retcodefile)
 {
 	$content = Get-Content $retcodefile
@@ -69,8 +72,7 @@ if (Test-Path $retcodefile)
 		Write-Host "Test passed"
 	}
 
-
-	if ($retcode -eq 3)
+	if ($retcode -eq -3)
 	{
 		#writes log messages in case of errors
 		Write-Error "Task Failed with message: Closed by user"
@@ -82,8 +84,6 @@ if (Test-Path $retcodefile)
 		Write-Host "Task failed"
 		Write-Error "Task Failed"
 	}
-
-	<# Remove-Item $retcodefile #>
 }
 
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PSModule.Models;
+using System;
 using System.Collections.Generic;
 using System.Management.Automation;
 
@@ -46,6 +47,7 @@ namespace PSModule
         [Parameter(Position = 12)]
         public string ALMRunHost;
 
+       
         protected override string GetReportFilename()
         {
             return String.IsNullOrEmpty(ReportName) ? base.GetReportFilename() : ReportName;
@@ -100,5 +102,6 @@ namespace PSModule
         {
             return "TestRunReturnCode.txt";
         }
+
     }
 }

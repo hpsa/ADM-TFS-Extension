@@ -12,7 +12,7 @@
   ],
   "description": "Enables you to run UFT tests as a build in an Azure DevOps build process. This extension includes 5 tasks.",
   "categories": [
-    "Test"
+    "Azure Pipelines"
   ],
   "resources": [
     "some stuff"
@@ -70,9 +70,6 @@
     },
     {
       "path": "RunFromFileSystemTask"
-    },
-    {
-      "path": "ReportTask"
     }
   ],
   "scopes": [
@@ -120,16 +117,6 @@
       ],
       "properties": {
         "name": "RunFromFileSystemTask"
-      }
-    },
-    {
-      "id": "custom-build-task-5",
-      "type": "ms.vss-distributed-task.task",
-      "targets": [
-        "ms.vss-distributed-task.tasks"
-      ],
-      "properties": {
-        "name": "ReportTask"
       }
     }
   ],
