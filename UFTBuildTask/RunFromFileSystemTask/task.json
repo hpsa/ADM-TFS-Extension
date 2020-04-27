@@ -1,5 +1,5 @@
 ﻿{
-  "id": "CFBE1493-3BB1-44D5-AC87-7F14A148A6F3",
+  "id": "CFBE1493-3BB1-44D5-AC87-7F14A148A6F2",
   "name": "RunFromFileSystemTask",
   "friendlyName": "UFT File System Execution",
   "description": "Execute UFT tests from file system",
@@ -12,7 +12,7 @@
   "version": {
     "Major": 1,
     "Minor": 0,
-    "Patch": 6
+    "Patch": 9
   },
   "demands": "UFT_LAUNCHER",
   "inputs": [

@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "UFT-Azure-extension",
   "name": "UFT Azure DevOps extension",
-  "version": "1.0.6",
+  "version": "1.0.9",
   "publisher": "uftpublisher",
   "targets": [
     {
