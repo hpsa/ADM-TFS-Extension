@@ -1,7 +1,7 @@
 ﻿{
-  "id": "2A12D98C-8838-40BA-BE69-C0B5D88743F6",
+  "id": "2A12D98C-8838-40BA-BE69-C0B5D88743F5",
   "name": "AlmLabEnvPrepareTask",
-  "friendlyName": "UFT ALM Lab Management Environment Preparation",
+  "friendlyName": "UFT ALM Lab Environment Preparation",
   "description": "Use this build step to assign values to AUT Environment Configuration in ALM.",
   "category": "Test",
   "visibility": [
@@ -12,7 +12,7 @@
   "version": {
     "Major": 1,
     "Minor": 0,
-    "Patch": 5
+    "Patch": 6
   },
   "demands": [
     "UFT_LAUNCHER"

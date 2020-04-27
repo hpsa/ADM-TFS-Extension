@@ -83,15 +83,19 @@ namespace PSModule
                 //collect results
                 CollateResults(resultsFileName, _launcherConsole.ToString(), resdir);
 
-                //create UFT report from the results file
-                List<ReportMetaData> listReport = Helper.readReportFromXMLFile(resultsFileName);
+                int retCode = -1;
+                if (File.Exists(resultsFileName) && (new FileInfo(resultsFileName).Length > 0))//if results file exists
+                {
+                    //create UFT report from the results file
+                    List<ReportMetaData> listReport = Helper.readReportFromXMLFile(resultsFileName);
 
-                //create html report
-                Helper.createSummaryReport(ufttfsdir, ref listReport);
+                    //create html report
+                    Helper.createSummaryReport(ufttfsdir, ref listReport);
 
-                //get task return code
-                int retCode = Helper.getErrorCode(listReport);
-                CollateRetCode(resdir, retCode);
+                    //get task return code
+                    retCode = Helper.getErrorCode(listReport);
+                    CollateRetCode(resdir, retCode);
+                }
             }
             catch (IOException ioe)
             {
@@ -317,74 +321,5 @@ namespace PSModule
             }
             return results;
         }
-
-
-        /*private List<ReportMetaData> readReportFromXMLFile(string reportPath)
-        {
-            List<ReportMetaData> listReport = new List<ReportMetaData>();
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(reportPath);
-
-            foreach (XmlNode node in xmlDoc.DocumentElement.ChildNodes)
-            {
-                foreach (XmlNode currentNode in node)
-                {
-                    ReportMetaData reportmetadata = new ReportMetaData();
-                    XmlAttributeCollection attributesList = currentNode.Attributes;
-                    foreach (XmlAttribute attribute in attributesList)
-                    {
-                        switch (attribute.Name)
-                        {
-                            case "name": reportmetadata.setDisplayName(attribute.Value); break;
-                            case "status": reportmetadata.setStatus(attribute.Value); break;
-                            default: break;
-                        }
-                    }
-
-                    XmlNodeList nodes = currentNode.ChildNodes;
-                    foreach (XmlNode xmlNode in nodes)
-                    {
-                        if (xmlNode.Name.Equals("system-out"))
-                        {
-                            reportmetadata.setDateTime(xmlNode.InnerText.Substring(0, 19));
-                        }
-                    }
-                    listReport.Add(reportmetadata);
-                }
-            }
-
-            return listReport;
-        }
-
-        private int getErrorCode(List<ReportMetaData> listReport) 
-        {
-            int errorCode = 0;
-            int passedTests = 0;
-            int failedTests = 0;
-
-            foreach (ReportMetaData report in listReport)
-            {
-                if (report.getStatus().Equals("pass"))
-                {
-                    passedTests++;
-                }
-                if (report.getStatus().Equals("fail"))
-                {
-                    failedTests++;
-                }
-            }
-
-            if (passedTests > 0 && failedTests > 0)
-            {
-                errorCode = -2;//job unstable
-            }
-            if (passedTests == 0 && failedTests > 0)
-            {
-                errorCode = -1;//job failed
-            }
-
-            return errorCode;
-
-        }*/
     }
 }

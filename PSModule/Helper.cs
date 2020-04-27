@@ -86,7 +86,6 @@ namespace PSModule
 
         public static void createSummaryReport(string uftWorkingFolder, ref List<ReportMetaData> reportList)
         {
-            Console.WriteLine("Creating summary report");
             HtmlTable table = new HtmlTable();
             HtmlTableRow header = new HtmlTableRow();
             HtmlTableCell h1 = new HtmlTableCell();

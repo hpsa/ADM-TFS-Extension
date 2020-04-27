@@ -21,6 +21,7 @@ param(
 
 
 $uftworkdir = $env:UFT_LAUNCHER
+
 Import-Module $uftworkdir\bin\PSModule.dll
 
 # delete old "ALM Lab Management Report" file and create a new one
@@ -29,9 +30,17 @@ if (-Not $varReportName)
 	$varReportName = "ALM Lab Management Report"
 }
 $report = Join-Path $env:UFT_LAUNCHER -ChildPath "res\$($varReportName)"
+
 if (Test-Path $report)
 {
 	Remove-Item $report
+}
+
+# delete old "UFT Report" file and create a new one
+$summaryReport = Join-Path $env:UFT_LAUNCHER -ChildPath "res\UFT Report"
+if (Test-Path $summaryReport)
+{
+	Remove-Item $summaryReport
 }
 
 # delete old "TestRunReturnCode" file and create a new one
