@@ -18,7 +18,7 @@ namespace PSModule
 
         protected override void CollateResults(string resultFile, string log, string resdir)
         {
-            //do nothing here. Collate results should be made by the standard "Copu and Publish Artifacts" TFS task
+            //do nothing here. Collate results should be made by the standard "Copy and Publish Artifacts" TFS task
         }
 
         public override Dictionary<string, string> GetTaskProperties()
@@ -28,7 +28,7 @@ namespace PSModule
             builder.SetRunType(RunType.FileSystem);
             builder.SetPerScenarioTimeOut(Timeout);
 
-            var tests = TestsPath.Split(";".ToArray());
+            var tests = TestsPath.Split("\n".ToArray());
 
             for (int i = 0; i < tests.Length; i++)
             {
@@ -41,7 +41,7 @@ namespace PSModule
 
         protected override string GetRetCodeFileName()
         {
-            return "FSTaskRetCode.txt";
+            return "TestRunReturnCode.txt";
         }
     }
 }

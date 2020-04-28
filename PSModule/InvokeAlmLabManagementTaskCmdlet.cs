@@ -54,16 +54,7 @@ namespace PSModule
         [Parameter(Position = 14)]
         public string DeprovisioningAction;
 
-        [Parameter(Position = 15)]
-        public string almRunHost;
-
-        [Parameter(Position = 16)]
-        public string almRunMode;
-
-        [Parameter(Position = 17)]
-        public string almTimeout;
-
-
+       
         protected override string GetReportFilename()
         {
             return String.IsNullOrEmpty(ReportName) ? base.GetReportFilename() : ReportName;
@@ -74,14 +65,12 @@ namespace PSModule
         {
             LauncherParamsBuilder builder = new LauncherParamsBuilder();
 
-            Console.WriteLine("Setting ALM Lab Management parameters");
             builder.SetRunType(RunType.AlmLabManagement);
             builder.SetAlmServerUrl(ALMServerPath);
             builder.SetAlmUserName(ALMUserName);
             builder.SetAlmPassword(ALMPassword);
             builder.SetAlmDomain(ALMDomain);
             builder.SetAlmProject(ALMProject);
-            builder.SetTimeslotDuration(TimeslotDuration);
 
             switch (TestRunType)
             {
@@ -115,16 +104,16 @@ namespace PSModule
             }
 
             //set ALM mandatory parameters
-            builder.SetAlmRunHost("localhost");
+            builder.SetAlmTimeout(TimeslotDuration);
             builder.SetAlmRunMode(AlmRunMode.RUN_LOCAL);
-            builder.SetAlmTimeout("30");
+            builder.SetAlmRunHost("localhost");
 
             return builder.GetProperties();
         }
 
         protected override string GetRetCodeFileName()
         {
-            return "RunFromAlmLabManagementTestRetCode.txt";
+            return "TestRunReturnCode.txt";
         }
     }
 }

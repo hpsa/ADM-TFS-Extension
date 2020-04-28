@@ -40,11 +40,13 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.PowerShell.5.ReferenceAssemblies.1.0.0\lib\net4\System.Management.Automation.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -55,13 +57,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractLauncherTaskCmdlet.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="InvokeAlmLabManagementTaskCmdlet.cs" />
     <Compile Include="InvokeRunFromALMTaskCmdlet.cs" />
     <Compile Include="Models\MobileSettings.cs" />
     <Compile Include="InvokeFSTaskCmdlet.cs" />
     <Compile Include="LauncherParamsBuilder.cs" />
+    <Compile Include="Models\ReportMetaData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -74,6 +83,20 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\run_results.html" />
+    <Content Include="Reports\run_results.xml" />
+    <None Include="Resources\passed.png" />
+    <None Include="Resources\failed.png" />
+    <EmbeddedResource Include="Resources\run_results.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

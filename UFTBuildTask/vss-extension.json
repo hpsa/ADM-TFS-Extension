@@ -1,26 +1,26 @@
 {
   "manifestVersion": 1,
-  "id": "application-UFT-TFS-Version2",
-  "name": "Unified Functional Testing (UFT)",
-  "version": "1.0.4",
+  "id": "UFT-Azure-extension",
+  "name": "UFT Azure DevOps extension",
+  "version": "1.0.9",
   "publisher": "uftpublisher",
   "targets": [
     {
-      "id": "Microsoft.VisualStudio.Services"
+      "id": "Microsoft.VisualStudio.Services",
+      "version": "[15.0,)"
     }
   ],
-  "description": "Enables you to run UFT tests as a build in a TFS build process. This extension includes 4 tasks.",
+  "description": "Enables you to run UFT tests as a build in an Azure DevOps build process. This extension includes 5 tasks.",
   "categories": [
-    "Azure Repos",
-    "Azure Pipelines",
-    "Azure Test Plans"
+    "Azure Pipelines", "Azure Repos", "Azure Test Plans"
   ],
   "resources": [
     "some stuff"
   ],
   "tags": [
     "UFT",
-    "ALM"
+    "ALM",
+    "Test task"
   ],
   "icons": {
     "default": "img/tfs.png"
@@ -67,7 +67,7 @@
       "path": "AlmLabManagementTask"
     },
     {
-      "path": "RunFromALM"
+      "path": "RunFromALMTask"
     },
     {
       "path": "RunFromFileSystemTask"
@@ -78,8 +78,9 @@
     "vso.build_execute",
     "vso.serviceendpoint"
   ],
+  
   "contributions": [
-    {
+       {
       "id": "custom-build-task-1",
       "type": "ms.vss-distributed-task.task",
       "targets": [
@@ -106,7 +107,7 @@
         "ms.vss-distributed-task.tasks"
       ],
       "properties": {
-        "name": "RunFromALM"
+        "name": "RunFromALMTask"
       }
     },
     {

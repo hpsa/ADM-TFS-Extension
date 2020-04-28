@@ -7,7 +7,9 @@ using System.Threading;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Text;
-
+using System.Collections.Concurrent;
+using PSModule.Models;
+using System.Xml;
 
 namespace PSModule
 {
@@ -17,18 +19,20 @@ namespace PSModule
         const string HpToolsLauncher_SCRIPT_NAME = "HpToolsLauncher.exe";
         const string HpToolsAborter_SCRIPT_NAME = "HpToolsAborter.exe";
 
-        public AbstractLauncherTaskCmdlet() {}
+        private ConcurrentQueue<string> outputToProcess = new ConcurrentQueue<string>();
+        private ConcurrentQueue<string> errorToProcess = new ConcurrentQueue<string>();
+
+        public AbstractLauncherTaskCmdlet() { }
 
         public abstract Dictionary<string, string> GetTaskProperties();
 
         protected override void ProcessRecord()
         {
-            Trace.WriteLine("CTRACE: DEBUG EXTENSION");
             string launcherPath = "";
             string aborterPath = "";
             string paramFileName = "";
             string resultsFileName = "";
-           
+
             try
             {
                 Dictionary<string, string> properties = new Dictionary<string, string>();
@@ -42,36 +46,28 @@ namespace PSModule
                 }
 
                 string ufttfsdir = Environment.GetEnvironmentVariable("UFT_LAUNCHER");
-                      
+
                 launcherPath = Path.GetFullPath(Path.Combine(ufttfsdir, HpToolsLauncher_SCRIPT_NAME));
-            
+
                 aborterPath = Path.GetFullPath(Path.Combine(ufttfsdir, HpToolsAborter_SCRIPT_NAME));
-             
+
                 string propdir = Path.GetFullPath(Path.Combine(ufttfsdir, "props"));
-               
+
                 if (!Directory.Exists(propdir))
                     Directory.CreateDirectory(propdir);
 
                 string resdir = Path.GetFullPath(Path.Combine(ufttfsdir, "res"));
-             
+
                 if (!Directory.Exists(resdir))
                     Directory.CreateDirectory(resdir);
 
                 string timeSign = DateTime.Now.ToString("ddMMyyyyHHmmssSSS");
 
                 paramFileName = Path.Combine(propdir, "Props" + timeSign + ".txt");
-               
-                resultsFileName = Path.Combine(resdir, "Results" + timeSign + ".xml");
-              
-                resultsFileName = resultsFileName.Replace("\\", "\\\\");
-               
-                /*if (!File.Exists(resultsFileName))
-                {
-                    Trace.WriteLine("CTRACE: result file does not exist (!!!!!!!!!!!!)");
-                    WriteError(new ErrorRecord(new Exception("result file does not exist !!!!!!!!!!!!!"), "", ErrorCategory.WriteError, ""));
 
-                    File.Create(resultsFileName).Dispose();
-                }*/
+                resultsFileName = Path.Combine(resdir, "Results" + timeSign + ".xml");
+
+                resultsFileName = resultsFileName.Replace("\\", "\\\\");
 
                 properties.Add("resultsFilename", resultsFileName);
 
@@ -80,22 +76,26 @@ namespace PSModule
                     WriteError(new ErrorRecord(new Exception("cannot save properties"), "", ErrorCategory.WriteError, ""));
                     return;
                 }
+                
+                //run the build task
+                Run(launcherPath, paramFileName);
 
-                /*foreach (var prop in properties)
-                {
-                    WriteVerbose(string.Format("{0} : {1}", prop.Key, prop.Value));
-                }*/
-
-                int retCode = Run(launcherPath, paramFileName);
-                WriteVerbose("Return code: {retCode}");
-               
+                //collect results
                 CollateResults(resultsFileName, _launcherConsole.ToString(), resdir);
-                CollateRetCode(resdir, retCode);
-                /*if (retCode == 3) {
-                    ThrowTerminatingError(new ErrorRecord(new ThreadInterruptedException(), "ClosedByUser", ErrorCategory.OperationStopped, ""));
-                } else {
-                    ThrowTerminatingError(new ErrorRecord(new ThreadInterruptedException(), "Task failed", ErrorCategory.OperationStopped, ""));
-                }*/
+
+                int retCode = -1;
+                if (File.Exists(resultsFileName) && (new FileInfo(resultsFileName).Length > 0))//if results file exists
+                {
+                    //create UFT report from the results file
+                    List<ReportMetaData> listReport = Helper.readReportFromXMLFile(resultsFileName);
+
+                    //create html report
+                    Helper.createSummaryReport(ufttfsdir, ref listReport);
+
+                    //get task return code
+                    retCode = Helper.getErrorCode(listReport);
+                    CollateRetCode(resdir, retCode);
+                }
             }
             catch (IOException ioe)
             {
@@ -146,27 +146,34 @@ namespace PSModule
                 info.RedirectStandardError = true;
 
                 Process launcher = new Process();
+                launcher.OutputDataReceived += Launcher_OutputDataReceived;
+                launcher.ErrorDataReceived += Launcher_ErrorDataReceived;
 
                 launcher.StartInfo = info;
 
                 launcher.Start();
 
-                while ((!launcher.StandardOutput.EndOfStream)  || (!launcher.StandardError.EndOfStream))
+                launcher.BeginOutputReadLine();
+                launcher.BeginErrorReadLine();
+
+                while (!launcher.HasExited)
                 {
-                   
-                    if (!launcher.StandardOutput.EndOfStream) {
-                        string line = launcher.StandardOutput.ReadLine();
+                    if (outputToProcess.TryDequeue(out string line))
+                    {
                         _launcherConsole.Append(line);
                         WriteObject(line);
                     }
-                    
-                    
-                    if (!launcher.StandardError.EndOfStream) {
-                        string lineErr = launcher.StandardError.ReadLine();
-                        _launcherConsole.Append(lineErr);
-                        WriteObject(lineErr);
+
+                    if (errorToProcess.TryDequeue(out line))
+                    {
+                        _launcherConsole.Append(line);
+                        WriteObject(line);
                     }
                 }
+
+                launcher.OutputDataReceived -= Launcher_OutputDataReceived;
+                launcher.ErrorDataReceived -= Launcher_ErrorDataReceived;
+                
                 launcher.WaitForExit();
 
                 return launcher.ExitCode;
@@ -177,6 +184,16 @@ namespace PSModule
                 WriteError(new ErrorRecord(e, "ThreadInterruptedException", ErrorCategory.InvalidData, "ThreadInterruptedException targer"));
                 return -1;
             }
+        }
+
+        private void Launcher_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            errorToProcess.Enqueue(e.Data);
+        }
+
+        private void Launcher_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            outputToProcess.Enqueue(e.Data);
         }
 
         protected abstract string GetRetCodeFileName();
@@ -216,7 +233,8 @@ namespace PSModule
 
         protected virtual void CollateResults(string resultFile, string log, string resdir)
         {
-            if (!File.Exists(resultFile)) {
+            if (!File.Exists(resultFile))
+            {
                 WriteError(new ErrorRecord(new Exception("result file does not exist"), "", ErrorCategory.WriteError, ""));
                 File.Create(resultFile).Dispose();
             }
@@ -232,7 +250,7 @@ namespace PSModule
             if ((String.IsNullOrEmpty(resultFile) || !File.Exists(resultFile)) && String.IsNullOrEmpty(log))
             {
                 WriteError(new ErrorRecord(new FileNotFoundException($"No results file ({resultFile}) nor result log provided"), "", ErrorCategory.WriteError, ""));
-                
+
                 return;
             }
 

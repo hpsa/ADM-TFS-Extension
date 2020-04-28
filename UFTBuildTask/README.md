@@ -1,24 +1,22 @@
 # Integration with UFT
 
-This extension enables you to include UFT tests as a build step in a TFS build process. Run UFT tests stored on the local file system or on ALM, and then view your test results after the build is complete.
+This extension enables you to include UFT tests as a build step in an Azure DevOps build process. Run UFT tests stored on the local file system or on ALM, and then view your test results after the build is complete.
 Additionally, use the plugin for prepairing the test environment before running the tests from ALM. 
 
 # Supported Product Versions
 
-This Extension supports UFT version 14.xx
+This Extension supports UFT starting from version 14.00.
 
 # What's New in this Release
 
-> **May 2019**
-> - Fixed report link
-> - Updated the tasks running UFT tests 
+> **April 2020**
+> - add support for ALM SSO
+> - add UFT test result report task (for TFS only)
+> - bug fixing
 
-# Installation Instructions
+# Installation Instructions and documentation
 
-For full installation instructions, see the installation section on the [Unified Functional Testing (UFT) Wiki](https://github.com/hpsa/ADM-TFS-Extension/wiki/Unified-Functional-Testing-%28UFT%29-TFS-Extension).
+For full installation instructions and documentation please consult our help page: [UFT and Azure DevOps Extension](https://admhelp.microfocus.com/uft/en/15.0/UFT_Help/Content/UFT_Tools/Azure_DevOps_Extension/uft-azure-devops.htm).
 
-NOTE: You must have Administrator privileges to install the Extension on your TFS server.
 
-# Documentation
 
-Please check the [Wiki](https://github.com/hpsa/ADM-TFS-Extension/wiki/Unified-Functional-Testing-%28UFT%29-TFS-Extension).

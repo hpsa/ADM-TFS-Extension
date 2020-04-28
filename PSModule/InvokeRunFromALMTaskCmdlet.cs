@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PSModule.Models;
+using System;
 using System.Collections.Generic;
 using System.Management.Automation;
 
@@ -10,33 +11,43 @@ namespace PSModule
         [Parameter(Position = 0, Mandatory = true)]
         public string ALMServerPath;
 
-        [Parameter(Position = 1, Mandatory = true)]
-        public string ALMUserName;
+        [Parameter(Position = 1, Mandatory = false)]
+        public string SSOEnabled;
 
         [Parameter(Position = 2)]
-        public string ALMPassword;
+        public string ClientID;
 
-        [Parameter(Position = 3, Mandatory = true)]
-        public string ALMDomain;
+        [Parameter(Position = 3)]
+        public string ApiKeySecret;
 
-        [Parameter(Position = 4, Mandatory = true)]
-        public string ALMProject;
+        [Parameter(Position = 4)]
+        public string ALMUserName;
 
         [Parameter(Position = 5)]
-        public string RunMode;
+        public string ALMPassword;
 
         [Parameter(Position = 6)]
-        public string ALMRunHost;
+        public string ALMDomain;
 
         [Parameter(Position = 7)]
-        public string TimeOut;
+        public string ALMProject;
 
         [Parameter(Position = 8)]
         public string ALMTestSet;
 
         [Parameter(Position = 9)]
+        public string TimeOut;
+
+        [Parameter(Position = 10)]
         public string ReportName;
 
+        [Parameter(Position = 11)]
+        public string RunMode;
+
+        [Parameter(Position = 12)]
+        public string ALMRunHost;
+
+       
         protected override string GetReportFilename()
         {
             return String.IsNullOrEmpty(ReportName) ? base.GetReportFilename() : ReportName;
@@ -48,6 +59,9 @@ namespace PSModule
 
             builder.SetRunType(RunType.Alm);
             builder.SetAlmServerUrl(ALMServerPath);
+            builder.SetSSOEnabled(SSOEnabled);
+            builder.SetClientID(ClientID);
+            builder.SetApiKeySecret(ApiKeySecret);
             builder.SetAlmUserName(ALMUserName);
             builder.SetAlmPassword(ALMPassword);
             builder.SetAlmDomain(ALMDomain);
@@ -86,7 +100,8 @@ namespace PSModule
 
         protected override string GetRetCodeFileName()
         {
-            return "RunFromALMTestRetCode.txt";
+            return "TestRunReturnCode.txt";
         }
+
     }
 }

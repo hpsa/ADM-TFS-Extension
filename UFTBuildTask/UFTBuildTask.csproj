@@ -50,12 +50,6 @@
     <Content Include="AlmLabManagementTask\task.json" />
     <Content Include="AlmLabEnvPrepareTask\task.json" />
     <Content Include="img\tfs.png" />
-    <Content Include="RunFromALM\resources\screenshots\buildProcess.PNG" />
-    <Content Include="RunFromALM\resources\screenshots\fs.PNG" />
-    <Content Include="RunFromALM\resources\screenshots\log.PNG" />
-    <Content Include="RunFromALM\resources\screenshots\Prep.PNG" />
-    <Content Include="RunFromALM\resources\screenshots\screen2.png" />
-    <Content Include="RunFromALM\resources\screenshots\Test_Tasks.PNG" />
     <Content Include="VSS.SDK.js" />
     <None Include=".bin\bower.cmd" />
     <None Include=".bin\git.cmd" />
@@ -63,14 +57,9 @@
     <Content Include="AlmLabEnvPrepareTask\localTask.ps1" />
     <Content Include="AlmLabManagementTask\localTask.ps1" />
     <Content Include="AlmLabManagementTask\icon.png" />
-    <Content Include="RunFromALM\icon.png" />
     <Content Include="RunFromFileSystemTask\Strings\resources.resjson\en-US\resources.resjson" />
     <Content Include="RunFromFileSystemTask\task.json" />
-    <Content Include="RunFromALM\task.json" />
     <None Include="RunFromFileSystemTask\localTask.ps1" />
-    <Content Include="RunFromALM\localTask.ps1" />
-    <Content Include="RunFromALM\resources\img\tfs.png" />
-    <Content Include="RunFromALM\resources\screenshots\AlmExecution.PNG" />
     <Content Include="LICENSE" />
     <Content Include="README.md" />
     <Content Include="overview.md" />
@@ -91,11 +80,14 @@
     <None Include=".vscode\tasks.json" />
     <Content Include="RunFromFileSystemTask\icon.png" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <TypeScriptCompile Include="AlmLabEnvPrepareTask\publishbuildartifacts.ts" />
     <TypeScriptCompile Include="RunFromFileSystemTask\publishbuildartifacts.ts" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
