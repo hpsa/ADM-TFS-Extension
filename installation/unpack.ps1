@@ -1,4 +1,4 @@
-Ôªøfunction Expand-ZIPFile($file, $destination)
+function Expand-ZIPFile($file, $destination)
 {
     $shell = new-object -com shell.application
     $zip = $shell.NameSpace($file)
@@ -26,14 +26,17 @@ if($result)
     $uftPath = Get-ItemProperty -Path $Registry_Key | Select-Object -ExpandProperty $value
 
     $currdir = AbsPath -folder .\
-    $zipFile = Join-Path -Path $currdir -ChildPath ‚ÄúUFT.zip‚Äù
+    $zipFile = Join-Path -Path $currdir -ChildPath ìUFT.zipî
     Expand-ZIPFile $zipFile $currdir
-
-    $launcherPath = Join-Path $currdir -ChildPath "UFTWorking"
+	
+    $uft_dir = Join-Path $currdir -ChildPath "UFT"
+	
+	$launcherFolder = Get-ChildItem -Path $uft_dir -recurse -Directory| Where-Object {$_.PSIsContainer -eq $true -and $_.Name -match "UFTWorking"}
+	$launcherPath = $launcherFolder.fullName
     
-    [Environment]::SetEnvironmentVariable("UFT_LAUNCHER", $launcherPath, "Machine")
+	[Environment]::SetEnvironmentVariable("UFT_LAUNCHER", $launcherPath, "Machine")
 
 }else
 {
-     Write-Host "requared HPE UFT installed"
+     Write-Host "required Micro Focus UFT installed"
 }

@@ -35,13 +35,13 @@
   ],
   "links": {
     "home": {
-      "uri": "https://github.com/hpsa/ADM-TFS-Extension"
+      "uri": "https://github.com/MicroFocus/ADM-TFS-Extension"
     },
     "installation": {
-      "uri": "https://github.com/hpsa/ADM-TFS-Extension/wiki/Installing-the-Unified-Functional-Testing-TFS-Extension"
+      "uri": "https://admhelp.microfocus.com/uft/en/15.0-15.0.1/UFT_Help/Content/UFT_Tools/Azure_DevOps_Extension/uft-azure-devops.htm"
     },
     "learn": {
-      "uri": "https://github.com/hpsa/ADM-TFS-Extension/wiki/Unified-Functional-Testing-(UFT)-TFS-Extension"
+      "uri": "https://admhelp.microfocus.com/uft/en/15.0-15.0.1/UFT_Help/Content/UFT_Tools/Azure_DevOps_Extension/uft-azure-devops.htm"
     }
   },
   "content": {
