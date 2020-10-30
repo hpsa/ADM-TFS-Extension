@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI.HtmlControls;
@@ -132,14 +133,16 @@ namespace PSModule
 
                 HtmlTableCell cell3 = new HtmlTableCell();
                 HtmlImage statusImage = new HtmlImage();
+
                 if (report.getStatus().Equals("pass"))
                 {
-                    statusImage.Src = "data:image/png;base64," + ImageToBase64(Resources.passed);
+                   statusImage.Src = "https://extensionado.blob.core.windows.net/uft-extension-images/passed.png";
                 }
                 else
                 {
-                    statusImage.Src = "data:image/png;base64," + ImageToBase64(Resources.failed);
+                   statusImage.Src = "https://extensionado.blob.core.windows.net/uft-extension-images/failed.png";
                 }
+                          
 
                 cell3.Align = "center";
                 cell3.Controls.Add(statusImage);
@@ -161,7 +164,7 @@ namespace PSModule
             //add table to file
             string html;
             var reportMessage = new System.Text.StringBuilder();
-            reportMessage.Append("<!DOCTYPE html>< html >< head /> <body>");
+    
             using (var sw = new StringWriter())
             {
                 table.RenderControl(new System.Web.UI.HtmlTextWriter(sw));
@@ -169,8 +172,7 @@ namespace PSModule
             }
 
             reportMessage.AppendFormat(html);
-            reportMessage.Append("</body></html>");
-
+     
             System.IO.File.WriteAllText(uftWorkingFolder + @"\res\UFT Report", reportMessage.ToString());
         }
 
@@ -182,6 +184,9 @@ namespace PSModule
 
         private static string ImageToBase64(System.Drawing.Image _imagePath)
         {
+            Console.WriteLine("path to image: "  + _imagePath);
+                
+            
             byte[] imageBytes = ImageToByteArray(_imagePath);
             string base64String = Convert.ToBase64String(imageBytes);
             return base64String;
@@ -189,11 +194,17 @@ namespace PSModule
 
         private static byte[] ImageToByteArray(System.Drawing.Image imageIn)
         {
-            using (var ms = new MemoryStream())
+            MemoryStream ms = new MemoryStream();
+            imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+
+            return ms.ToArray();
+
+           /* using (var ms = new MemoryStream())
             {
                 imageIn.Save(ms, imageIn.RawFormat);
+                //imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
                 return ms.ToArray();
-            }
+            }*/
         }
     }
 }

@@ -39,7 +39,7 @@
       "label": "Username",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "The user name that will access this ALM server during the build step run."
+      "helpMarkDown": "The user name that will access this ALM server during the build step run"
     },
     {
       "name": "varPass",
@@ -47,7 +47,7 @@
       "label": "Password",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "The password for the user that will access this ALM server during the build step run."
+      "helpMarkDown": "The password for the user that will access this ALM server during the build step run"
     },
     {
       "name": "varDomain",
@@ -55,7 +55,7 @@
       "label": "Domain",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "The ALM domain in which the tests to run are stored."
+      "helpMarkDown": "The ALM domain in which the tests to run are stored"
     },
     {
       "name": "varProject",
@@ -63,7 +63,7 @@
       "label": "Project",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "The ALM project in which the tests to run are stored."
+      "helpMarkDown": "The ALM project in which the tests to run are stored"
     },
     {
       "name": "varRunType",
@@ -71,7 +71,7 @@
       "label": "Run Type",
       "defaultValue": "TEST_SET",
       "required": false,
-      "helpMarkDown": "The run mode (Suite run or Build Veriification Suite) to use when running the test.",
+      "helpMarkDown": "The run mode (Suite run or Build Verification Suite) to use when running the test",
       "options": {
         "TEST_SET": "Test set",
         "BVS": "Build verification suite"
@@ -83,7 +83,7 @@
       "label": "Test Set/Build Verification Suite ID",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "The ID number (found in ALM) for the test set or build verification suite."
+      "helpMarkDown": "The ID number (found in ALM) for the test set or build verification suite"
     },
     {
       "name": "varDescription",
@@ -91,7 +91,7 @@
       "label": "Description",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "The description of this test set/build verification suite."
+      "helpMarkDown": "The description of this test set/build verification suite"
     },
     {
       "name": "varTimeslotDuration",
@@ -99,7 +99,7 @@
       "label": "Timeslot Duration (in minutes, minimum = 30)",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "The amount of time needed on the host to run this test set/verification suite."
+      "helpMarkDown": "The amount of time needed on the host to run this test set/verification suite"
     },
     {
       "name": "varEnvironmentConfigurationID",
@@ -107,7 +107,7 @@
       "label": "Environment Configuration ID",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "To find the ID of your environment configuration, right-click the entity, copy the URL, and paste it to a text editor. Use the number associated with the EntityID at the end of the URL."
+      "helpMarkDown": "To find the ID of your environment configuration, right-click the entity, copy the URL, and paste it to a text editor. Use the number associated with the EntityID at the end of the URL"
     },
     {
       "name": "varReportName",
@@ -115,7 +115,7 @@
       "label": "Report Name",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "The name of the file containing the ALM report link."
+      "helpMarkDown": "The name of the file containing the ALM report link"
     },
     {
       "name": "varUseCDA",
@@ -124,7 +124,7 @@
       "groupName": "useCDAGroup",
       "defaultValue": "false",
       "required": false,
-      "helpMarkDown": "Use ALM CDA servers for deployment of the tests."
+      "helpMarkDown": "Use ALM CDA servers for deployment of the tests"
     },
     {
       "name": "varDeploymentAction",
@@ -133,7 +133,7 @@
       "defaultValue": "Use Deployed",
       "groupName": "useCDAGroup",
       "required": false,
-      "helpMarkDown": "The action to perform on deploying the server for running tests.",
+      "helpMarkDown": "The action to perform on deploying the server for running tests",
       "options": {
         "Use Deployed": "Use Deployed",
         "Provision and Deploy": "Provision and Deploy",
@@ -147,7 +147,7 @@
       "defaultValue": "",
       "groupName": "useCDAGroup",
       "required": false,
-      "helpMarkDown": "The name of environment on which you are deploying the server."
+      "helpMarkDown": "The name of environment on which you are deploying the server"
     },
     {
       "name": "varDeprovisioningAction",
@@ -156,7 +156,7 @@
       "defaultValue": "Leave environment deployed",
       "groupName": "useCDAGroup",
       "required": false,
-      "helpMarkDown": "The action to perform after the testing run when you are ready to end the server deployment.",
+      "helpMarkDown": "The action to perform after the testing run when you are ready to end the server deployment",
       "options": {
         "Leave environment deployed": "Leave environment deployed",
         "Deprovision at end": "Deprovision end"

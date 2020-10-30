@@ -22,7 +22,7 @@
       "label": "Tests",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "List of tests or folders that contain tests, to run. Each line should contain a single test, folder, or MTB file."
+      "helpMarkDown": "List of tests or folders that contain tests, to run. Each line should contain a single test, folder, or MTB file"
     },
     {
       "name": "timeOutIn",
@@ -30,7 +30,7 @@
       "label": "Timeout",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "Timeout value in seconds. If left empty, there is no timeout."
+      "helpMarkDown": "Timeout value in seconds. If left empty, there is no timeout"
     }
   ],
   "instanceNameFormat": "Run From File System",

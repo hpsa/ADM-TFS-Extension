@@ -85,11 +85,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="images\failed.png" />
+    <Content Include="images\passed.png" />
     <Content Include="Reports\run_results.html" />
     <Content Include="Reports\run_results.xml" />
     <None Include="Resources\passed.png" />
     <None Include="Resources\failed.png" />
-    <EmbeddedResource Include="Resources\run_results.html" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

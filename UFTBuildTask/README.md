@@ -1,7 +1,7 @@
 # Integration with UFT
 
 This extension enables you to include UFT tests as a build step in an Azure DevOps build process. Run UFT tests stored on the local file system or on ALM, and then view your test results after the build is complete.
-Additionally, use the plugin for prepairing the test environment before running the tests from ALM. 
+Additionally, use the plugin for preparing the test environment before running the tests from ALM. 
 
 # Supported Product Versions
 

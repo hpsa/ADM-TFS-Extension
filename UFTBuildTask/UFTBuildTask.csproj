@@ -49,7 +49,9 @@
     <Content Include="AlmLabEnvPrepareTask\icon.png" />
     <Content Include="AlmLabManagementTask\task.json" />
     <Content Include="AlmLabEnvPrepareTask\task.json" />
-    <Content Include="img\tfs.png" />
+    <Content Include="images\failed.png" />
+    <Content Include="images\passed.png" />
+    <Content Include="images\tfs.png" />
     <Content Include="VSS.SDK.js" />
     <None Include=".bin\bower.cmd" />
     <None Include=".bin\git.cmd" />

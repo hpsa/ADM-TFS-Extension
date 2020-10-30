@@ -79,14 +79,5 @@ namespace PSModule.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;&lt;html style=&apos;margin: 0;padding: 0;height: 100%;width: 100%;&apos;&gt;&lt;head&gt;&lt;meta http-equiv=&apos;X-UA-Compatible&apos; content=&apos;IE=Edge&apos;/&gt;&lt;meta name=&apos;revised&apos; content=&apos;14.51.1566.0&apos; /&gt;&lt;title&gt;Report&lt;/title&gt;&lt;style&gt;﻿html,body{margin:0;padding:0;height:100%;width:100%}body,pre,svg{font-family:Arial,&apos;Courier New&apos;,Tahoma,&apos;Times New Roman&apos;;margin:0}body{background-color:#f3f3f3;font-size:14px}DIV.IconYes{width:16px;height:16px;background-repeat:no-repeat;background-position:center;background-image:url(&apos;data:image/gi [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string run_results {
-            get {
-                return ResourceManager.GetString("run_results", resourceCulture);
-            }
-        }
     }
 }

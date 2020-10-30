@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "UFT-Azure-extension",
   "name": "UFT Azure DevOps extension",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "publisher": "uftpublisher",
   "targets": [
     {
@@ -12,7 +12,7 @@
   ],
   "description": "Enables you to run UFT tests as a build in an Azure DevOps build process. This extension includes 4 tasks.",
   "categories": [
-    "Test"
+    "Azure Pipelines"
   ],
   "resources": [
     "some stuff"
@@ -23,7 +23,7 @@
     "Test task"
   ],
   "icons": {
-    "default": "img/tfs.png"
+    "default": "images/tfs.png"
   },
   "screenshots ": [
     {

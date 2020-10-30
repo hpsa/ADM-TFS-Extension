@@ -39,7 +39,7 @@
       "label": "SSO Enabled",
       "defaultValue": "false",
       "required": false,
-      "helpMarkDown": "Obtain the Client ID and API key secret from your ALM site administrator."
+      "helpMarkDown": "Obtain the Client ID and API key secret from your ALM site administrator"
     },
     {
       "name": "varClientID",
@@ -48,7 +48,7 @@
       "defaultValue": "",
       "required": true,
       "visibleRule": "varSSOEnabled = true",
-      "helpMarkDown": "The Client ID that will access this ALM server during the build step run."
+      "helpMarkDown": "The Client ID that will access this ALM server during the build step run"
     },
     {
       "name": "varApiKeySecret",
@@ -57,7 +57,7 @@
       "defaultValue": "",
       "required": true,
       "visibleRule": "varSSOEnabled = true",
-      "helpMarkDown": "The API Secret Key for the client that will access this ALM server during the build step run."
+      "helpMarkDown": "The API Secret Key for the client that will access this ALM server during the build step run"
     },
     {
       "name": "varUserName",
@@ -66,18 +66,17 @@
       "defaultValue": "",
       "required": true,
       "visibleRule": "varSSOEnabled = false",
-      "helpMarkDown": "The username that will access this ALM server during the build step run."
+      "helpMarkDown": "The username that will access this ALM server during the build step run"
     },
     {
       "name": "varPass",
       "type": "string",
       "label": "Password",
-      "PasswordChar": "*",
       "isConfidential": true,
       "defaultValue": "",
       "required": false,
       "visibleRule": "varSSOEnabled = false",
-      "helpMarkDown": "The password for the user that will access this ALM server during the build step run."
+      "helpMarkDown": "The password for the user that will access this ALM server during the build step run"
     },
     {
       "name": "varDomain",
@@ -85,7 +84,7 @@
       "label": "Domain",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "The ALM domain in which the tests to run are stored."
+      "helpMarkDown": "The ALM domain in which the tests to run are stored"
     },
     {
       "name": "varProject",
@@ -93,7 +92,7 @@
       "label": "Project",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "The ALM project in which the tests to run are stored."
+      "helpMarkDown": "The ALM project in which the tests to run are stored"
     },
     {
       "name": "varTestsets",
@@ -101,7 +100,7 @@
       "label": "Test Sets",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "The test sets to run in the current build step."
+      "helpMarkDown": "The test sets to run in the current build step"
     },
     {
       "name": "varTimeout",
@@ -109,7 +108,7 @@
       "label": "Timeout",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "Timeout value in seconds. If left empty, there is no timeout."
+      "helpMarkDown": "Timeout value in seconds. If left empty, there is no timeout"
     },
     {
       "name": "varReportName",
@@ -117,7 +116,7 @@
       "label": "Report Name",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "The name of the file containing the ALM report link."
+      "helpMarkDown": "The name of the file containing the ALM report link"
     },
     {
       "name": "runMode",
@@ -125,7 +124,7 @@
       "label": "Run Mode",
       "defaultValue": "runLocally",
       "required": false,
-      "helpMarkDown": "The place to run the test: Remote host, local computer, or remote planned host.",
+      "helpMarkDown": "The place to run the test: Remote host, local computer, or remote planned host",
       "groupName": "advanced",
       "options": {
         "runLocally": "Run locally",
@@ -140,7 +139,7 @@
       "defaultValue": "",
       "groupName": "advanced",
       "required": false,
-      "helpMarkDown": "The address of the host running the selected tests."
+      "helpMarkDown": "The address of the host running the selected tests"
     }
   ],
   "instanceNameFormat": "Run From ALM",

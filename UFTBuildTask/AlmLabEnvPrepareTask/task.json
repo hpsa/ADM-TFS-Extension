@@ -46,7 +46,7 @@
       "label": "Username",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "The username that will access this ALM server during the build step run."
+      "helpMarkDown": "The username that will access this ALM server during the build step run"
     },
     {
       "name": "varPass",
@@ -54,7 +54,7 @@
       "label": "Password",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "The password for the user that will access this ALM server during the build step run."
+      "helpMarkDown": "The password for the user that will access this ALM server during the build step run"
     },
     {
       "name": "varDomain",
@@ -62,7 +62,7 @@
       "label": "Domain",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "The ALM domain in which the tests to run are stored."
+      "helpMarkDown": "The ALM domain in which the tests to run are stored"
     },
     {
       "name": "varProject",
@@ -70,7 +70,7 @@
       "label": "Project",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "The ALM project in which the tests to run are stored."
+      "helpMarkDown": "The ALM project in which the tests to run are stored"
     },
     {
       "name": "varEnvId",
@@ -78,7 +78,7 @@
       "label": "AUT Environment ID",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "Assign ID of an AUT Environment that exists in the ALM project you selected."
+      "helpMarkDown": "Assign ID of an AUT Environment that exists in the ALM project you selected"
     },
     {
       "name": "javaHomeSelection",
@@ -87,7 +87,7 @@
       "required": true,
       "groupName": "advanced",
       "defaultValue": "Existing",
-      "helpMarkDown": "Sets JAVA_HOME either by selecting a JDK version that will be discovered during builds or by manually entering a JDK path.",
+      "helpMarkDown": "Sets JAVA_HOME either by selecting a JDK version that will be discovered during builds or by manually entering a JDK path",
       "options": {
         "NewConf": "Create a new configuration named",
         "Existing": "Use an existing configuration with ID:"
@@ -118,7 +118,7 @@
       "required": true,
       "groupName": "advanced",
       "defaultValue": "",
-      "helpMarkDown": "Sets JAVA_HOME to the given path.",
+      "helpMarkDown": "Sets JAVA_HOME to the given path",
       "visibleRule": "javaHomeSelection = Existing"
     },
     {
@@ -128,7 +128,7 @@
       "defaultValue": "",
       "groupName": "advanced",
       "required": false,
-      "helpMarkDown": "A path to the JSON file that will be loaded in order to assign values to all the AUT Environment Parameters of From JSON type."
+      "helpMarkDown": "A path to the JSON file that will be loaded in order to assign values to all the AUT Environment Parameters of From JSON type"
     },
     {
       "name": "AddParam1",
@@ -146,7 +146,7 @@
       "groupName": "params",
       "defaultValue": "JSON",
       "visibleRule": "AddParam1 = true",
-      "helpMarkDown": "Manual - the value youll assign for Parameter value field will be used as is. Environment - the value youll assign for Parameter value will be looked for in the environment parameters and the resolved value will be used. If you named your parameter my_parameter put here my_parameter (exactly the same value). From JSON - the value youll assign for Parameter value will be looked for in the JSON file you specified for the Path to JSON file entry",
+      "helpMarkDown": "Manual - the value you will assign for 'Parameter value' field will be used as it is. Environment - the Parameter Value you will assign will be looked for in the environment parameters and the resolved value will be used (If you named your parameter MY_PARAMETER, use the exact the same value here - MY_PARAMETER). JSON - the Parameter Value will be looked for in the JSON file you specified in the the 'Path to JSON' field",
       "options": {
         "JSON": "From JSON",
         "Environment": "Environment",
@@ -161,7 +161,7 @@
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam1 = true",
-      "helpMarkDown": "The name must be set in the same hierarchical structure as it defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/Parameter_name"
+      "helpMarkDown": "The name must be set in the same hierarchical structure as it is defined in ALM (Parameters tab of the AUT Environment). For example: Parameters/Parameter_name"
     },
     {
       "name": "paramValue1",
@@ -171,7 +171,7 @@
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam1 = true",
-      "helpMarkDown": "If you are using a From JSON type, specify here the path for the element you would like to get. Make sure you are using JsonPath style for defining it."
+      "helpMarkDown": "If you are using a From JSON type, specify here the path for the element you would like to get. Make sure you are using JsonPath style for defining it"
     },
     {
       "name": "AddParam2",
@@ -189,7 +189,7 @@
       "groupName": "params",
       "defaultValue": "JSON",
       "visibleRule": "AddParam2 = true",
-      "helpMarkDown": "Manual - the value youll assign for Parameter value field will be used as is. Environment - the value youll assign for Parameter value will be looked for in the environment parameters and the resolved value will be used. If you named your parameter my_parameter put here my_parameter (exactly the same value). From JSON - the value youll assign for Parameter value will be looked for in the JSON file you specified for the Path to JSON file entry",
+      "helpMarkDown": "Manual - the value you will assign for 'Parameter value' field will be used as it is. Environment - the Parameter Value you will assign will be looked for in the environment parameters and the resolved value will be used (If you named your parameter MY_PARAMETER, use the exact the same value here - MY_PARAMETER). JSON - the Parameter Value will be looked for in the JSON file you specified in the the Path to JSON field",
       "options": {
         "JSON": "From JSON",
         "Environment": "Environment",
@@ -214,7 +214,7 @@
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam2 = true",
-      "helpMarkDown": "If you are using a From JSON type, specify here the path for the element you would like to get. Make sure you are using JsonPath style for defining it."
+      "helpMarkDown": "If you are using a From JSON type, specify here the path for the element you would like to get. Make sure you are using JsonPath style for defining it"
     },
     {
       "name": "AddParam3",
@@ -232,7 +232,7 @@
       "groupName": "params",
       "defaultValue": "JSON",
       "visibleRule": "AddParam3 = true",
-      "helpMarkDown": "Manual - the value youll assign for Parameter value field will be used as is. Environment - the value youll assign for Parameter value will be looked for in the environment parameters and the resolved value will be used. If you named your parameter my_parameter put here my_parameter (exactly the same value). From JSON - the value youll assign for Parameter value will be looked for in the JSON file you specified for the Path to JSON file entry",
+      "helpMarkDown": "Manual - the value you will assign for 'Parameter value' field will be used as it is. Environment - the Parameter Value you will assign will be looked for in the environment parameters and the resolved value will be used (If you named your parameter MY_PARAMETER, use the exact the same value here - MY_PARAMETER). JSON - the Parameter Value will be looked for in the JSON file you specified in the the Path to JSON field",
       "options": {
         "JSON": "From JSON",
         "Environment": "Environment",
@@ -257,7 +257,7 @@
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam3 = true",
-      "helpMarkDown": "If you are using a From JSON type, specify here the path for the element you would like to get. Make sure you are using JsonPath style for defining it."
+      "helpMarkDown": "If you are using a From JSON type, specify here the path for the element you would like to get. Make sure you are using JsonPath style for defining it"
     },
     {
       "name": "AddParam4",
@@ -275,7 +275,7 @@
       "groupName": "params",
       "defaultValue": "JSON",
       "visibleRule": "AddParam4 = true",
-      "helpMarkDown": "Manual - the value youll assign for Parameter value field will be used as is. Environment - the value youll assign for Parameter value will be looked for in the environment parameters and the resolved value will be used. If you named your parameter my_parameter put here my_parameter (exactly the same value). From JSON - the value youll assign for Parameter value will be looked for in the JSON file you specified for the Path to JSON file entry",
+      "helpMarkDown": "Manual - the value you will assign for 'Parameter value' field will be used as it is. Environment - the Parameter Value you will assign will be looked for in the environment parameters and the resolved value will be used (If you named your parameter MY_PARAMETER, use the exact the same value here - MY_PARAMETER). JSON - the Parameter Value will be looked for in the JSON file you specified in the the Path to JSON field",
       "options": {
         "JSON": "From JSON",
         "Environment": "Environment",
@@ -300,7 +300,7 @@
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam4 = true",
-      "helpMarkDown": "If you are using a From JSON type, specify here the path for the element you would like to get. Make sure you are using JsonPath style for defining it."
+      "helpMarkDown": "If you are using a From JSON type, specify here the path for the element you would like to get. Make sure you are using JsonPath style for defining it"
     },
     {
       "name": "AddParam5",
@@ -318,7 +318,7 @@
       "groupName": "params",
       "defaultValue": "JSON",
       "visibleRule": "AddParam5 = true",
-      "helpMarkDown": "Manual - the value youll assign for Parameter value field will be used as is. Environment - the value youll assign for Parameter value will be looked for in the environment parameters and the resolved value will be used. If you named your parameter my_parameter put here my_parameter (exactly the same value). From JSON - the value youll assign for Parameter value will be looked for in the JSON file you specified for the Path to JSON file entry",
+      "helpMarkDown": "Manual - the value you will assign for 'Parameter value' field will be used as it is. Environment - the Parameter Value you will assign will be looked for in the environment parameters and the resolved value will be used (If you named your parameter MY_PARAMETER, use the exact the same value here - MY_PARAMETER). JSON - the Parameter Value will be looked for in the JSON file you specified in the the Path to JSON field",
       "options": {
         "JSON": "From JSON",
         "Environment": "Environment",
@@ -343,7 +343,7 @@
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam5 = true",
-      "helpMarkDown": "If you are using a From JSON type, specify here the path for the element you would like to get. Make sure you are using JsonPath style for defining it."
+      "helpMarkDown": "If you are using a From JSON type, specify here the path for the element you would like to get. Make sure you are using JsonPath style for defining it"
     },
     {
       "name": "AddParam6",
@@ -361,7 +361,7 @@
       "groupName": "params",
       "defaultValue": "JSON",
       "visibleRule": "AddParam6 = true",
-      "helpMarkDown": "Manual - the value youll assign for Parameter value field will be used as is. Environment - the value youll assign for Parameter value will be looked for in the environment parameters and the resolved value will be used. If you named your parameter my_parameter put here my_parameter (exactly the same value). From JSON - the value youll assign for Parameter value will be looked for in the JSON file you specified for the Path to JSON file entry",
+      "helpMarkDown": "Manual - the value you will assign for Parameter value field will be used as it is. Environment - the Parameter Value you will assign will be looked for in the environment parameters and the resolved value will be used (If you named your parameter MY_PARAMETER, use the exact the same value here - MY_PARAMETER). JSON - the Parameter Value will be looked for in the JSON file you specified in the the Path to JSON field",
       "options": {
         "JSON": "From JSON",
         "Environment": "Environment",
@@ -386,7 +386,7 @@
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam6 = true",
-      "helpMarkDown": "If you are using a From JSON type, specify here the path for the element you would like to get. Make sure you are using JsonPath style for defining it."
+      "helpMarkDown": "If you are using a From JSON type, specify here the path for the element you would like to get. Make sure you are using JsonPath style for defining it"
     },
     {
       "name": "AddParam7",
@@ -404,7 +404,7 @@
       "groupName": "params",
       "defaultValue": "JSON",
       "visibleRule": "AddParam7 = true",
-      "helpMarkDown": "Manual - the value youll assign for Parameter value field will be used as is. Environment - the value youll assign for Parameter value will be looked for in the environment parameters and the resolved value will be used. If you named your parameter my_parameter put here my_parameter (exactly the same value). From JSON - the value youll assign for Parameter value will be looked for in the JSON file you specified for the Path to JSON file entry",
+      "helpMarkDown": "Manual - the value you will assign for 'Parameter value' field will be used as it is. Environment - the Parameter Value you will assign will be looked for in the environment parameters and the resolved value will be used (If you named your parameter MY_PARAMETER, use the exact the same value here - MY_PARAMETER). JSON - the Parameter Value will be looked for in the JSON file you specified in the the Path to JSON field",
       "options": {
         "JSON": "From JSON",
         "Environment": "Environment",
@@ -429,7 +429,7 @@
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam7 = true",
-      "helpMarkDown": "If you are using a From JSON type, specify here the path for the element you would like to get. Make sure you are using JsonPath style for defining it."
+      "helpMarkDown": "If you are using a From JSON type, specify here the path for the element you would like to get. Make sure you are using JsonPath style for defining it"
     },
     {
       "name": "AddParam8",
@@ -447,7 +447,7 @@
       "groupName": "params",
       "defaultValue": "JSON",
       "visibleRule": "AddParam8 = true",
-      "helpMarkDown": "Manual - the value youll assign for Parameter value field will be used as is. Environment - the value youll assign for Parameter value will be looked for in the environment parameters and the resolved value will be used. If you named your parameter my_parameter put here my_parameter (exactly the same value). From JSON - the value youll assign for Parameter value will be looked for in the JSON file you specified for the Path to JSON file entry",
+      "helpMarkDown": "Manual - the value you will assign for 'Parameter value' field will be used as is. Environment - the Parameter Value you will assign will be looked for in the environment parameters and the resolved value will be used (If you named your parameter MY_PARAMETER, use the exact the same value here - MY_PARAMETER). JSON - the Parameter Value will be looked for in the JSON file you specified in the the Path to JSON field",
       "options": {
         "JSON": "From JSON",
         "Environment": "Environment",
@@ -472,7 +472,7 @@
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam8 = true",
-      "helpMarkDown": "If you are using a From JSON type, specify here the path for the element you would like to get. Make sure you are using JsonPath style for defining it."
+      "helpMarkDown": "If you are using a From JSON type, specify here the path for the element you would like to get. Make sure you are using JsonPath style for defining it"
     },
     {
       "name": "AddParam9",
@@ -490,7 +490,7 @@
       "groupName": "params",
       "defaultValue": "JSON",
       "visibleRule": "AddParam9 = true",
-      "helpMarkDown": "Manual - the value youll assign for Parameter value field will be used as is. Environment - the value youll assign for Parameter value will be looked for in the environment parameters and the resolved value will be used. If you named your parameter my_parameter put here my_parameter (exactly the same value). From JSON - the value youll assign for Parameter value will be looked for in the JSON file you specified for the Path to JSON file entry",
+      "helpMarkDown": "Manual - the value you will assign for Parameter value field will be used as it is. Environment - the Parameter Value you will assign will be looked for in the environment parameters and the resolved value will be used (If you named your parameter MY_PARAMETER, use the exact the same value here - MY_PARAMETER). JSON - the Parameter Value will be looked for in the JSON file you specified in the the Path to JSON field",
       "options": {
         "JSON": "From JSON",
         "Environment": "Environment",
@@ -515,7 +515,7 @@
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam9 = true",
-      "helpMarkDown": "If you are using a From JSON type, specify here the path for the element you would like to get. Make sure you are using JsonPath style for defining it."
+      "helpMarkDown": "If you are using a From JSON type, specify here the path for the element you would like to get. Make sure you are using JsonPath style for defining it"
     },
     {
       "name": "AddParam10",
@@ -533,7 +533,7 @@
       "groupName": "params",
       "defaultValue": "JSON",
       "visibleRule": "AddParam10 = true",
-      "helpMarkDown": "Manual - the value youll assign for Parameter value field will be used as is. Environment - the value youll assign for Parameter value will be looked for in the environment parameters and the resolved value will be used. If you named your parameter my_parameter put here my_parameter (exactly the same value). From JSON - the value youll assign for Parameter value will be looked for in the JSON file you specified for the Path to JSON file entry",
+      "helpMarkDown": "Manual - the value you will assign for 'Parameter value' field will be used as it is. Environment - the Parameter Value you will assign will be looked for in the environment parameters and the resolved value will be used (If you named your parameter MY_PARAMETER, use the exact the same value here - MY_PARAMETER). JSON - the Parameter Value will be looked for in the JSON file you specified in the the Path to JSON field",
       "options": {
         "JSON": "From JSON",
         "Environment": "Environment",
@@ -558,7 +558,7 @@
       "required": true,
       "groupName": "params",
       "visibleRule": "AddParam10 = true",
-      "helpMarkDown": "If you are using a From JSON type, specify here the path for the element you would like to get. Make sure you are using JsonPath style for defining it."
+      "helpMarkDown": "If you are using a From JSON type, specify here the path for the element you would like to get. Make sure you are using JsonPath style for defining it"
     },
     {
       "name": "paramOnlyFirst",
