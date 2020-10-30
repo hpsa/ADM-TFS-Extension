@@ -85,14 +85,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="images\failed.png" />
-    <Content Include="images\passed.png" />
-    <Content Include="Reports\run_results.html" />
-    <Content Include="Reports\run_results.xml" />
-    <None Include="Resources\passed.png" />
-    <None Include="Resources\failed.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

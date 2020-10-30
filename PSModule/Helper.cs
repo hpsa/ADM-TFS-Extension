@@ -184,9 +184,6 @@ namespace PSModule
 
         private static string ImageToBase64(System.Drawing.Image _imagePath)
         {
-            Console.WriteLine("path to image: "  + _imagePath);
-                
-            
             byte[] imageBytes = ImageToByteArray(_imagePath);
             string base64String = Convert.ToBase64String(imageBytes);
             return base64String;
@@ -198,13 +195,6 @@ namespace PSModule
             imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
 
             return ms.ToArray();
-
-           /* using (var ms = new MemoryStream())
-            {
-                imageIn.Save(ms, imageIn.RawFormat);
-                //imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                return ms.ToArray();
-            }*/
         }
     }
 }
