@@ -2,73 +2,71 @@
 # localTask.ps1
 #
     
-param(
-	[string][Parameter(Mandatory=$true)] $varAlmserv,
-	[string][Parameter(Mandatory=$true)] $varUserName,
-	[string] $varPass,
-	[string][Parameter(Mandatory=$true)] $varDomain,
-	[string][Parameter(Mandatory=$true)] $varProject,
-	[string][Parameter(Mandatory=$true)] $varEnvId,
+$varAlmserv = Get-VstsInput -Name 'varAlmserv' -Require
+$varUserName = Get-VstsInput -Name 'varUserName' -Require
+$varPass = Get-VstsInput -Name 'varPass'
+$varDomain = Get-VstsInput -Name 'varDomain' -Require
+$varProject = Get-VstsInput -Name 'varProject' -Require
+$varEnvId = Get-VstsInput -Name 'varEnvId' -Require
 
-	[string][Parameter(Mandatory=$true)] $javaHomeSelection,
-	[string][Parameter(Mandatory=$false)] $createNewNamed,
-	[string][Parameter(Mandatory=$false)] $assignMessage,
-	[string][Parameter(Mandatory=$false)] $jdkUserInputPath,
-	[string][Parameter(Mandatory=$false)] $varPathToJSON,
-	[string][Parameter(Mandatory=$true)] $paramOnlyFirst,
+$javaHomeSelection = Get-VstsInput -Name 'javaHomeSelection' -Require
+$createNewNamed = Get-VstsInput -Name 'createNewNamed'
+$assignMessage = Get-VstsInput -Name 'assignMessage'
+$jdkUserInputPath = Get-VstsInput -Name 'jdkUserInputPath'
+$varPathToJSON = Get-VstsInput -Name 'varPathToJSON'
+$paramOnlyFirst = Get-VstsInput -Name 'paramOnlyFirst' -Require
 
-	[string][Parameter(Mandatory=$false)] $AddParam1,
-	[string][Parameter(Mandatory=$false)] $paramType1,
-	[string][Parameter(Mandatory=$false)] $paramName1,
-	[string][Parameter(Mandatory=$false)] $paramValue1,
+$AddParam1 = Get-VstsInput -Name 'AddParam1'
+$paramType1 = Get-VstsInput -Name 'paramType1'
+$paramName1 = Get-VstsInput -Name 'paramName1'
+$paramValue1 = Get-VstsInput -Name 'paramValue1'
 
-	[string][Parameter(Mandatory=$false)] $AddParam2,
-	[string][Parameter(Mandatory=$false)] $paramType2,
-	[string][Parameter(Mandatory=$false)] $paramName2,
-	[string][Parameter(Mandatory=$false)] $paramValue2,
+$AddParam2 = Get-VstsInput -Name 'AddParam2'
+$paramType2 = Get-VstsInput -Name 'paramType2'
+$paramName2 = Get-VstsInput -Name 'paramName2'
+$paramValue2 = Get-VstsInput -Name 'paramValue2'
 
-	[string][Parameter(Mandatory=$false)] $AddParam3,
-	[string][Parameter(Mandatory=$false)] $paramType3,
-	[string][Parameter(Mandatory=$false)] $paramName3,
-	[string][Parameter(Mandatory=$false)] $paramValue3,
+$AddParam3 = Get-VstsInput -Name 'AddParam3'
+$paramType3 = Get-VstsInput -Name 'paramType3'
+$paramName3 = Get-VstsInput -Name 'paramName3'
+$paramValue3 = Get-VstsInput -Name 'paramValue3'
 
-	[string][Parameter(Mandatory=$false)] $AddParam4,
-	[string][Parameter(Mandatory=$false)] $paramType4,
-	[string][Parameter(Mandatory=$false)] $paramName4,
-	[string][Parameter(Mandatory=$false)] $paramValue4,
+$AddParam4 = Get-VstsInput -Name 'AddParam4'
+$paramType4 = Get-VstsInput -Name 'paramType4'
+$paramName4 = Get-VstsInput -Name 'paramName4'
+$paramValue4 = Get-VstsInput -Name 'paramValue4'
 
-	[string][Parameter(Mandatory=$false)] $AddParam5,
-	[string][Parameter(Mandatory=$false)] $paramType5,
-	[string][Parameter(Mandatory=$false)] $paramName5,
-	[string][Parameter(Mandatory=$false)] $paramValue5,
+$AddParam5 = Get-VstsInput -Name 'AddParam5'
+$paramType5 = Get-VstsInput -Name 'paramType5'
+$paramName5 = Get-VstsInput -Name 'paramName5'
+$paramValue5 = Get-VstsInput -Name 'paramValue5'
 
-	[string][Parameter(Mandatory=$false)] $AddParam6,
-	[string][Parameter(Mandatory=$false)] $paramType6,
-	[string][Parameter(Mandatory=$false)] $paramName6,
-	[string][Parameter(Mandatory=$false)] $paramValue6,
+$AddParam6 = Get-VstsInput -Name 'AddParam6'
+$paramType6 = Get-VstsInput -Name 'paramType6'
+$paramName6 = Get-VstsInput -Name 'paramName6'
+$paramValue6 = Get-VstsInput -Name 'paramValue6'
 
-	[string][Parameter(Mandatory=$false)] $AddParam7,
-	[string][Parameter(Mandatory=$false)] $paramType7,
-	[string][Parameter(Mandatory=$false)] $paramName7,
-	[string][Parameter(Mandatory=$false)] $paramValue7,
+$AddParam7 = Get-VstsInput -Name 'AddParam7'
+$paramType7 = Get-VstsInput -Name 'paramType7'
+$paramName7 = Get-VstsInput -Name 'paramName7'
+$paramValue7 = Get-VstsInput -Name 'paramValue7'
 
-	[string][Parameter(Mandatory=$false)] $AddParam8,
-	[string][Parameter(Mandatory=$false)] $paramType8,
-	[string][Parameter(Mandatory=$false)] $paramName8,
-	[string][Parameter(Mandatory=$false)] $paramValue8,
+$AddParam8 = Get-VstsInput -Name 'AddParam8'
+$paramType8 = Get-VstsInput -Name 'paramType8'
+$paramName8 = Get-VstsInput -Name 'paramName8'
+$paramValue8 = Get-VstsInput -Name 'paramValue8'
 
-	[string][Parameter(Mandatory=$false)] $AddParam9,
-	[string][Parameter(Mandatory=$false)] $paramType9,
-	[string][Parameter(Mandatory=$false)] $paramName9,
-	[string][Parameter(Mandatory=$false)] $paramValue9,
+$AddParam9 = Get-VstsInput -Name 'AddParam9'
+$paramType9 = Get-VstsInput -Name 'paramType9'
+$paramName9 = Get-VstsInput -Name 'paramName9'
+$paramValue9 = Get-VstsInput -Name 'paramValue9'
 
-	[string][Parameter(Mandatory=$false)] $AddParam10,
-	[string][Parameter(Mandatory=$false)] $paramType10,
-	[string][Parameter(Mandatory=$false)] $paramName10,
-	[string][Parameter(Mandatory=$false)] $paramValue10
-)
+$AddParam10 = Get-VstsInput -Name 'AddParam10'
+$paramType10 = Get-VstsInput -Name 'paramType10'
+$paramName10 = Get-VstsInput -Name 'paramName10'
+$paramValue10 = Get-VstsInput -Name 'paramValue10'
 
-Import-Module "Microsoft.TeamFoundation.DistributedTask.Task.Common"
+#Import-Module "Microsoft.TeamFoundation.DistributedTask.Task.Common"
 
 $uftworkdir = $env:UFT_LAUNCHER
 

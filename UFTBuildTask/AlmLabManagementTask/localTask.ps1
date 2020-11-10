@@ -1,23 +1,22 @@
 #
 # localTask.ps1
 #
-param(
-	[string][Parameter(Mandatory=$true)] $varAlmServ, 
-	[string][Parameter(Mandatory=$true)] $varUserName,
-	[string] $varPass,
-	[string][Parameter(Mandatory=$true)] $varDomain,
-	[string][Parameter(Mandatory=$true)] $varProject,
-	[string] $varRunType,
-	[string][Parameter(Mandatory=$true)] $varTestSet,
-	[string] $varDescription,
-	[string][Parameter(Mandatory=$true)] $varTimeslotDuration,
-	[string] $varEnvironmentConfigurationID,
-	[string] [Parameter(Mandatory=$false)] $varReportName,
-	[string] $varUseCDA,
-	[string] $varDeploymentAction,
-	[string] $varDeploymentEnvironmentName,
-	[string] $varDeprovisioningAction
-)
+
+$varAlmServ = Get-VstsInput -Name 'varAlmserv' -Require
+$varUserName = Get-VstsInput -Name 'varUserName' -Require
+$varPass = Get-VstsInput -Name 'varPass'
+$varDomain = Get-VstsInput -Name 'varDomain' -Require
+$varProject = Get-VstsInput -Name 'varProject' -Require
+$varRunType = Get-VstsInput -Name 'varRunType'
+$varTestSet = Get-VstsInput -Name 'varTestSet' -Require
+$varDescription = Get-VstsInput -Name 'varDescription'
+$varTimeslotDuration = Get-VstsInput -Name 'varTimeslotDuration' -Require
+$varEnvironmentConfigurationID = Get-VstsInput -Name 'varEnvironmentConfigurationID'
+$varReportName = Get-VstsInput -Name 'varReportName'
+$varUseCDA = Get-VstsInput -Name 'varUseCDA'
+$varDeploymentAction = Get-VstsInput -Name 'varDeploymentAction'
+$varDeploymentEnvironmentName = Get-VstsInput -Name 'varDeploymentEnvironmentName'
+$varDeprovisioningAction = Get-VstsInput -Name 'varDeprovisioningAction'
 
 
 $uftworkdir = $env:UFT_LAUNCHER
@@ -56,7 +55,7 @@ if (Test-Path $retcodefile)
 
 # remove temporary files complited
 $results = Join-Path $env:UFT_LAUNCHER -ChildPath "res\*.xml"
- Get-ChildItem -Path $results | foreach ($_) { Remove-Item $_.fullname }
+ #Get-ChildItem -Path $results | foreach ($_) { Remove-Item $_.fullname }
 
 
 $CDA1 = [bool]($varUseCDA) 

@@ -1,13 +1,14 @@
 #
 # localTask.ps1
 #
-param(
-	[string][Parameter(Mandatory=$true)] $testPathInput, 
-	[string] $timeOutIn
-)
+
+
+$testPathInput = Get-VstsInput -Name 'testPathInput' -Require
+$timeOutIn = Get-VstsInput -Name 'timeOutIn'
 
 $uftworkdir = $env:UFT_LAUNCHER
 Import-Module $uftworkdir\bin\PSModule.dll
+
 
 # delete old "UFT Report" file and create a new one
 $summaryReport = Join-Path $env:UFT_LAUNCHER -ChildPath "res\UFT Report"
@@ -15,6 +16,7 @@ if (Test-Path $summaryReport)
 {
 	Remove-Item $summaryReport
 }
+
 
 # delete old "TestRunReturnCode" file and create a new one
 $retcodefile = Join-Path $env:UFT_LAUNCHER -ChildPath "res\TestRunReturnCode.txt"
@@ -25,7 +27,8 @@ if (Test-Path $retcodefile)
 
 # remove temporary files complited
 $results = Join-Path $env:UFT_LAUNCHER -ChildPath "res\*.xml"
-Get-ChildItem -Path $results | foreach ($_) { Remove-Item $_.fullname }
+
+#Get-ChildItem -Path $results | foreach ($_) { Remove-Item $_.fullname }
 
 
 Invoke-FSTask $testPathInput $timeOutIn -Verbose 

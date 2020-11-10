@@ -12,7 +12,7 @@
   "version": {
     "Major": 1,
     "Minor": 1,
-    "Patch": 0
+    "Patch": 1
   },
   "demands": [
     "UFT_LAUNCHER"
@@ -165,8 +165,8 @@
   ],
   "instanceNameFormat": "Run From ALM Lab Management",
   "execution": {
-    "PowerShell": {
-      "target": "$(currentDirectory)\\localTask.ps1",
+    "PowerShell3": {
+      "target": "localTask.ps1",
       "argumentFormat": "",
       "workingDirectory": "$(currentDirectory)"
     }
