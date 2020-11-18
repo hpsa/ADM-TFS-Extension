@@ -33,7 +33,11 @@ if($result)
 	
 	$launcherFolder = Get-ChildItem -Path $uft_dir -recurse -Directory| Where-Object {$_.PSIsContainer -eq $true -and $_.Name -match "UFTWorking"}
 	$launcherPath = $launcherFolder.fullName
+<<<<<<< HEAD
   
+=======
+    
+>>>>>>> upstream/master
 	[Environment]::SetEnvironmentVariable("UFT_LAUNCHER", $launcherPath, "Machine")
 
 }else
