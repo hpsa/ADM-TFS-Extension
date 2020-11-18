@@ -9,9 +9,10 @@ This Extension supports UFT starting from version 14.00.
 
 # What's New in this Release
 
-> **April 2020**
-> - add support for ALM SSO
-> - add UFT test result report task (for TFS only)
+> **November 2020**
+> - add UFT Report (summary report of the run job)
+> - add JUnit Report
+> - update Powershell Module task execution handler
 > - bug fixing
 
 # Installation Instructions and documentation
