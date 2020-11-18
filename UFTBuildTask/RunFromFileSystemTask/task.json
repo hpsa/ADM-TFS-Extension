@@ -8,11 +8,11 @@
     "Build",
     "Release"
   ],
-  "author": "",
+  "author": "Micro Focus",
   "version": {
     "Major": 1,
-    "Minor": 0,
-    "Patch": 9
+    "Minor": 1,
+    "Patch": 0
   },
   "demands": "UFT_LAUNCHER",
   "inputs": [
@@ -22,7 +22,7 @@
       "label": "Tests",
       "defaultValue": "",
       "required": true,
-      "helpMarkDown": "List of tests or folders that contain tests, to run. Each line should contain a single test, folder, or MTB file."
+      "helpMarkDown": "List of tests or folders that contain tests, to run. Each line should contain a single test, folder, or MTB file"
     },
     {
       "name": "timeOutIn",
@@ -30,13 +30,13 @@
       "label": "Timeout",
       "defaultValue": "",
       "required": false,
-      "helpMarkDown": "Timeout value in seconds. If left empty, there is no timeout."
+      "helpMarkDown": "Timeout value in seconds. If left empty, there is no timeout"
     }
   ],
   "instanceNameFormat": "Run From File System",
   "execution": {
-    "PowerShell": {
-      "target": "$(currentDirectory)\\localTask.ps1",
+    "PowerShell3": {
+      "target": "localTask.ps1",
       "argumentFormat": "",
       "workingDirectory": "$(currentDirectory)",
       "platforms": [
@@ -44,7 +44,7 @@
       ]
     },
     "PublishTest": {
-      "target": "$(currentDirectory)\\publish.ps1",
+      "target": "publish.ps1",
       "argumentFormat": "",
       "workingDirectory": "$(currentDirectory)",
       "platforms": [

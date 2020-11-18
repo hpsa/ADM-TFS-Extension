@@ -1,22 +1,20 @@
  #
 # localTask.ps1
 #
-param(
-	[string][Parameter(Mandatory=$true)] $varAlmserv, 
-	[string][Parameter(Mandatory=$false)] $varSSOEnabled,
-	[string] $varClientID,
-	[string] $varApiKeySecret,
-	[string] $varUserName,
-	[string] $varPass,
-	[string] $varDomain,
-	[string] $varProject,
-	[string] $varTestsets,
-	[string] $varTimeout,
-	[string] $varReportName,
-	[string] $runMode,
-	[string] $testingToolHost
-)
 
+$varAlmserv = Get-VstsInput -Name 'varAlmserv' -Require
+$varSSOEnabled = Get-VstsInput -Name 'varSSOEnabled'
+$varClientID = Get-VstsInput -Name 'varClientID'
+$varApiKeySecret = Get-VstsInput -Name 'varApiKeySecret'
+$varUserName = Get-VstsInput -Name 'varUsername'
+$varPass = Get-VstsInput -Name 'varPass'
+$varDomain = Get-VstsInput -Name 'varDomain' -Require
+$varProject = Get-VstsInput -Name 'varProject' -Require
+$varTestsets = Get-VstsInput -Name 'varTestsets' -Require
+$varTimeout = Get-VstsInput -Name 'varTimeout'
+$varReportName = Get-VstsInput -Name 'varReportName'
+$runMode = Get-VstsInput -Name 'runMode'
+$testingToolHost = Get-VstsInput -Name 'testingToolHost'
 
 $uftworkdir = $env:UFT_LAUNCHER
 
@@ -55,7 +53,7 @@ if (Test-Path $retcodefile)
 
 # remove temporary files complited
 $results = Join-Path $env:UFT_LAUNCHER -ChildPath "res\*.xml"
-Get-ChildItem -Path $results | foreach ($_) { Remove-Item $_.fullname }
+#Get-ChildItem -Path $results | foreach ($_) { Remove-Item $_.fullname }
 
 
 Invoke-RunFromAlmTask $varAlmserv $varSSOEnabled $varClientID $varApiKeySecret $varUserName $varPass $varDomain $varProject $varTestsets $varTimeout $varReportName $runMode $testingToolHost -Verbose
