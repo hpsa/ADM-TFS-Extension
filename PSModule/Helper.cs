@@ -107,11 +107,11 @@ namespace PSModule
             h3.Align = "center";
             header.Cells.Add(h3);
 
-            /*HtmlTableCell h4 = new HtmlTableCell();
+            HtmlTableCell h4 = new HtmlTableCell();
             h4.InnerText = "HTML report";
             h4.Width = "100";
             h4.Align = "center";
-            header.Cells.Add(h4);*/
+            header.Cells.Add(h4);
 
             header.BgColor = KnownColor.Azure.ToString();
             table.Rows.Add(header);
@@ -148,15 +148,19 @@ namespace PSModule
                 cell3.Controls.Add(statusImage);
                 row.Cells.Add(cell3);
 
-                /*HtmlTableCell cell4 = new HtmlTableCell();
+                HtmlTableCell cell4 = new HtmlTableCell();
                 HtmlAnchor reportLink = new HtmlAnchor();
 
-                reportLink.HRef = "C:\\Users\\laakso.CORPDOM\\TFS\\TFS_project\\UFTWorking\\res\\run_results.html"; //Path.GetFullPath(Resources.run_results); 
-                reportLink.InnerText = "report";
+                //need to be sent as parameters (maybe taken from ReportMetaData)
+                string storageAccount = "aldemostorageaccount";
+                string containerName = "uftcontainer";
+
+                reportLink.HRef = "https://" + storageAccount + ".blob.core.windows.net/" + containerName + "/run_results.html";
+                reportLink.InnerText = "View report";
 
                 cell4.Controls.Add(reportLink);
                 cell4.Align = "center";
-                row.Cells.Add(cell4);*/
+                row.Cells.Add(cell4);
 
                 table.Rows.Add(row);
             }

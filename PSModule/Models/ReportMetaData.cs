@@ -7,9 +7,7 @@ namespace PSModule.Models
         private string folderPath { get; set; } //slave path of report folder(only for html report format)
         private string displayName { get; set; }
 
-        //private string urlName { get; set; }
-
-        //private string resourceURL { get; set; }
+        private string resourceURL { get; set; }
 
         private string dateTime { get; set; }
 
@@ -26,10 +24,6 @@ namespace PSModule.Models
             return displayName;
         }
 
-       /* public void setUrlName(string value)
-        {
-            this.urlName = value;
-        }*/
 
         public void setDateTime(string value)
         {
@@ -41,10 +35,10 @@ namespace PSModule.Models
             return dateTime;
         }
 
-       /* public void setResourceUrl(string value)
+        public void setResourceUrl(string value)
         {
             this.resourceURL = value;
-        }*/
+        }
 
         public void setStatus(string value)
         {
