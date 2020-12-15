@@ -27,18 +27,13 @@ if($result)
     $uftPath = Get-ItemProperty -Path $Registry_Key | Select-Object -ExpandProperty $value
 
     $currdir = AbsPath -folder .\
-    $zipFile = Join-Path -Path $currdir -ChildPath ìUFT.zipî
+    $zipFile = Join-Path -Path $currdir -ChildPath ‚ÄúUFT.zip‚Äù
     Expand-ZIPFile $zipFile $currdir
 	
     $uft_dir = Join-Path $currdir -ChildPath "UFT"
 	
 	$launcherFolder = Get-ChildItem -Path $uft_dir -recurse -Directory| Where-Object {$_.PSIsContainer -eq $true -and $_.Name -match "UFTWorking"}
 	$launcherPath = $launcherFolder.fullName
-<<<<<<< HEAD
-  
-=======
-    
->>>>>>> upstream/master
 	[Environment]::SetEnvironmentVariable("UFT_LAUNCHER", $launcherPath, "Machine")
 
 }else
