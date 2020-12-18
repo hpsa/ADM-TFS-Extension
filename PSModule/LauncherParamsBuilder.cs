@@ -31,6 +31,31 @@ namespace PSModule
             return properties;
         }
 
+        public void SetUploadArtifact(string uploadArtifact)
+        {
+            SetParamValue("uploadArtifact", uploadArtifact);
+        }
+
+        public void SetArtifactType(string artifactType)
+        {
+            SetParamValue("artifactType", artifactType);
+        }
+
+        public void SetArtifactName(string artifactName)
+        {
+            SetParamValue("artifactName", artifactName);
+        }
+
+        public void SetStorageAccount(string storageAccount)
+        {
+            SetParamValue("storageAccount", storageAccount);
+        }
+
+        public void SetContainer(string container)
+        {
+            SetParamValue("container", container);
+        }
+
         public void SetRunType(RunType runType)
         {
             SetParamValue("runType", runType.ToString());

@@ -7,3 +7,9 @@ C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\UFTBuildTask\obj\Re
 C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\UFTBuildTask\obj\Release\UFTBuildTask.dll
 C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\UFTBuildTask\obj\Release\UFTBuildTask.pdb
 C:\Users\laakso.CORPDOM\TFS\UFT_TFS_plugin\ADM-TFS-Extension\UFTBuildTask\obj\Release\UFTBuildTask.csprojAssemblyReference.cache
+D:\Plugins\Azure\ADM-TFS-Extension\UFTBuildTask\bin\Release\UFTBuildTask.dll.config
+D:\Plugins\Azure\ADM-TFS-Extension\UFTBuildTask\bin\Release\UFTBuildTask.dll
+D:\Plugins\Azure\ADM-TFS-Extension\UFTBuildTask\bin\Release\UFTBuildTask.pdb
+D:\Plugins\Azure\ADM-TFS-Extension\UFTBuildTask\obj\Release\UFTBuildTask.csproj.CoreCompileInputs.cache
+D:\Plugins\Azure\ADM-TFS-Extension\UFTBuildTask\obj\Release\UFTBuildTask.dll
+D:\Plugins\Azure\ADM-TFS-Extension\UFTBuildTask\obj\Release\UFTBuildTask.pdb

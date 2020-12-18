@@ -3,8 +3,14 @@
 #
 
 
+param()
 $testPathInput = Get-VstsInput -Name 'testPathInput' -Require
 $timeOutIn = Get-VstsInput -Name 'timeOutIn'
+$uploadArtifact = Get-VstsInput -Name 'uploadArtifact' -Require
+$artifactType = Get-VstsInput -Name 'artifactType'
+#$storageAccount = $env:STORAGE_ACCOUNT
+#$container = $env:CONTAINER
+$reportFileName = "RunFromFileSystemReport_" + $Env:BUILD_BUILDNUMBER
 
 $uftworkdir = $env:UFT_LAUNCHER
 Import-Module $uftworkdir\bin\PSModule.dll
@@ -30,8 +36,32 @@ $results = Join-Path $env:UFT_LAUNCHER -ChildPath "res\*.xml"
 
 #Get-ChildItem -Path $results | foreach ($_) { Remove-Item $_.fullname }
 
+Invoke-FSTask $testPathInput $timeOutIn $uploadArtifact $artifactType $env:STORAGE_ACCOUNT $env:CONTAINER $reportFileName -Verbose 
 
-Invoke-FSTask $testPathInput $timeOutIn -Verbose 
+$testPathReportInput = Join-Path $testPathInput -ChildPath "Report\run_results.html"
+
+#connect to Azure account
+Connect-AzAccount
+
+#get resource group
+$group = $env:RESOURCE_GROUP
+$resourceGroup = Get-AzResourceGroup -Name "$($group)"
+$groupName = $resourceGroup.ResourceGroupName
+
+#get storage account
+$account = $env:STORAGE_ACCOUNT
+$storageAccount =  Get-AzStorageAccount -ResourceGroupName "$($groupName)" -Name  "$($account)"
+
+#get storage context
+$storageContext = $storageAccount.Context
+
+#get storage container
+$container = $env:CONTAINER
+
+$artifact = $reportFileName + ".html"
+
+#upload resource to container
+Set-AzStorageBlobContent -Container "$($container)" -File $testPathReportInput -Blob  $artifact -Context $storageContext
 
 # create summary UFT report
 if (Test-Path $summaryReport)

@@ -90,7 +90,7 @@ namespace PSModule
                     List<ReportMetaData> listReport = Helper.readReportFromXMLFile(resultsFileName);
 
                     //create html report
-                    Helper.createSummaryReport(ufttfsdir, ref listReport);
+                    Helper.createSummaryReport(ufttfsdir, ref listReport, properties["storageAccount"], properties["container"], properties["artifactName"]);
 
                     //get task return code
                     retCode = Helper.getErrorCode(listReport);

@@ -5,6 +5,7 @@ namespace PSModule.Models
     public class ReportMetaData
     {
         private string folderPath { get; set; } //slave path of report folder(only for html report format)
+        
         private string displayName { get; set; }
 
         private string resourceURL { get; set; }
@@ -12,7 +13,7 @@ namespace PSModule.Models
         private string dateTime { get; set; }
 
         private string status { get; set; }
-    
+
 
         public void setDisplayName(string value)
         {

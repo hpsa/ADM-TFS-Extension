@@ -83,9 +83,10 @@ namespace PSModule
 
         }
 
-        
 
-        public static void createSummaryReport(string uftWorkingFolder, ref List<ReportMetaData> reportList)
+
+        public static void createSummaryReport(string uftWorkingFolder, ref List<ReportMetaData> reportList, 
+                                               string storageAccount, string container, string artifactName)
         {
             HtmlTable table = new HtmlTable();
             HtmlTableRow header = new HtmlTableRow();
@@ -136,13 +137,13 @@ namespace PSModule
 
                 if (report.getStatus().Equals("pass"))
                 {
-                   statusImage.Src = "https://extensionado.blob.core.windows.net/uft-extension-images/passed.png";
+                    statusImage.Src = "https://extensionado.blob.core.windows.net/uft-extension-images/passed.png";
                 }
                 else
                 {
-                   statusImage.Src = "https://extensionado.blob.core.windows.net/uft-extension-images/failed.png";
+                    statusImage.Src = "https://extensionado.blob.core.windows.net/uft-extension-images/failed.png";
                 }
-                          
+
 
                 cell3.Align = "center";
                 cell3.Controls.Add(statusImage);
@@ -152,10 +153,13 @@ namespace PSModule
                 HtmlAnchor reportLink = new HtmlAnchor();
 
                 //need to be sent as parameters (maybe taken from ReportMetaData)
-                string storageAccount = "aldemostorageaccount";
-                string containerName = "uftcontainer";
+                //string storageAccount = "aldemostorageaccount";
+                //string containerName = "uftcontainer";
+               // string buildNumber = "100";
+                //string artifactName = runType + buildNumber;
+               // string artifactName = "RunFromFileSystemReport_" + buildNumber;
 
-                reportLink.HRef = "https://" + storageAccount + ".blob.core.windows.net/" + containerName + "/run_results.html";
+                reportLink.HRef = "https://" + storageAccount + ".blob.core.windows.net/" + container + "/"+ artifactName + ".html";
                 reportLink.InnerText = "View report";
 
                 cell4.Controls.Add(reportLink);
@@ -168,7 +172,7 @@ namespace PSModule
             //add table to file
             string html;
             var reportMessage = new System.Text.StringBuilder();
-    
+
             using (var sw = new StringWriter())
             {
                 table.RenderControl(new System.Web.UI.HtmlTextWriter(sw));
@@ -176,7 +180,7 @@ namespace PSModule
             }
 
             reportMessage.AppendFormat(html);
-     
+
             System.IO.File.WriteAllText(uftWorkingFolder + @"\res\UFT Report", reportMessage.ToString());
         }
 
