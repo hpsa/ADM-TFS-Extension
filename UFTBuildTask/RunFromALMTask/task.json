@@ -171,7 +171,7 @@
       "name": "reportFileName",
       "type": "string",
       "label": "Report file name",
-      "defaultValue": "UFTAlmExecutionReport",
+      "defaultValue": "AlmExecutionReport",
       "visibleRule": "artifactType = onlyReport || artifactType = bothReportArchive",
       "helpMarkDown": "Choose a name for the UFT report file."
     }
