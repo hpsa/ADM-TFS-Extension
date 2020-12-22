@@ -54,7 +54,25 @@ namespace PSModule
         [Parameter(Position = 14)]
         public string DeprovisioningAction;
 
-       
+        [Parameter(Position = 15, Mandatory = true)]
+        public string UploadArtifact;
+
+        [Parameter(Position = 16)]
+        public ArtifactType ArtType;
+
+        [Parameter(Position = 17)]
+        public string StorageAccount;
+
+        [Parameter(Position = 18)]
+        public string Container;
+
+        [Parameter(Position = 19)]
+        public string ReportFileName;
+
+        [Parameter(Position = 20)]
+        public string ArchiveName;
+
+
         protected override string GetReportFilename()
         {
             return String.IsNullOrEmpty(ReportName) ? base.GetReportFilename() : ReportName;
@@ -107,6 +125,13 @@ namespace PSModule
             builder.SetAlmTimeout(TimeslotDuration);
             builder.SetAlmRunMode(AlmRunMode.RUN_LOCAL);
             builder.SetAlmRunHost("localhost");
+
+            builder.SetUploadArtifact(UploadArtifact);
+            builder.SetArtifactType(ArtType);
+            builder.SetReportName(ReportFileName);
+            builder.SetArchiveName(ArchiveName);
+            builder.SetStorageAccount(StorageAccount);
+            builder.SetContainer(Container);
 
             return builder.GetProperties();
         }

@@ -18,8 +18,7 @@ namespace PSModule
         public string UploadArtifact;
 
         [Parameter(Position = 3)]
-        //public ArtifactType ArtifactType;
-        public string ArtifactType;
+        public ArtifactType ArtType;
 
         [Parameter(Position = 4)]
         public string StorageAccount;
@@ -29,6 +28,9 @@ namespace PSModule
 
         [Parameter(Position = 6)]
         public string ReportFileName;
+
+        [Parameter(Position = 7)]
+        public string ArchiveName;
 
         //public MobileSettings mobile;
 
@@ -53,8 +55,9 @@ namespace PSModule
             }
 
             builder.SetUploadArtifact(UploadArtifact);
-            builder.SetArtifactType(ArtifactType);
-            builder.SetArtifactName(ReportFileName);
+            builder.SetArtifactType(ArtType);
+            builder.SetReportName(ReportFileName);
+            builder.SetArchiveName(ArchiveName);
             builder.SetStorageAccount(StorageAccount);
             builder.SetContainer(Container);
 

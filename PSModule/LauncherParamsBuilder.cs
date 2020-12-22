@@ -36,14 +36,19 @@ namespace PSModule
             SetParamValue("uploadArtifact", uploadArtifact);
         }
 
-        public void SetArtifactType(string artifactType)
+        public void SetArtifactType(ArtifactType artifactType)
         {
-            SetParamValue("artifactType", artifactType);
+            SetParamValue("artifactType", artifactType.ToString());
         }
 
-        public void SetArtifactName(string artifactName)
+        public void SetReportName(string reportName)
         {
-            SetParamValue("artifactName", artifactName);
+            SetParamValue("reportName", reportName);
+        }
+
+        public void SetArchiveName(string archiveName)
+        {
+            SetParamValue("archiveName", archiveName);
         }
 
         public void SetStorageAccount(string storageAccount)

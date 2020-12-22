@@ -8,9 +8,7 @@ $testPathInput = Get-VstsInput -Name 'testPathInput' -Require
 $timeOutIn = Get-VstsInput -Name 'timeOutIn'
 $uploadArtifact = Get-VstsInput -Name 'uploadArtifact' -Require
 $artifactType = Get-VstsInput -Name 'artifactType'
-#$storageAccount = $env:STORAGE_ACCOUNT
-#$container = $env:CONTAINER
-$reportFileName = "RunFromFileSystemReport_" + $Env:BUILD_BUILDNUMBER
+$reportFileName = Get-VstsInput -Name 'reportFileName'
 
 $uftworkdir = $env:UFT_LAUNCHER
 Import-Module $uftworkdir\bin\PSModule.dll
@@ -34,34 +32,75 @@ if (Test-Path $retcodefile)
 # remove temporary files complited
 $results = Join-Path $env:UFT_LAUNCHER -ChildPath "res\*.xml"
 
-#Get-ChildItem -Path $results | foreach ($_) { Remove-Item $_.fullname }
+# Get-ChildItem -Path $results | foreach ($_) { Remove-Item $_.fullname }
 
-Invoke-FSTask $testPathInput $timeOutIn $uploadArtifact $artifactType $env:STORAGE_ACCOUNT $env:CONTAINER $reportFileName -Verbose 
+if ($reportFileName)
+{
+	$reportFileName = $reportFileName + '_' +  $env:BUILD_BUILDNUMBER
+} else
+{
+	$reportFileName = "FileSystemExecutionReport_" + $env:BUILD_BUILDNUMBER
+}
+
+$archiveName = "Report_" + $env:BUILD_BUILDNUMBER
+
+Invoke-FSTask $testPathInput $timeOutIn $uploadArtifact $artifactType $env:STORAGE_ACCOUNT $env:CONTAINER $reportFileName $archiveName -Verbose 
 
 $testPathReportInput = Join-Path $testPathInput -ChildPath "Report\run_results.html"
 
-#connect to Azure account
+if($uploadArtifact -eq "yes")
+{
+# connect to Azure account
 Connect-AzAccount
 
-#get resource group
+# get resource group
 $group = $env:RESOURCE_GROUP
 $resourceGroup = Get-AzResourceGroup -Name "$($group)"
 $groupName = $resourceGroup.ResourceGroupName
 
-#get storage account
+# get storage account
 $account = $env:STORAGE_ACCOUNT
 $storageAccount =  Get-AzStorageAccount -ResourceGroupName "$($groupName)" -Name  "$($account)"
 
-#get storage context
+# get storage context
 $storageContext = $storageAccount.Context
 
-#get storage container
+# get storage container
 $container = $env:CONTAINER
 
-$artifact = $reportFileName + ".html"
+if ($artifactType -eq "onlyReport") #upload only report
+{
+	$artifact = $reportFileName + ".html"
+	# upload resource to container
+	Set-AzStorageBlobContent -Container "$($container)" -File $testPathReportInput -Blob  $artifact -Context $storageContext
+	
+} elseif ($artifactType -eq "onlyArchive") #upload only archive
+{
+	#archive report folder
+	$artifact = "Report_" + $env:BUILD_BUILDNUMBER + ".zip"
+	
+	$sourceFolder = Join-Path $testPathInput -ChildPath "Report"
+	$destinationFolder = Join-Path $testPathInput -ChildPath $artifact
+	Compress-Archive -Path $sourceFolder -DestinationPath $destinationFolder
+	
+	# upload resource to container
+	Set-AzStorageBlobContent -Container "$($container)" -File $destinationFolder -Blob  $artifact -Context $storageContext
 
-#upload resource to container
-Set-AzStorageBlobContent -Container "$($container)" -File $testPathReportInput -Blob  $artifact -Context $storageContext
+} else { #upload both report and archive
+	$artifact = $reportFileName + ".html"
+	# upload resource to container
+	Set-AzStorageBlobContent -Container "$($container)" -File $testPathReportInput -Blob $artifact -Context $storageContext
+
+	#archive report folder	
+	$artifact = "Report_" + $env:BUILD_BUILDNUMBER + ".zip"
+	$sourceFolder = Join-Path $testPathInput -ChildPath "Report"
+	$destinationFolder = Join-Path $testPathInput -ChildPath $artifact
+	Compress-Archive -Path $sourceFolder -DestinationPath $destinationFolder
+
+	# upload resource to container
+	Set-AzStorageBlobContent -Container "$($container)" -File $destinationFolder -Blob  $artifact -Context $storageContext
+}
+}
 
 # create summary UFT report
 if (Test-Path $summaryReport)
