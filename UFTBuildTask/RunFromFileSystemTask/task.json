@@ -51,7 +51,7 @@
           "defaultValue": "onlyReport",
           "required": false,
           "visibleRule": "uploadArtifact = yes",
-          "helpMarkDown": "What artifact will be downloaded to the storage account.",
+          "helpMarkDown": "Choose what artifact will be uploaded to the storage account",
           "options": {
             "onlyReport": "Only UFT html report",
             "onlyArchive": "Only UFT archive",
