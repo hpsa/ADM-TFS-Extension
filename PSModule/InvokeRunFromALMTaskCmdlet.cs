@@ -47,7 +47,7 @@ namespace PSModule
         [Parameter(Position = 12)]
         public string ALMRunHost;
 
-        [Parameter(Position = 13, Mandatory = true)]
+        /*[Parameter(Position = 13, Mandatory = true)]
         public string UploadArtifact;
 
         [Parameter(Position = 14)]
@@ -63,7 +63,10 @@ namespace PSModule
         public string ReportFileName;
 
         [Parameter(Position = 18)]
-        public string ArchiveName;
+        public string ArchiveName;*/
+
+        [Parameter(Position = 13)]
+        public string BuildNumber;
 
 
         protected override string GetReportFilename()
@@ -86,6 +89,7 @@ namespace PSModule
             builder.SetAlmProject(ALMProject);
             builder.SetAlmRunHost(ALMRunHost);
             builder.SetAlmTimeout(TimeOut);
+            builder.SetBuildNumber(BuildNumber);
 
             switch (RunMode)
             {
@@ -113,12 +117,12 @@ namespace PSModule
                 builder.SetAlmTestSet("");
             }
 
-            builder.SetUploadArtifact(UploadArtifact);
+           /* builder.SetUploadArtifact(UploadArtifact);
             builder.SetArtifactType(ArtType);
             builder.SetReportName(ReportFileName);
             builder.SetArchiveName(ArchiveName);
             builder.SetStorageAccount(StorageAccount);
-            builder.SetContainer(Container);
+            builder.SetContainer(Container);*/
 
             return builder.GetProperties();
         }

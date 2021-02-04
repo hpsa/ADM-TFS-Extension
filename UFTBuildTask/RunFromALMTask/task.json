@@ -12,8 +12,9 @@
   "version": {
     "Major": 1,
     "Minor": 1,
-    "Patch": 5
+    "Patch": 6
   },
+  "helpUrl": "https://admhelp.microfocus.com/uft/en/15.0-15.0.2/UFT_Help/Content/UFT_Tools/Azure_DevOps_Extension/uft-azure-devops-run-alm.htm",
   "demands": [
     "UFT_LAUNCHER"
   ],
@@ -140,42 +141,9 @@
       "groupName": "advanced",
       "required": false,
       "helpMarkDown": "The address of the host running the selected tests"
-    },
-    {
-      "name": "uploadArtifact",
-      "type": "radio",
-      "label": "Do you want to upload the UFT report to the storage account?",
-      "defaultValue": "yes",
-      "required": true,
-      "options": {
-        "yes": "Yes",
-        "no": "No"
-      },
-      "helpMarkDown": "Choose whether you want or not to upload the report on your Azure storage account."
-    },
-    {
-      "name": "artifactType",
-      "type": "pickList",
-      "label": "What would you like to upload?",
-      "defaultValue": "onlyReport",
-      "required": false,
-      "visibleRule": "uploadArtifact = yes",
-      "helpMarkDown": "Choose what artifact will be uploaded to the storage account",
-      "options": {
-        "onlyReport": "Only UFT html report",
-        "onlyArchive": "Only UFT archive",
-        "bothReportArchive": "Both UFT report and archive"
-      }
-    },
-    {
-      "name": "reportFileName",
-      "type": "string",
-      "label": "Report file name",
-      "defaultValue": "AlmExecutionReport",
-      "visibleRule": "artifactType = onlyReport || artifactType = bothReportArchive",
-      "helpMarkDown": "Choose a name for the UFT report file."
     }
   ],
+
   "instanceNameFormat": "Run From ALM",
   "execution": {
     "PowerShell3": {

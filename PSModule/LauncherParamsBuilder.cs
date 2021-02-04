@@ -41,6 +41,11 @@ namespace PSModule
             SetParamValue("artifactType", artifactType.ToString());
         }
 
+        public void SetBuildNumber(string buildNumber)
+        {
+            SetParamValue("buildNumber", buildNumber);
+        }
+
         public void SetReportName(string reportName)
         {
             SetParamValue("reportName", reportName);

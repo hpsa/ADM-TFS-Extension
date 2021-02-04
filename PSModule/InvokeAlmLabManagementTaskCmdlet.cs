@@ -54,7 +54,7 @@ namespace PSModule
         [Parameter(Position = 14)]
         public string DeprovisioningAction;
 
-        [Parameter(Position = 15, Mandatory = true)]
+        /*[Parameter(Position = 15, Mandatory = true)]
         public string UploadArtifact;
 
         [Parameter(Position = 16)]
@@ -70,8 +70,10 @@ namespace PSModule
         public string ReportFileName;
 
         [Parameter(Position = 20)]
-        public string ArchiveName;
+        public string ArchiveName;*/
 
+        [Parameter(Position = 15)]
+        public string BuildNumber;
 
         protected override string GetReportFilename()
         {
@@ -89,6 +91,7 @@ namespace PSModule
             builder.SetAlmPassword(ALMPassword);
             builder.SetAlmDomain(ALMDomain);
             builder.SetAlmProject(ALMProject);
+            builder.SetBuildNumber(BuildNumber);
 
             switch (TestRunType)
             {
@@ -126,12 +129,12 @@ namespace PSModule
             builder.SetAlmRunMode(AlmRunMode.RUN_LOCAL);
             builder.SetAlmRunHost("localhost");
 
-            builder.SetUploadArtifact(UploadArtifact);
+            /*builder.SetUploadArtifact(UploadArtifact);
             builder.SetArtifactType(ArtType);
             builder.SetReportName(ReportFileName);
             builder.SetArchiveName(ArchiveName);
             builder.SetStorageAccount(StorageAccount);
-            builder.SetContainer(Container);
+            builder.SetContainer(Container);*/
 
             return builder.GetProperties();
         }

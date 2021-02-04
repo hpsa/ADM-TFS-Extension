@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "UFT-Azure-extension",
   "name": "UFT Azure DevOps extension",
-  "version": "1.1.5",
+  "version": "1.1.8",
   "publisher": "LaaksoAnda",
   "targets": [
     {
@@ -38,10 +38,10 @@
       "uri": "https://github.com/MicroFocus/ADM-TFS-Extension"
     },
     "installation": {
-      "uri": "https://admhelp.microfocus.com/uft/en/15.0-15.0.1/UFT_Help/Content/UFT_Tools/Azure_DevOps_Extension/uft-azure-devops.htm"
+      "uri": "https://admhelp.microfocus.com/uft/en/15.0-15.0.2/UFT_Help/Content/UFT_Tools/Azure_DevOps_Extension/uft-azure-devops.htm"
     },
     "learn": {
-      "uri": "https://admhelp.microfocus.com/uft/en/15.0-15.0.1/UFT_Help/Content/UFT_Tools/Azure_DevOps_Extension/uft-azure-devops.htm"
+      "uri": "https://admhelp.microfocus.com/uft/en/15.0-15.0.2/UFT_Help/Content/UFT_Tools/Azure_DevOps_Extension/uft-azure-devops.htm"
     }
   },
   "content": {

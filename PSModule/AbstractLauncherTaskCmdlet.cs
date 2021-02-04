@@ -55,8 +55,8 @@ namespace PSModule
 
                 if (!Directory.Exists(propdir))
                     Directory.CreateDirectory(propdir);
-
-                string resdir = Path.GetFullPath(Path.Combine(ufttfsdir, "res"));
+                
+                string resdir = Path.GetFullPath(Path.Combine(ufttfsdir, "res\\Report_" + properties["buildNumber"]));
 
                 if (!Directory.Exists(resdir))
                     Directory.CreateDirectory(resdir);
@@ -90,7 +90,24 @@ namespace PSModule
                     List<ReportMetaData> listReport = Helper.readReportFromXMLFile(resultsFileName);
 
                     //create html report
-                    Helper.createSummaryReport(ufttfsdir, ref listReport, properties["uploadArtifact"], properties["artifactType"], properties["storageAccount"], properties["container"], properties["reportName"], properties["archiveName"]);
+
+                    if (properties["runType"].Equals(RunType.FileSystem.ToString()) && properties["uploadArtifact"].Equals("yes"))
+                    {
+                        string storageAccount = properties.ContainsKey("storageAccount") ? properties["storageAccount"] : "";
+                        string container = properties.ContainsKey("container") ? properties["container"] : "";
+                      
+                        Helper.createSummaryReport(ufttfsdir, ref listReport,
+                                                        properties["uploadArtifact"], properties["artifactType"], storageAccount, container,
+                                                        properties["reportName"], properties["archiveName"], properties["buildNumber"],
+                                                        properties["runType"]);
+                    } else
+                    {
+                        Helper.createSummaryReport(ufttfsdir, ref listReport,
+                                                  properties["uploadArtifact"], "", "", "",
+                                                  "", "",
+                                                  properties["buildNumber"],
+                                                  properties["runType"]);
+                    }
 
                     //get task return code
                     retCode = Helper.getErrorCode(listReport);

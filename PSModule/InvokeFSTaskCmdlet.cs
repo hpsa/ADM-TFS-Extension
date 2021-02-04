@@ -32,6 +32,9 @@ namespace PSModule
         [Parameter(Position = 7)]
         public string ArchiveName;
 
+        [Parameter(Position = 8)]
+        public string BuildNumber;
+
         //public MobileSettings mobile;
 
         protected override void CollateResults(string resultFile, string log, string resdir)
@@ -60,6 +63,7 @@ namespace PSModule
             builder.SetArchiveName(ArchiveName);
             builder.SetStorageAccount(StorageAccount);
             builder.SetContainer(Container);
+            builder.SetBuildNumber(BuildNumber);
 
             return builder.GetProperties();
         }

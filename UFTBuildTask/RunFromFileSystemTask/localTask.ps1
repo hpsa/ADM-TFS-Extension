@@ -2,7 +2,6 @@
 # localTask.ps1
 #
 
-
 param()
 $testPathInput = Get-VstsInput -Name 'testPathInput' -Require
 $timeOutIn = Get-VstsInput -Name 'timeOutIn'
@@ -11,95 +10,167 @@ $artifactType = Get-VstsInput -Name 'artifactType'
 $reportFileName = Get-VstsInput -Name 'reportFileName'
 
 $uftworkdir = $env:UFT_LAUNCHER
+$buildNumber = $env:BUILD_BUILDNUMBER
+$pipelineName = $env:BUILD_DEFINITIONNAME
+
 Import-Module $uftworkdir\bin\PSModule.dll
 
+#---------------------------------------------------------------------------------------------------
+
+function UploadArtifactToAzureStorage($storageContext, $container, $testPathReportInput, $artifact){
+	
+	$storageContainer = Get-AzStorageContainer -Context $storageContext -ErrorAction Stop | where-object {$_.Name -eq $container}
+	If($storageContainer)
+	{
+		#upload artifact to storage container
+		Set-AzStorageBlobContent -Container "$($container)" -File $testPathReportInput -Blob $artifact -Context $storageContext
+	}else{
+		if([string]::IsNullOrEmpty($container)){
+		 Write-Error "Missing storage container."
+		} else {
+			Write-Error ("Provided storage container {0} not found." -f $container)
+		}
+	}
+}
+
+function ArchiveReport($artifact, $reportFile){
+	$sourceFolder = Join-Path $reportFile -ChildPath "Report"
+	$destinationFolder = Join-Path $reportFile -ChildPath $artifact
+	Compress-Archive -Path $sourceFolder -DestinationPath $destinationFolder
+	
+	return $destinationFolder
+}
+
+function UploadHtmlReport($reports, $reportFileNames){
+	$index = 0
+	foreach ( $item in $reports ){
+		$testPathReportInput =  Join-Path $item -ChildPath "Report\run_results.html"
+		$artifact = $reportFileNames[$index]
+		
+		# upload resource to container
+		UploadArtifactToAzureStorage $storageContext $container $testPathReportInput $artifact
+		
+		$index += 1
+	}
+}
+
+function UploadArchive($reports, $archiveFileNames){
+	$index = 0
+	foreach ( $item in $reports ){
+		#archive report folder	
+		$artifact = $archiveFileNames[$index]
+		
+		$destinationFolder = ArchiveReport $artifact $item
+		
+		UploadArtifactToAzureStorage $storageContext $container $destinationFolder $artifact
+					
+		$index += 1
+	}
+}
+
+#---------------------------------------------------------------------------------------------------
 
 # delete old "UFT Report" file and create a new one
-$summaryReport = Join-Path $env:UFT_LAUNCHER -ChildPath "res\UFT Report"
-if (Test-Path $summaryReport)
-{
-	Remove-Item $summaryReport
-}
-
+$summaryReport = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\UFT Report")
 
 # delete old "TestRunReturnCode" file and create a new one
-$retcodefile = Join-Path $env:UFT_LAUNCHER -ChildPath "res\TestRunReturnCode.txt"
-if (Test-Path $retcodefile)
-{
-	Remove-Item $retcodefile
-}
+$retcodefile = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\TestRunReturnCode.txt")
 
 # remove temporary files complited
-$results = Join-Path $env:UFT_LAUNCHER -ChildPath "res\*.xml"
+$results = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber +"\*.xml")
 
-# Get-ChildItem -Path $results | foreach ($_) { Remove-Item $_.fullname }
+$reports = New-Object System.Collections.Generic.List[System.Object]
+$reportFileNames = New-Object System.Collections.Generic.List[System.Object]
+$archiveFileNames = New-Object System.Collections.Generic.List[System.Object]
+
+if($testPathInput.Contains(".mtb")){#batch file with multiple tests
+	$XMLfile = $testPathInput
+	[XML]$testDetails = Get-Content $XMLfile
+	foreach($test in $testDetails.Mtbx.Test){
+		$reports.Add($test.path)
+	}
+}else{#single test or multiline tests
+	$reports = $testPathInput.split([Environment]::NewLine)
+	$testPathReportInput = Join-Path $testPathInput -ChildPath "Report\run_results.html"
+}
 
 if ($reportFileName)
 {
-	$reportFileName = $reportFileName + '_' +  $env:BUILD_BUILDNUMBER
+	$reportFileName = $reportFileName + '_' + $buildNumber
 } else
 {
-	$reportFileName = "FileSystemExecutionReport_" + $env:BUILD_BUILDNUMBER
+	$reportFileName = $pipelineName + "_" + $buildNumber
+}
+$ind = 1
+foreach ( $item in $reports ){
+		$artifactName = $reportFileName + "_" + $ind + ".html"
+		$archiveName = $reportFileName + "_Report_" + $ind + ".zip"
+		$reportFileNames.Add($artifactName)
+		$archiveFileNames.Add($archiveName)
+		$ind += 1
 }
 
-$archiveName = "Report_" + $env:BUILD_BUILDNUMBER
+$archiveNamePattern = $reportFileName + "_Report"
 
-Invoke-FSTask $testPathInput $timeOutIn $uploadArtifact $artifactType $env:STORAGE_ACCOUNT $env:CONTAINER $reportFileName $archiveName -Verbose 
+#---------------------------------------------------------------------------------------------------
 
-$testPathReportInput = Join-Path $testPathInput -ChildPath "Report\run_results.html"
+Invoke-FSTask $testPathInput $timeOutIn $uploadArtifact $artifactType $env:STORAGE_ACCOUNT $env:CONTAINER $reportFileName $archiveNamePattern $buildNumber -Verbose 
+
+#---------------------------------------------------------------------------------------------------
 
 if($uploadArtifact -eq "yes")
 {
-# connect to Azure account
-Connect-AzAccount
+	# get resource group
+	if($null -eq $env:RESOURCE_GROUP){
+		Write-Error "Missing resource group."
+	} else {
+		$group = $env:RESOURCE_GROUP
+		$resourceGroup = Get-AzResourceGroup -Name "$($group)"
+		$groupName = $resourceGroup.ResourceGroupName
+	}
 
-# get resource group
-$group = $env:RESOURCE_GROUP
-$resourceGroup = Get-AzResourceGroup -Name "$($group)"
-$groupName = $resourceGroup.ResourceGroupName
+	# get storage account
+	$account = $env:STORAGE_ACCOUNT
 
-# get storage account
-$account = $env:STORAGE_ACCOUNT
-$storageAccount =  Get-AzStorageAccount -ResourceGroupName "$($groupName)" -Name  "$($account)"
+	$storageAccounts =  Get-AzStorageAccount -ResourceGroupName "$($groupName)"
 
-# get storage context
-$storageContext = $storageAccount.Context
+	$correctAccount = 0
+	foreach($item in $storageAccounts){
+		if($item.storageaccountname -like $account){ 
+			$storageAccount = $item
+			$correctAccount = 1
+			break
+		}
+	}
 
-# get storage container
-$container = $env:CONTAINER
+	if ($correctAccount -eq 1){
+		# get storage context
+		$storageContext = $storageAccount.Context
 
-if ($artifactType -eq "onlyReport") #upload only report
-{
-	$artifact = $reportFileName + ".html"
-	# upload resource to container
-	Set-AzStorageBlobContent -Container "$($container)" -File $testPathReportInput -Blob  $artifact -Context $storageContext
-	
-} elseif ($artifactType -eq "onlyArchive") #upload only archive
-{
-	#archive report folder
-	$artifact = "Report_" + $env:BUILD_BUILDNUMBER + ".zip"
-	
-	$sourceFolder = Join-Path $testPathInput -ChildPath "Report"
-	$destinationFolder = Join-Path $testPathInput -ChildPath $artifact
-	Compress-Archive -Path $sourceFolder -DestinationPath $destinationFolder
-	
-	# upload resource to container
-	Set-AzStorageBlobContent -Container "$($container)" -File $destinationFolder -Blob  $artifact -Context $storageContext
+		# get storage container
+		$container = $env:CONTAINER
 
-} else { #upload both report and archive
-	$artifact = $reportFileName + ".html"
-	# upload resource to container
-	Set-AzStorageBlobContent -Container "$($container)" -File $testPathReportInput -Blob $artifact -Context $storageContext
+		if ($artifactType -eq "onlyReport") #upload only report
+		{
+			UploadHtmlReport $reports $reportFileNames
+			
+		} elseif ($artifactType -eq "onlyArchive") #upload only archive
+		{
+			UploadArchive $reports $archiveFileNames
 
-	#archive report folder	
-	$artifact = "Report_" + $env:BUILD_BUILDNUMBER + ".zip"
-	$sourceFolder = Join-Path $testPathInput -ChildPath "Report"
-	$destinationFolder = Join-Path $testPathInput -ChildPath $artifact
-	Compress-Archive -Path $sourceFolder -DestinationPath $destinationFolder
+		} else { #upload both report and archive
 
-	# upload resource to container
-	Set-AzStorageBlobContent -Container "$($container)" -File $destinationFolder -Blob  $artifact -Context $storageContext
-}
+			UploadHtmlReport $reports $reportFileNames
+			
+			UploadArchive $reports $archiveFileNames
+		}
+	} else {
+		if([string]::IsNullOrEmpty($account)){
+			Write-Error "Missing storage account."
+		} else {
+			Write-Error ("Provided storage account {0} not found." -f $account)
+		}
+	}
 }
 
 # create summary UFT report
@@ -131,3 +202,4 @@ if (Test-Path $retcodefile)
 		Write-Error "Task Failed"
 	}
 }
+

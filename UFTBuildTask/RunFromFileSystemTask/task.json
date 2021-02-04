@@ -1,90 +1,91 @@
 ﻿{
-    "id": "CFBE1493-3BB1-44D5-AC87-7F14A148A6F5",
-    "name": "RunFromFileSystemTask",
-    "friendlyName": "UFT File System Execution",
-    "description": "Execute UFT tests from file system",
-    "category": "Test",
-    "visibility": [
-        "Build",
-        "Release"
-    ],
-    "author": "Micro Focus",
-    "version": {
-        "Major": 1,
-        "Minor": 1,
-        "Patch": 5
+  "id": "CFBE1493-3BB1-44D5-AC87-7F14A148A6F5",
+  "name": "RunFromFileSystemTask",
+  "friendlyName": "UFT File System Execution",
+  "description": "Execute UFT tests from file system",
+  "category": "Test",
+  "visibility": [
+    "Build",
+    "Release"
+  ],
+  "author": "Micro Focus",
+  "version": {
+    "Major": 1,
+    "Minor": 1,
+    "Patch": 8
+  },
+  "helpUrl": "https://admhelp.microfocus.com/uft/en/15.0-15.0.2/UFT_Help/Content/UFT_Tools/Azure_DevOps_Extension/uft-azure-devops-run-local.htm",
+  "demands": "UFT_LAUNCHER",
+  "inputs": [
+    {
+      "name": "testPathInput",
+      "type": "multiLine",
+      "label": "Tests",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "List of tests or folders that contain tests, to run. Each line should contain a single test, folder, or MTB file"
     },
-    "demands": "UFT_LAUNCHER",
-    "inputs": [
-        {
-            "name": "testPathInput",
-            "type": "multiLine",
-            "label": "Tests",
-            "defaultValue": "",
-            "required": true,
-            "helpMarkDown": "List of tests or folders that contain tests, to run. Each line should contain a single test, folder, or MTB file"
-        },
-        {
-            "name": "timeOutIn",
-            "type": "string",
-            "label": "Timeout",
-            "defaultValue": "",
-            "required": false,
-            "helpMarkDown": "Timeout value in seconds. If left empty, there is no timeout"
-        },
-        {
-            "name": "uploadArtifact",
-            "type": "radio",
-            "label": "Do you want to upload the UFT report to the storage account?",
-            "defaultValue": "yes",
-            "required": true,
-            "options": {
-                "yes": "Yes",
-                "no": "No"
-            },
-            "helpMarkDown": "Choose whether you want or not to upload the report on your Azure storage account."
-        },
-        {
-          "name": "artifactType",
-          "type": "pickList",
-          "label": "What would you like to upload?",
-          "defaultValue": "onlyReport",
-          "required": false,
-          "visibleRule": "uploadArtifact = yes",
-          "helpMarkDown": "Choose what artifact will be uploaded to the storage account",
-          "options": {
-            "onlyReport": "Only UFT html report",
-            "onlyArchive": "Only UFT archive",
-            "bothReportArchive": "Both UFT report and archive"
-          }
-        },
-        {
-          "name": "reportFileName",
-          "type": "string",
-          "label": "Report file name",
-          "defaultValue": "FileSystemExecutionReport",
-          "visibleRule": "artifactType = onlyReport || artifactType = bothReportArchive",
-          "helpMarkDown": "Choose a name for the UFT report file."
-        }
-    ],
-
-    "instanceNameFormat": "Run From File System",
-    "execution": {
-        "PowerShell3": {
-            "target": "localTask.ps1",
-            "argumentFormat": "",
-            "workingDirectory": "$(currentDirectory)",
-            "platforms": [
-                "windows"
-            ]
-        },
-        "PublishTest": {
-            "target": "publish.ps1",
-            "argumentFormat": "",
-            "workingDirectory": "$(currentDirectory)",
-            "platforms": [
-                "windows"
-            ]
-        }
+    {
+      "name": "timeOutIn",
+      "type": "string",
+      "label": "Timeout",
+      "defaultValue": "",
+      "required": false,
+      "helpMarkDown": "Timeout value in seconds. If left empty, there is no timeout"
+    },
+    {
+      "name": "uploadArtifact",
+      "type": "radio",
+      "label": "Do you want to upload the UFT report to the storage account?",
+      "defaultValue": "yes",
+      "required": true,
+      "options": {
+        "yes": "Yes",
+        "no": "No"
+      },
+      "helpMarkDown": "Choose whether you want or not to upload the report on your Azure storage account."
+    },
+    {
+      "name": "artifactType",
+      "type": "pickList",
+      "label": "Artifacts to upload",
+      "defaultValue": "onlyReport",
+      "required": false,
+      "visibleRule": "uploadArtifact = yes",
+      "helpMarkDown": "Choose what artifact will be uploaded to the storage account",
+      "options": {
+        "onlyReport": "Only UFT html report",
+        "onlyArchive": "Only UFT archive",
+        "bothReportArchive": "Both UFT report and archive"
+      }
+    },
+    {
+      "name": "reportFileName",
+      "type": "string",
+      "label": "Report file name",
+      "defaultValue": "$(Build.DefinitionName)",
+      "visibleRule": "artifactType = onlyReport || artifactType = bothReportArchive",
+      "helpMarkDown": "Choose a name for the UFT report file"
     }
+  ],
+
+  "instanceNameFormat": "Run From File System",
+  "execution": {
+    "PowerShell3": {
+      "target": "localTask.ps1",
+      "argumentFormat": "",
+      "workingDirectory": "$(currentDirectory)",
+      "platforms": [
+        "windows"
+      ]
+    },
+    "PublishTest": {
+      "target": "publish.ps1",
+      "argumentFormat": "",
+      "workingDirectory": "$(currentDirectory)",
+      "platforms": [
+        "windows"
+      ]
+    }
+  }
 }

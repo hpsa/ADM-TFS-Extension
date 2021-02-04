@@ -88,7 +88,7 @@ namespace PSModule
         public static void createSummaryReport(string uftWorkingFolder, ref List<ReportMetaData> reportList,
                                                string uploadArtifact, string artifactType,
                                                string storageAccount, string container, 
-                                               string reportName, string archiveName)
+                                               string reportName, string archiveName, string buildNumber, string runType)
         {
             HtmlTable table = new HtmlTable();
             HtmlTableRow header = new HtmlTableRow();
@@ -110,37 +110,41 @@ namespace PSModule
             h3.Align = "center";
             header.Cells.Add(h3);
 
-            if (uploadArtifact.Equals("yes") && (artifactType.Equals(ArtifactType.onlyReport.ToString()) || artifactType.Equals(ArtifactType.bothReportArchive.ToString())))
+            if (runType.Equals(RunType.FileSystem.ToString()))
             {
-                HtmlTableCell h4 = new HtmlTableCell();
-                h4.InnerText = "UFT report";
-                h4.Width = "100";
-                h4.Align = "center";
-                header.Cells.Add(h4);
-
-                if (artifactType.Equals(ArtifactType.bothReportArchive.ToString()))
+                if (uploadArtifact.Equals("yes") && (artifactType.Equals(ArtifactType.onlyReport.ToString()) || artifactType.Equals(ArtifactType.bothReportArchive.ToString())))
                 {
-                    HtmlTableCell h5 = new HtmlTableCell();
-                    h5.InnerText = "UFT report archive";
-                    h5.Width = "150";
-                    h5.Align = "center";
-                    header.Cells.Add(h5);
-                }
-            }
+                    HtmlTableCell h4 = new HtmlTableCell();
+                    h4.InnerText = "UFT report";
+                    h4.Width = "100";
+                    h4.Align = "center";
+                    header.Cells.Add(h4);
 
-            if (uploadArtifact.Equals("yes") && (artifactType.Equals(ArtifactType.onlyArchive.ToString())))
-            {
-                HtmlTableCell h4 = new HtmlTableCell();
-                h4.InnerText = "UFT report archive";
-                h4.Width = "150";
-                h4.Align = "center";
-                header.Cells.Add(h4);
+                    if (artifactType.Equals(ArtifactType.bothReportArchive.ToString()))
+                    {
+                        HtmlTableCell h5 = new HtmlTableCell();
+                        h5.InnerText = "UFT report archive";
+                        h5.Width = "150";
+                        h5.Align = "center";
+                        header.Cells.Add(h5);
+                    }
+                }
+
+                if (uploadArtifact.Equals("yes") && (artifactType.Equals(ArtifactType.onlyArchive.ToString())))
+                {
+                    HtmlTableCell h4 = new HtmlTableCell();
+                    h4.InnerText = "UFT report archive";
+                    h4.Width = "150";
+                    h4.Align = "center";
+                    header.Cells.Add(h4);
+                }
             }
 
             header.BgColor = KnownColor.Azure.ToString();
             table.Rows.Add(header);
 
             //create table content
+            int index = 1;
             foreach (ReportMetaData report in reportList)
             {
                 HtmlTableRow row = new HtmlTableRow();
@@ -167,67 +171,72 @@ namespace PSModule
                     statusImage.Src = "https://extensionado.blob.core.windows.net/uft-extension-images/failed.png";
                 }
 
-
                 cell3.Align = "center";
                 cell3.Controls.Add(statusImage);
                 row.Cells.Add(cell3);
 
-                if (uploadArtifact.Equals("yes") && (artifactType.Equals(ArtifactType.onlyReport.ToString()) || artifactType.Equals(ArtifactType.bothReportArchive.ToString())))
+                if (runType.Equals(RunType.FileSystem.ToString()))
                 {
-
-                    HtmlTableCell cell4 = new HtmlTableCell();
-                    HtmlAnchor reportLink = new HtmlAnchor();
-
-                    reportLink.HRef = "https://" + storageAccount + ".blob.core.windows.net/" + container + "/" + reportName + ".html";
-                    reportLink.InnerText = "View report";
-
-                    cell4.Controls.Add(reportLink);
-                    cell4.Align = "center";
-                    row.Cells.Add(cell4);
-
-                    if (artifactType.Equals(ArtifactType.bothReportArchive.ToString()))
+                    if (uploadArtifact.Equals("yes") && (artifactType.Equals(ArtifactType.onlyReport.ToString()) || artifactType.Equals(ArtifactType.bothReportArchive.ToString())))
                     {
-                        HtmlTableCell cell5 = new HtmlTableCell();
+
+                        HtmlTableCell cell4 = new HtmlTableCell();
+                        HtmlAnchor reportLink = new HtmlAnchor();
+
+                        reportLink.HRef = "https://" + storageAccount + ".blob.core.windows.net/" + container + "/" + reportName + "_" + index + ".html";
+                        reportLink.InnerText = "View report";
+
+                        cell4.Controls.Add(reportLink);
+                        cell4.Align = "center";
+                        row.Cells.Add(cell4);
+
+
+                        if (artifactType.Equals(ArtifactType.bothReportArchive.ToString()))
+                        {
+                            HtmlTableCell cell5 = new HtmlTableCell();
+                            HtmlAnchor archiveLink = new HtmlAnchor();
+
+                            archiveLink.HRef = "https://" + storageAccount + ".blob.core.windows.net/" + container + "/" + archiveName + "_" + index + ".zip";
+                            archiveLink.InnerText = "Download";
+
+                            cell5.Controls.Add(archiveLink);
+                            cell5.Align = "center";
+                            row.Cells.Add(cell5);
+                        }
+                    }
+
+                    if (uploadArtifact.Equals("yes") && artifactType.Equals(ArtifactType.onlyArchive.ToString()))
+                    {
+                        HtmlTableCell cell4 = new HtmlTableCell();
                         HtmlAnchor archiveLink = new HtmlAnchor();
 
-                        archiveLink.HRef = "https://" + storageAccount + ".blob.core.windows.net/" + container + "/" + archiveName + ".zip";
+                        archiveLink.HRef = "https://" + storageAccount + ".blob.core.windows.net/" + container + "/" + archiveName + "_" + index + ".zip";
                         archiveLink.InnerText = "Download";
 
-                        cell5.Controls.Add(archiveLink);
-                        cell5.Align = "center";
-                        row.Cells.Add(cell5);
+                        cell4.Controls.Add(archiveLink);
+                        cell4.Align = "center";
+                        row.Cells.Add(cell4);
                     }
                 }
 
-                if (uploadArtifact.Equals("yes") && artifactType.Equals(ArtifactType.onlyArchive.ToString()))
-                {
-                    HtmlTableCell cell4 = new HtmlTableCell();
-                    HtmlAnchor archiveLink = new HtmlAnchor();
-
-                    archiveLink.HRef = "https://" + storageAccount + ".blob.core.windows.net/" + container + "/" + archiveName + ".zip";
-                    archiveLink.InnerText = "Download";
-
-                    cell4.Controls.Add(archiveLink);
-                    cell4.Align = "center";
-                    row.Cells.Add(cell4);
-                }
-
                 table.Rows.Add(row);
-
-                //add table to file
-                string html;
-                var reportMessage = new System.Text.StringBuilder();
-
-                using (var sw = new StringWriter())
-                {
-                    table.RenderControl(new System.Web.UI.HtmlTextWriter(sw));
-                    html = sw.ToString();
-                }
-
-                reportMessage.AppendFormat(html);
-
-                System.IO.File.WriteAllText(uftWorkingFolder + @"\res\UFT Report", reportMessage.ToString());
+                index++;
             }
+
+            //add table to file
+            string html;
+            var reportMessage = new System.Text.StringBuilder();
+
+            using (var sw = new StringWriter())
+            {
+                table.RenderControl(new System.Web.UI.HtmlTextWriter(sw));
+                html = sw.ToString();
+            }
+
+            reportMessage.AppendFormat(html);
+
+            System.IO.File.WriteAllText(uftWorkingFolder + @"\\res\\Report_" + buildNumber + "\\UFT Report", reportMessage.ToString());
+            
         }
 
         private static string getTestName(string testPath)
