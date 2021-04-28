@@ -12,7 +12,7 @@
   "version": {
     "Major": 1,
     "Minor": 1,
-    "Patch": 6
+    "Patch": 8
   },
   "helpUrl": "https://admhelp.microfocus.com/uft/en/15.0-15.0.2/UFT_Help/Content/UFT_Tools/Azure_DevOps_Extension/uft-azure-devops-run-alm.htm",
   "demands": [

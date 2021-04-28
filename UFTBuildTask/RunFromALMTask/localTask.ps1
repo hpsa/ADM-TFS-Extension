@@ -37,38 +37,39 @@ if (Test-Path $report)
 
 # delete old "UFT Report" file and create a new one
 $summaryReport = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\UFT Report")
-if (Test-Path $summaryReport)
-{
-	Remove-Item $summaryReport
-}
+
+#run status summary Report
+$runStatus = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\Run status summary")
 
 # delete old "TestRunReturnCode" file and create a new one
-#if (-Not $varReturnCodeFile)
-#{
-	#$varReturnCodeFile = "TestRunReturnCode.txt"
-#}
-#$retcodefile = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\$($varReturnCodeFile)")
 $retcodefile = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\TestRunReturnCode.txt")
-
-#if (Test-Path $retcodefile)
-#{
-#	Remove-Item $retcodefile
-#}
 
 # remove temporary files complited
 $results = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber +"\*.xml")
-#Get-ChildItem -Path $results | foreach ($_) { Remove-Item $_.fullname }
 
+#junit report file 
+$outputJUnitFile = Join-Path $uftworkdir -ChildPath ("res\Report_" + $buildNumber + "\Failed tests")
 
 Invoke-RunFromAlmTask $varAlmserv $varSSOEnabled $varClientID $varApiKeySecret $varUserName $varPass $varDomain $varProject $varTestsets $varTimeout $varReportName $runMode $testingToolHost $buildNumber -Verbose
-
-Write-Host "before summary report"
 
 # create summary UFT report
 if (Test-Path $summaryReport)
 {
 	#uploads report files to build artifacts
 	Write-Host "##vso[task.uploadsummary]$($summaryReport)" | ConvertTo-Html
+}
+
+if (Test-Path $runStatus)
+{
+	#uploads report files to build artifacts
+	Write-Host "##vso[task.uploadsummary]$($runStatus)" | ConvertTo-Html
+}
+
+# upload junit report
+if (Test-Path $outputJUnitFile)
+{
+	#uploads report files to build artifacts
+	Write-Host "##vso[task.uploadsummary]$($outputJUnitFile)" | ConvertTo-Html
 }
 
 # read return code
@@ -88,8 +89,6 @@ if (Test-Path $retcodefile)
 	}
 	elseif ($retcode -ne 0)
 	{
-		Write-Host "Return code: $($retcode)"
-		Write-Host "Task failed"
 		Write-Error "Task Failed"
 	}
 }

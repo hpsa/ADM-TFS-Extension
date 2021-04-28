@@ -18,19 +18,8 @@ Import-Module $uftworkdir\bin\PSModule.dll
 #---------------------------------------------------------------------------------------------------
 
 function UploadArtifactToAzureStorage($storageContext, $container, $testPathReportInput, $artifact){
-	
-	$storageContainer = Get-AzStorageContainer -Context $storageContext -ErrorAction Stop | where-object {$_.Name -eq $container}
-	If($storageContainer)
-	{
-		#upload artifact to storage container
-		Set-AzStorageBlobContent -Container "$($container)" -File $testPathReportInput -Blob $artifact -Context $storageContext
-	}else{
-		if([string]::IsNullOrEmpty($container)){
-		 Write-Error "Missing storage container."
-		} else {
-			Write-Error ("Provided storage container {0} not found." -f $container)
-		}
-	}
+	#upload artifact to storage container
+	Set-AzStorageBlobContent -Container "$($container)" -File $testPathReportInput -Blob $artifact -Context $storageContext
 }
 
 function ArchiveReport($artifact, $reportFile){
@@ -73,11 +62,17 @@ function UploadArchive($reports, $archiveFileNames){
 # delete old "UFT Report" file and create a new one
 $summaryReport = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\UFT Report")
 
+#run status summary Report
+$runStatus = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\Run status summary")
+
 # delete old "TestRunReturnCode" file and create a new one
 $retcodefile = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\TestRunReturnCode.txt")
 
 # remove temporary files complited
 $results = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber +"\*.xml")
+
+#junit report file 
+$outputJUnitFile = Join-Path $uftworkdir -ChildPath ("res\Report_" + $buildNumber + "\Failed tests")
 
 $reports = New-Object System.Collections.Generic.List[System.Object]
 $reportFileNames = New-Object System.Collections.Generic.List[System.Object]
@@ -113,10 +108,7 @@ foreach ( $item in $reports ){
 $archiveNamePattern = $reportFileName + "_Report"
 
 #---------------------------------------------------------------------------------------------------
-
-Invoke-FSTask $testPathInput $timeOutIn $uploadArtifact $artifactType $env:STORAGE_ACCOUNT $env:CONTAINER $reportFileName $archiveNamePattern $buildNumber -Verbose 
-
-#---------------------------------------------------------------------------------------------------
+#storage variables validation
 
 if($uploadArtifact -eq "yes")
 {
@@ -132,7 +124,7 @@ if($uploadArtifact -eq "yes")
 	# get storage account
 	$account = $env:STORAGE_ACCOUNT
 
-	$storageAccounts =  Get-AzStorageAccount -ResourceGroupName "$($groupName)"
+	$storageAccounts = Get-AzStorageAccount -ResourceGroupName "$($groupName)"
 
 	$correctAccount = 0
 	foreach($item in $storageAccounts){
@@ -143,42 +135,75 @@ if($uploadArtifact -eq "yes")
 		}
 	}
 
-	if ($correctAccount -eq 1){
-		# get storage context
-		$storageContext = $storageAccount.Context
-
-		# get storage container
-		$container = $env:CONTAINER
-
-		if ($artifactType -eq "onlyReport") #upload only report
-		{
-			UploadHtmlReport $reports $reportFileNames
-			
-		} elseif ($artifactType -eq "onlyArchive") #upload only archive
-		{
-			UploadArchive $reports $archiveFileNames
-
-		} else { #upload both report and archive
-
-			UploadHtmlReport $reports $reportFileNames
-			
-			UploadArchive $reports $archiveFileNames
-		}
-	} else {
+	if($correctAccount -eq 0){
 		if([string]::IsNullOrEmpty($account)){
-			Write-Error "Missing storage account."
+				Write-Error "Missing storage account."
 		} else {
 			Write-Error ("Provided storage account {0} not found." -f $account)
+		}
+	}else{
+		$storageContext = $storageAccount.Context
+		
+		#get container
+		$container = $env:CONTAINER
+
+		$storageContainer = Get-AzStorageContainer -Context $storageContext -ErrorAction Stop | where-object {$_.Name -eq $container}
+		If($storageContainer -eq $null)
+		{
+			if([string]::IsNullOrEmpty($container)){
+			 Write-Error "Missing storage container."
+			} else {
+				Write-Error ("Provided storage container {0} not found." -f $container)
+			}
 		}
 	}
 }
 
+#---------------------------------------------------------------------------------------------------
+#Run the tests
+Invoke-FSTask $testPathInput $timeOutIn $uploadArtifact $artifactType $env:STORAGE_ACCOUNT $env:CONTAINER $reportFileName $archiveNamePattern $buildNumber -Verbose 
+
+#---------------------------------------------------------------------------------------------------
+#upload artifacts to Azure storage
+if($uploadArtifact -eq "yes")
+{
+	if ($artifactType -eq "onlyReport") #upload only report
+	{
+		UploadHtmlReport $reports $reportFileNames
+		
+	} elseif ($artifactType -eq "onlyArchive") #upload only archive
+	{
+		UploadArchive $reports $archiveFileNames
+
+	} else { #upload both report and archive
+
+		UploadHtmlReport $reports $reportFileNames
+		
+		UploadArchive $reports $archiveFileNames
+	}
+}
+
+#---------------------------------------------------------------------------------------------------
 # create summary UFT report
 if (Test-Path $summaryReport)
 {
 	#uploads report files to build artifacts
 	Write-Host "##vso[task.uploadsummary]$($summaryReport)" | ConvertTo-Html
 }
+
+if (Test-Path $runStatus)
+{
+	#uploads report files to build artifacts
+	Write-Host "##vso[task.uploadsummary]$($runStatus)" | ConvertTo-Html
+}
+
+# upload junit report
+if (Test-Path $outputJUnitFile)
+{
+	#uploads report files to build artifacts
+	Write-Host "##vso[task.uploadsummary]$($outputJUnitFile)" | ConvertTo-Html
+}
+
 
 # read return code
 if (Test-Path $retcodefile)
@@ -197,8 +222,6 @@ if (Test-Path $retcodefile)
 	}
 	elseif ($retcode -ne 0)
 	{
-		Write-Host "Return code: $($retcode)"
-		Write-Host "Task failed"
 		Write-Error "Task Failed"
 	}
 }

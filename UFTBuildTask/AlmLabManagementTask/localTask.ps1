@@ -38,12 +38,14 @@ if (Test-Path $report)
 
 # delete old "UFT Report" file and create a new one
 $summaryReport = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\UFT Report")
-if (Test-Path $summaryReport)
-{
-	Remove-Item $summaryReport
-}
 
-# delete old "TestRunReturnCode" file and create a new one
+#run status summary Report
+$runStatus = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\Run status summary")
+
+#junit report file 
+$outputJUnitFile = Join-Path $uftworkdir -ChildPath ("res\Report_" + $buildNumber + "\Failed tests"
+
+# create return code file
 #if (-Not $varReturnCodeFile)
 #{
 #	$varReturnCodeFile = "TestRunReturnCode.txt"
@@ -70,6 +72,19 @@ if (Test-Path $summaryReport)
 	Write-Host "##vso[task.uploadsummary]$($summaryReport)" | ConvertTo-Html
 }
 
+if (Test-Path $runStatus)
+{
+	#uploads report files to build artifacts
+	Write-Host "##vso[task.uploadsummary]$($runStatus)" | ConvertTo-Html
+}
+
+# upload junit report
+if (Test-Path $outputJUnitFile)
+{
+	#uploads report files to build artifacts
+	Write-Host "##vso[task.uploadsummary]$($outputJUnitFile)" | ConvertTo-Html
+}
+
 # read return code
 if (Test-Path $retcodefile)
 {
@@ -85,12 +100,9 @@ if (Test-Path $retcodefile)
 	{
 		#writes log messages in case of errors
 		Write-Error "Task Failed with message: Closed by user"
-		Write-Host "Task Failed with message: Closed by user"
 	}
 	elseif ($retcode -ne 0)
 	{
-		Write-Host "Return code: $($retcode)"
-		Write-Host "Task failed"
 		Write-Error "Task Failed"
 	}
 }

@@ -1,0 +1,56 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\Plugins\\Azure\\ADM-TFS-Extension\\PSModule\\PSModule.csproj": {}
+  },
+  "projects": {
+    "D:\\Plugins\\Azure\\ADM-TFS-Extension\\PSModule\\PSModule.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Plugins\\Azure\\ADM-TFS-Extension\\PSModule\\PSModule.csproj",
+        "projectName": "PSModule",
+        "projectPath": "D:\\Plugins\\Azure\\ADM-TFS-Extension\\PSModule\\PSModule.csproj",
+        "packagesPath": "C:\\Users\\laakso\\.nuget\\packages\\",
+        "outputPath": "D:\\Plugins\\Azure\\ADM-TFS-Extension\\PSModule\\obj\\",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "configFilePaths": [
+          "C:\\Users\\laakso\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net46"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net46": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net46": {
+          "dependencies": {
+            "AzureSDK2.2DLLs": {
+              "target": "Package",
+              "version": "[1.0.0, )"
+            }
+          }
+        }
+      },
+      "runtimes": {
+        "win": {
+          "#import": []
+        },
+        "win-x64": {
+          "#import": []
+        },
+        "win-x86": {
+          "#import": []
+        }
+      }
+    }
+  }
+}

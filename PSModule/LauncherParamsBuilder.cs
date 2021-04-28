@@ -78,7 +78,7 @@ namespace PSModule
 
         public void SetAlmUserName(string almUserName)
         {
-            SetParamValue("almUserName", almUserName);
+            SetParamValue("almUsername", almUserName);
         }
 
         public void SetAlmPassword(string almPassword)
