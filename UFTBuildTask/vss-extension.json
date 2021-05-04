@@ -1,8 +1,8 @@
 {
   "manifestVersion": 1,
   "id": "UFT-Azure-extension",
-  "name": "UFT Azure DevOps extension",
-  "version": "1.1.0",
+  "name": "UFT One Azure DevOps extension",
+  "version": "2.0.0",
   "publisher": "uftpublisher",
   "targets": [
     {
@@ -10,7 +10,7 @@
       "version": "[15.0,)"
     }
   ],
-  "description": "Enables you to run UFT tests as a build in an Azure DevOps build process. This extension includes 4 tasks.",
+  "description": "Enables you to run UFT tests as a build in an Azure DevOps build process. This extension includes 5 tasks.",
   "categories": [
     "Azure Pipelines"
   ],
@@ -25,6 +25,7 @@
   "icons": {
     "default": "images/tfs.png"
   },
+  "demands": [ "contribution/ms.vss-dashboards-web.widget-sdk-version-2", "contribution/ms.vss-web.charts-service" ],
   "screenshots ": [
     {
       "path": "resources/screenshots/AlmExecution.PNG"
@@ -38,10 +39,10 @@
       "uri": "https://github.com/MicroFocus/ADM-TFS-Extension"
     },
     "installation": {
-      "uri": "https://admhelp.microfocus.com/uft/en/15.0-15.0.1/UFT_Help/Content/UFT_Tools/Azure_DevOps_Extension/uft-azure-devops.htm"
+      "uri": "https://admhelp.microfocus.com/uft/en/15.0-15.0.2/UFT_Help/Content/UFT_Tools/Azure_DevOps_Extension/uft-azure-devops.htm"
     },
     "learn": {
-      "uri": "https://admhelp.microfocus.com/uft/en/15.0-15.0.1/UFT_Help/Content/UFT_Tools/Azure_DevOps_Extension/uft-azure-devops.htm"
+      "uri": "https://admhelp.microfocus.com/uft/en/15.0-15.0.2/UFT_Help/Content/UFT_Tools/Azure_DevOps_Extension/uft-azure-devops.htm"
     }
   },
   "content": {
@@ -71,16 +72,25 @@
     },
     {
       "path": "RunFromFileSystemTask"
-    }
+    },
+    {
+      "path": "node_modules/vss-web-extension-sdk/lib/VSS.SDK.js",
+      "addressable": true
+    },
+    {
+      "path": "images",
+      "addressable": true
+    }   
   ],
   "scopes": [
     "vso.test",
     "vso.build_execute",
     "vso.serviceendpoint"
   ],
-  
+
+
   "contributions": [
-       {
+    {
       "id": "custom-build-task-1",
       "type": "ms.vss-distributed-task.task",
       "targets": [
@@ -108,6 +118,17 @@
       ],
       "properties": {
         "name": "RunFromALMTask"
+      }
+    },
+    {
+      "id": "my-hub",
+      "type": "ms.vss-web.hub",
+      "targets": [
+        "ms.vss-code-web.code-hub-group"
+      ],
+      "properties": {
+        "name": "My Hub",
+        "uri": "my-hub.html"
       }
     },
     {

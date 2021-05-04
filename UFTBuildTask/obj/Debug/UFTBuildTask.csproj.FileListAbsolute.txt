@@ -1,1 +1,0 @@
-C:\Users\laakso\TFS\ADM-TFS-Extension-master\UFTBuildTask\obj\Debug\UFTBuildTask.csprojResolveAssemblyReference.cache
