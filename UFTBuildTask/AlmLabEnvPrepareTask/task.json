@@ -1,5 +1,5 @@
 ﻿{
-  "id": "2A12D98C-8838-40BA-BE69-C0B5D88743F5",
+  "id": "2A12D98C-8838-40BA-BE69-C0B5D88743F7",
   "name": "AlmLabEnvPrepareTask",
   "friendlyName": "UFT ALM Lab Environment Preparation",
   "description": "Use this build step to assign values to AUT Environment Configuration in ALM.",
