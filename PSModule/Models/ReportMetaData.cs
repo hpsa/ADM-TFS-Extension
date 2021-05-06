@@ -4,19 +4,17 @@ namespace PSModule.Models
 {
     public class ReportMetaData
     {
-        private string reportPath { get; set; } //slave path of report folder(only for html report format)
-
+        private string folderPath { get; set; } //slave path of report folder(only for html report format)
         private string displayName { get; set; }
 
-        private string resourceURL { get; set; }
+        //private string urlName { get; set; }
+
+        //private string resourceURL { get; set; }
 
         private string dateTime { get; set; }
 
         private string status { get; set; }
-
-        private string duration { get; set; }
-
-        private string errorMessage { get; set; }
+    
 
         public void setDisplayName(string value)
         {
@@ -28,16 +26,10 @@ namespace PSModule.Models
             return displayName;
         }
 
-        public void setReportPath(string value)
+       /* public void setUrlName(string value)
         {
-            this.reportPath = value;
-        }
-
-        internal string getReportPath()
-        {
-            return reportPath;
-        }
-
+            this.urlName = value;
+        }*/
 
         public void setDateTime(string value)
         {
@@ -49,10 +41,10 @@ namespace PSModule.Models
             return dateTime;
         }
 
-        public void setResourceUrl(string value)
+       /* public void setResourceUrl(string value)
         {
             this.resourceURL = value;
-        }
+        }*/
 
         public void setStatus(string value)
         {
@@ -61,25 +53,6 @@ namespace PSModule.Models
         internal string getStatus()
         {
             return status;
-        }
-
-        public void setDuration(string value)
-        {
-            this.duration = value;
-        }
-        internal string getDuration()
-        {
-            return duration;
-        }
-
-        public void setErrorMessage(string value)
-        {
-            this.errorMessage = value;
-        }
-
-        internal string getErrorMessage()
-        {
-            return errorMessage;
         }
     }
 }
