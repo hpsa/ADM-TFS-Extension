@@ -18,7 +18,6 @@ namespace PSModule
         const string UFTFolder = "UFTWorking";
         const string HpToolsLauncher_SCRIPT_NAME = "HpToolsLauncher.exe";
         const string HpToolsAborter_SCRIPT_NAME = "HpToolsAborter.exe";
-        const string ReportConverter_SCRIPT_NAME = "ReportConverter.exe";
 
         private ConcurrentQueue<string> outputToProcess = new ConcurrentQueue<string>();
         private ConcurrentQueue<string> errorToProcess = new ConcurrentQueue<string>();
@@ -31,7 +30,6 @@ namespace PSModule
         {
             string launcherPath = "";
             string aborterPath = "";
-            string converterPath = "";
             string paramFileName = "";
             string resultsFileName = "";
 
@@ -53,14 +51,12 @@ namespace PSModule
 
                 aborterPath = Path.GetFullPath(Path.Combine(ufttfsdir, HpToolsAborter_SCRIPT_NAME));
 
-                converterPath = Path.GetFullPath(Path.Combine(ufttfsdir, ReportConverter_SCRIPT_NAME));
-
                 string propdir = Path.GetFullPath(Path.Combine(ufttfsdir, "props"));
 
                 if (!Directory.Exists(propdir))
                     Directory.CreateDirectory(propdir);
 
-                string resdir = Path.GetFullPath(Path.Combine(ufttfsdir, "res\\Report_" + properties["buildNumber"]));
+                string resdir = Path.GetFullPath(Path.Combine(ufttfsdir, "res"));
 
                 if (!Directory.Exists(resdir))
                     Directory.CreateDirectory(resdir);
@@ -73,9 +69,6 @@ namespace PSModule
 
                 resultsFileName = resultsFileName.Replace("\\", "\\\\");
 
-                var junitReportFile = Path.Combine(resdir, "junit_report.xml");
-                junitReportFile = junitReportFile.Replace("\\", "\\\\");
-
                 properties.Add("resultsFilename", resultsFileName);
 
                 if (!SaveProperties(paramFileName, properties))
@@ -83,10 +76,10 @@ namespace PSModule
                     WriteError(new ErrorRecord(new Exception("cannot save properties"), "", ErrorCategory.WriteError, ""));
                     return;
                 }
-
+                
                 //run the build task
                 Run(launcherPath, paramFileName);
-               
+
                 //collect results
                 CollateResults(resultsFileName, _launcherConsole.ToString(), resdir);
 
@@ -94,74 +87,15 @@ namespace PSModule
                 if (File.Exists(resultsFileName) && (new FileInfo(resultsFileName).Length > 0))//if results file exists
                 {
                     //create UFT report from the results file
-                    List<ReportMetaData> listReport = Helper.readReportFromXMLFile(resultsFileName, new Dictionary<string, List<ReportMetaData>>(), false);
-
-                    string storageAccount = properties.ContainsKey("storageAccount") ? properties["storageAccount"] : "";
-                    string container = properties.ContainsKey("container") ? properties["container"] : "";
+                    List<ReportMetaData> listReport = Helper.readReportFromXMLFile(resultsFileName);
 
                     //create html report
-                    if (properties["runType"].Equals(RunType.FileSystem.ToString()) && properties["uploadArtifact"].Equals("yes"))
-                    {
-                        Helper.createSummaryReport(ufttfsdir, ref listReport,
-                                                        properties["uploadArtifact"], properties["artifactType"], storageAccount, container,
-                                                        properties["reportName"], properties["archiveName"], properties["buildNumber"],
-                                                        properties["runType"]);
-                    }
-                    else
-                    {
-                        Helper.createSummaryReport(ufttfsdir, ref listReport,
-                                                  "", "", "", "",
-                                                  "", "",
-                                                  properties["buildNumber"],
-                                                  properties["runType"]);
-                    }
+                    Helper.createSummaryReport(ufttfsdir, ref listReport);
+
                     //get task return code
                     retCode = Helper.getErrorCode(listReport);
-                    
-                    //create run status summary report
-                    string runStatus;
-                   
-                    switch (retCode)
-                    {
-                        case 0: runStatus = "PASSED"; break;
-                        case -1: runStatus = "FAILED"; break;
-                        case -2: runStatus = "UNSTABLE"; break;
-                        case -3: runStatus = "CLOSED BY USER"; break;
-                        default: runStatus = "UNDEFINED"; break;
-                    }
-
-                    Dictionary<string, int> nrOfTests = new Dictionary<string, int>();
-                    nrOfTests.Add("Passed", 0);
-                    nrOfTests.Add("Failed", 0);
-                    nrOfTests.Add("Error", 0);
-                    nrOfTests.Add("Warning", 0);
-                  
-                    int totalTests = Helper.getNumberOfTests(listReport, ref nrOfTests);
-                    
-                    Helper.createRunStatusSummary(runStatus, totalTests, nrOfTests, ufttfsdir, 
-                                                properties["buildNumber"], storageAccount, container);
-                    
-                    List<string> testNames = new List<string>();
-                    List<string> reportFolders = new List<string>();
-                    foreach(var item in listReport)
-                    {
-                        testNames.Add(item.getDisplayName().Substring(item.getDisplayName().LastIndexOf("\\") + 1));
-                        reportFolders.Add(item.getReportPath());
-                    }
-                  
-                    //run junit report converter
-                    string outputFileReport = Path.Combine(resdir, "junit_report.xml");
-
-                    RunConverter(converterPath, outputFileReport, reportFolders);
-                    var steps = new Dictionary<string, List<ReportMetaData>>();
-                    List<ReportMetaData> junitReportList = Helper.readReportFromXMLFile(junitReportFile, steps, true);
-                    if (nrOfTests["Failed"] > 0 || nrOfTests["Error"] > 0)
-                    {
-                        Helper.createJUnitReport(steps, ufttfsdir, properties["buildNumber"]);
-                    }
+                    CollateRetCode(resdir, retCode);
                 }
-
-                CollateRetCode(resdir, retCode);
             }
             catch (IOException ioe)
             {
@@ -173,7 +107,6 @@ namespace PSModule
                 Run(aborterPath, paramFileName);
             }
         }
-                
 
         private bool SaveProperties(string paramsFile, Dictionary<string, string> properties)
         {
@@ -199,7 +132,6 @@ namespace PSModule
             return result;
         }
 
-       
         private StringBuilder _launcherConsole = new StringBuilder();
         private int Run(string launcherPath, string paramFile)
         {
@@ -249,66 +181,8 @@ namespace PSModule
 
             catch (Exception e)
             {
-                WriteError(new ErrorRecord(e, "ThreadInterruptedException", ErrorCategory.InvalidData, "ThreadInterruptedException target"));
+                WriteError(new ErrorRecord(e, "ThreadInterruptedException", ErrorCategory.InvalidData, "ThreadInterruptedException targer"));
                 return -1;
-            }
-        }
-
-        private StringBuilder _converterConsole = new StringBuilder();
-
-        private void RunConverter(string converterPath, string outputfile, List<string> inputReportFolders)
-        {
-            try
-            {
-                ProcessStartInfo info = new ProcessStartInfo();
-                info.UseShellExecute = false;
-                info.Arguments = $" -j \"{outputfile}\" --aggregate";
-                foreach (var reportFolder in inputReportFolders)
-                {
-                    info.Arguments = info.Arguments + " \"" + reportFolder + "\"";
-                }
-                
-                info.FileName = converterPath;
-                info.RedirectStandardOutput = true;
-                info.RedirectStandardError = true;
-
-                Process converter = new Process();
-                converter.OutputDataReceived += Launcher_OutputDataReceived;
-                converter.ErrorDataReceived += Launcher_ErrorDataReceived;
-
-                converter.StartInfo = info;
-
-                converter.Start();
-
-                converter.BeginOutputReadLine();
-                converter.BeginErrorReadLine();
-
-                while (!converter.HasExited)
-                {
-                    if (outputToProcess.TryDequeue(out string line))
-                    {
-                        _converterConsole.Append(line);
-                        WriteObject(line);
-                    }
-
-                    if (errorToProcess.TryDequeue(out line))
-                    {
-                        _converterConsole.Append(line);
-                        WriteObject(line);
-                    }
-                }
-
-                converter.OutputDataReceived -= Launcher_OutputDataReceived;
-                converter.ErrorDataReceived -= Launcher_ErrorDataReceived;
-
-                converter.WaitForExit();
-
-               // return launcher.ExitCode;
-            }
-            catch (Exception e)
-            {
-                WriteError(new ErrorRecord(e, "ThreadInterruptedException", ErrorCategory.InvalidData, "ThreadInterruptedException target"));
-               // return -1;
             }
         }
 

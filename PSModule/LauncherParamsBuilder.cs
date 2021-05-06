@@ -31,41 +31,6 @@ namespace PSModule
             return properties;
         }
 
-        public void SetUploadArtifact(string uploadArtifact)
-        {
-            SetParamValue("uploadArtifact", uploadArtifact);
-        }
-
-        public void SetArtifactType(ArtifactType artifactType)
-        {
-            SetParamValue("artifactType", artifactType.ToString());
-        }
-
-        public void SetBuildNumber(string buildNumber)
-        {
-            SetParamValue("buildNumber", buildNumber);
-        }
-
-        public void SetReportName(string reportName)
-        {
-            SetParamValue("reportName", reportName);
-        }
-
-        public void SetArchiveName(string archiveName)
-        {
-            SetParamValue("archiveName", archiveName);
-        }
-
-        public void SetStorageAccount(string storageAccount)
-        {
-            SetParamValue("storageAccount", storageAccount);
-        }
-
-        public void SetContainer(string container)
-        {
-            SetParamValue("container", container);
-        }
-
         public void SetRunType(RunType runType)
         {
             SetParamValue("runType", runType.ToString());
@@ -78,7 +43,7 @@ namespace PSModule
 
         public void SetAlmUserName(string almUserName)
         {
-            SetParamValue("almUsername", almUserName);
+            SetParamValue("almUserName", almUserName);
         }
 
         public void SetAlmPassword(string almPassword)

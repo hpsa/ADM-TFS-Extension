@@ -1,5 +1,5 @@
 ﻿{
-  "id": "2A12D98C-8838-40BA-BE69-C0B5D88743F7",
+  "id": "2A12D98C-8838-40BA-BE69-C0B5D88743F5",
   "name": "AlmLabEnvPrepareTask",
   "friendlyName": "UFT ALM Lab Environment Preparation",
   "description": "Use this build step to assign values to AUT Environment Configuration in ALM.",
@@ -10,11 +10,10 @@
   ],
   "author": "Micro Focus",
   "version": {
-    "Major": 2,
-    "Minor": 0,
+    "Major": 1,
+    "Minor": 1,
     "Patch": 0
   },
-  "helpUrl": "https://admhelp.microfocus.com/uft/en/15.0-15.0.2/UFT_Help/Content/UFT_Tools/Azure_DevOps_Extension/uft-azure-devops.htm",
   "demands": [
     "UFT_LAUNCHER"
   ],

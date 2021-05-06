@@ -20,7 +20,6 @@ $varDeprovisioningAction = Get-VstsInput -Name 'varDeprovisioningAction'
 
 
 $uftworkdir = $env:UFT_LAUNCHER
-$buildNumber = $env:BUILD_BUILDNUMBER
 
 Import-Module $uftworkdir\bin\PSModule.dll
 
@@ -37,52 +36,37 @@ if (Test-Path $report)
 }
 
 # delete old "UFT Report" file and create a new one
-$summaryReport = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\UFT Report")
+$summaryReport = Join-Path $env:UFT_LAUNCHER -ChildPath "res\UFT Report"
+if (Test-Path $summaryReport)
+{
+	Remove-Item $summaryReport
+}
 
-#run status summary Report
-$runStatus = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\Run status summary")
-
-#junit report file 
-$outputJUnitFile = Join-Path $uftworkdir -ChildPath ("res\Report_" + $buildNumber + "\Failed tests"
-
-# create return code file
-#if (-Not $varReturnCodeFile)
-#{
-#	$varReturnCodeFile = "TestRunReturnCode.txt"
-#}
-#$retcodefile = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\$($varReturnCodeFile)") 
-$retcodefile = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\TestRunReturnCode.txt")
+# delete old "TestRunReturnCode" file and create a new one
+if (-Not $varReturnCodeFile)
+{
+	$varReturnCodeFile = "TestRunReturnCode.txt"
+}
+$retcodefile = Join-Path $env:UFT_LAUNCHER -ChildPath "res\$($varReturnCodeFile)" 
 if (Test-Path $retcodefile)
 {
 	Remove-Item $retcodefile
 }
 
 # remove temporary files complited
-$results = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber +"\*.xml")
+$results = Join-Path $env:UFT_LAUNCHER -ChildPath "res\*.xml"
  #Get-ChildItem -Path $results | foreach ($_) { Remove-Item $_.fullname }
 
 
 $CDA1 = [bool]($varUseCDA) 
-Invoke-AlmLabManagementTask $varAlmServ $varUserName $varPass $varDomain $varProject $varRunType $varTestSet $varDescription $varTimeslotDuration $varEnvironmentConfigurationID $varReportName $CDA1 $varDeploymentAction $varDeploymentEnvironmentName $varDeprovisioningAction $buildNumber -Verbose
+Invoke-AlmLabManagementTask $varAlmServ $varUserName $varPass $varDomain $varProject $varRunType $varTestSet $varDescription $varTimeslotDuration $varEnvironmentConfigurationID $varReportName $CDA1 $varDeploymentAction $varDeploymentEnvironmentName $varDeprovisioningAction -Verbose
+
 
 # create summary UFT report
 if (Test-Path $summaryReport)
 {
 	#uploads report files to build artifacts
 	Write-Host "##vso[task.uploadsummary]$($summaryReport)" | ConvertTo-Html
-}
-
-if (Test-Path $runStatus)
-{
-	#uploads report files to build artifacts
-	Write-Host "##vso[task.uploadsummary]$($runStatus)" | ConvertTo-Html
-}
-
-# upload junit report
-if (Test-Path $outputJUnitFile)
-{
-	#uploads report files to build artifacts
-	Write-Host "##vso[task.uploadsummary]$($outputJUnitFile)" | ConvertTo-Html
 }
 
 # read return code
@@ -100,9 +84,12 @@ if (Test-Path $retcodefile)
 	{
 		#writes log messages in case of errors
 		Write-Error "Task Failed with message: Closed by user"
+		Write-Host "Task Failed with message: Closed by user"
 	}
 	elseif ($retcode -ne 0)
 	{
+		Write-Host "Return code: $($retcode)"
+		Write-Host "Task failed"
 		Write-Error "Task Failed"
 	}
 }
