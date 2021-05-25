@@ -1,5 +1,5 @@
 ﻿{
-  "id": "A571AE7C-E100-42E1-8CED-498B46029772",
+  "id": "A571AE7C-E100-42E1-8CED-498B46029774",
   "name": "RunFromALMTask",
   "friendlyName": "UFT ALM Execution",
   "description": "Execute UFT tests from ALM",
@@ -10,10 +10,11 @@
   ],
   "author": "Micro Focus",
   "version": {
-    "Major": 1,
-    "Minor": 1,
+    "Major": 2,
+    "Minor": 0,
     "Patch": 0
   },
+  "helpUrl": "https://admhelp.microfocus.com/uft/en/15.0-15.0.2/UFT_Help/Content/UFT_Tools/Azure_DevOps_Extension/uft-azure-devops-run-alm.htm",
   "demands": [
     "UFT_LAUNCHER"
   ],
@@ -142,6 +143,7 @@
       "helpMarkDown": "The address of the host running the selected tests"
     }
   ],
+
   "instanceNameFormat": "Run From ALM",
   "execution": {
     "PowerShell3": {
