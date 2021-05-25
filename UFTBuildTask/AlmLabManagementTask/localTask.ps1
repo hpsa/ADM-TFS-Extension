@@ -43,7 +43,7 @@ $summaryReport = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildN
 $runStatus = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\Run status summary")
 
 #junit report file 
-$outputJUnitFile = Join-Path $uftworkdir -ChildPath ("res\Report_" + $buildNumber + "\Failed tests"
+$outputJUnitFile = Join-Path $uftworkdir -ChildPath ("res\Report_" + $buildNumber + "\Failed tests")
 
 # create return code file
 #if (-Not $varReturnCodeFile)
