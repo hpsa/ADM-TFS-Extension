@@ -77,7 +77,7 @@ namespace PSModule
 
         protected override string GetReportFilename()
         {
-            return String.IsNullOrEmpty(ReportName) ? base.GetReportFilename() : ReportName;
+            return string.IsNullOrEmpty(ReportName) ? base.GetReportFilename() : ReportName;
         }
 
 

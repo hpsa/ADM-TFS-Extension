@@ -14,7 +14,7 @@ namespace PSModule
 {
     class Helper
     {
-        public static List<ReportMetaData> readReportFromXMLFile(string reportPath, Dictionary<string, List<ReportMetaData>> testSteps, bool isJUnitReport)
+        public static List<ReportMetaData> ReadReportFromXMLFile(string reportPath, Dictionary<string, List<ReportMetaData>> testSteps, bool isJUnitReport)
         {
             List<ReportMetaData> listReport = new List<ReportMetaData>();
             XmlDocument xmlDoc = new XmlDocument();
@@ -51,7 +51,7 @@ namespace PSModule
                     {
                         //remove the number in front of each step
                         string stepName = reportmetadata.getDisplayName();
-                        if (!String.IsNullOrEmpty(stepName))
+                        if (!string.IsNullOrEmpty(stepName))
                         {
                             if (stepName.StartsWith("#"))
                             {
@@ -94,7 +94,7 @@ namespace PSModule
             return listReport;
         }
 
-        public static int getErrorCode(List<ReportMetaData> listReport)
+        public static int GetErrorCode(List<ReportMetaData> listReport)
         {
             int errorCode = 0;
             int passedTests = 0;
@@ -128,7 +128,7 @@ namespace PSModule
             return errorCode;
         }
 
-        public static int getNumberOfTests(List<ReportMetaData> listReport, ref Dictionary<string, int> nrOfTests)
+        public static int GetNumberOfTests(List<ReportMetaData> listReport, ref Dictionary<string, int> nrOfTests)
         {
             int totalTests = 0;
             foreach (ReportMetaData item in listReport)
@@ -147,7 +147,7 @@ namespace PSModule
             return totalTests;
         }
 
-        public static void createSummaryReport(string uftWorkingFolder, ref List<ReportMetaData> reportList,
+        public static void CreateSummaryReport(string uftWorkingFolder, ref List<ReportMetaData> reportList,
                                                string uploadArtifact, string artifactType,
                                                string storageAccount, string container, 
                                                string reportName, string archiveName, string buildNumber, string runType)
@@ -217,7 +217,7 @@ namespace PSModule
                 HtmlTableRow row = new HtmlTableRow();
 
                 HtmlTableCell cell1 = new HtmlTableCell();
-                cell1.InnerText = getTestName(report.getDisplayName());
+                cell1.InnerText = GetTestName(report.getDisplayName());
                 cell1.Align = "center";
                 row.Cells.Add(cell1);
 
@@ -304,7 +304,7 @@ namespace PSModule
             
         }
 
-        public static void createRunStatusSummary(string runStatus, int totalTests, Dictionary<string, int> nrOfTests, 
+        public static void CreateRunStatusSummary(string runStatus, int totalTests, Dictionary<string, int> nrOfTests, 
                                                   string uftWorkingFolder, string buildNumber,
                                                   string storageAccount, string container)
         {
@@ -419,7 +419,7 @@ namespace PSModule
         }
 
 
-        public static void createJUnitReport(Dictionary<string,List<ReportMetaData>> reports, string uftWorkingFolder, string buildNumber)
+        public static void CreateJUnitReport(Dictionary<string,List<ReportMetaData>> reports, string uftWorkingFolder, string buildNumber)
         {
             HtmlTable table = new HtmlTable();
             HtmlTableRow header = new HtmlTableRow();
@@ -455,14 +455,14 @@ namespace PSModule
             header.BgColor = KnownColor.Azure.ToString();
             table.Rows.Add(header);
            
-            Dictionary<string, int> numberOfFailedSteps = getNumberOfFailedSteps(reports);
+            Dictionary<string, int> numberOfFailedSteps = GetNumberOfFailedSteps(reports);
 
             foreach (string testName in reports.Keys) 
             {
                 int index = 0;
                 foreach (var item in reports[testName])
                 {
-                    if (!String.IsNullOrEmpty(item.getStatus()) && item.getStatus().Equals("fail"))
+                    if (!string.IsNullOrEmpty(item.getStatus()) && item.getStatus().Equals("fail"))
                     {
                         HtmlTableRow row = new HtmlTableRow();
                         if (index == 0)
@@ -513,7 +513,7 @@ namespace PSModule
             System.IO.File.WriteAllText(uftWorkingFolder + @"\\res\\Report_" + buildNumber + "\\Failed tests", junitStatusMessage.ToString());
         }
 
-        private static Dictionary<string, int> getNumberOfFailedSteps(Dictionary<string, List<ReportMetaData>> reports)
+        private static Dictionary<string, int> GetNumberOfFailedSteps(Dictionary<string, List<ReportMetaData>> reports)
         {
             Dictionary<string, int> numberOfFailedSteps = new Dictionary<string, int>();
             foreach(var test in reports.Keys)
@@ -521,7 +521,7 @@ namespace PSModule
                 int failedSteps = 0;
                 foreach (var item in reports[test])
                 {
-                    if (!String.IsNullOrEmpty(item.getStatus()) && item.getStatus().Equals("fail"))
+                    if (!string.IsNullOrEmpty(item.getStatus()) && item.getStatus().Equals("fail"))
                     {
                         failedSteps++;
                     }
@@ -531,7 +531,7 @@ namespace PSModule
             return numberOfFailedSteps;
         }
 
-        private static string getTestName(string testPath)
+        private static string GetTestName(string testPath)
         {
             int pos = testPath.LastIndexOf("\\", StringComparison.Ordinal) + 1;
             return testPath.Substring(pos, testPath.Length - pos);

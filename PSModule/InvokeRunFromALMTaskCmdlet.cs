@@ -68,10 +68,9 @@ namespace PSModule
         [Parameter(Position = 13)]
         public string BuildNumber;
 
-
         protected override string GetReportFilename()
         {
-            return String.IsNullOrEmpty(ReportName) ? base.GetReportFilename() : ReportName;
+            return string.IsNullOrEmpty(ReportName) ? base.GetReportFilename() : ReportName;
         }
 
         public override Dictionary<string, string> GetTaskProperties()
