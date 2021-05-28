@@ -65,7 +65,7 @@ namespace PSModule
                 paramFileName = Path.Combine(propdir, $"Props{timeSign}.txt");
                 resultsFileName = Path.Combine(resdir, $"Results{timeSign}.xml");
 
-                properties.Add("resultsFilename", resultsFileName);
+                properties.Add("resultsFilename", resultsFileName.Replace(@"\", @"\\")); // double backslashes are expected by HpToolsLauncher.exe (JavaProperties.cs, in LoadInternal method)
 
                 if (!SaveProperties(paramFileName, properties))
                 {
