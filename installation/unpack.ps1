@@ -27,7 +27,7 @@ if($result)
     $uftPath = Get-ItemProperty -Path $Registry_Key | Select-Object -ExpandProperty $value
 
     $currdir = AbsPath -folder .\
-    $zipFile = Join-Path -Path $currdir -ChildPath “UFT.zip”
+    $zipFile = Join-Path -Path $currdir -ChildPath "UFT.zip"
     Expand-ZIPFile $zipFile $currdir
 	
     $uft_dir = Join-Path $currdir -ChildPath "UFT"
