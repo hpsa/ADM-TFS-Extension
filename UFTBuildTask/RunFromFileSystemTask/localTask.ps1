@@ -24,21 +24,24 @@ function UploadArtifactToAzureStorage($storageContext, $container, $testPathRepo
 
 function ArchiveReport($artifact, $reportFile){
 	$sourceFolder = Join-Path $reportFile -ChildPath "Report"
-	$destinationFolder = Join-Path $reportFile -ChildPath $artifact
-	Compress-Archive -Path $sourceFolder -DestinationPath $destinationFolder
-	
-	return $destinationFolder
+	if (Test-Path $sourceFolder) {
+		$destinationFolder = Join-Path $reportFile -ChildPath $artifact
+		Compress-Archive -Path $sourceFolder -DestinationPath $destinationFolder
+		return $destinationFolder
+	}
+	return $null
 }
 
 function UploadHtmlReport($reports, $reportFileNames){
 	$index = 0
 	foreach ( $item in $reports ){
 		$testPathReportInput =  Join-Path $item -ChildPath "Report\run_results.html"
-		$artifact = $reportFileNames[$index]
+		if (Test-Path $testPathReportInput) {
+			$artifact = $reportFileNames[$index]
 		
-		# upload resource to container
-		UploadArtifactToAzureStorage $storageContext $container $testPathReportInput $artifact
-		
+			# upload resource to container
+			UploadArtifactToAzureStorage $storageContext $container $testPathReportInput $artifact
+		}
 		$index += 1
 	}
 }
@@ -50,8 +53,9 @@ function UploadArchive($reports, $archiveFileNames){
 		$artifact = $archiveFileNames[$index]
 		
 		$destinationFolder = ArchiveReport $artifact $item
-		
-		UploadArtifactToAzureStorage $storageContext $container $destinationFolder $artifact
+		if ($destinationFolder) {
+			UploadArtifactToAzureStorage $storageContext $container $destinationFolder $artifact
+		}
 					
 		$index += 1
 	}
@@ -203,7 +207,6 @@ if (Test-Path $outputJUnitFile)
 	#uploads report files to build artifacts
 	Write-Host "##vso[task.uploadsummary]$($outputJUnitFile)" | ConvertTo-Html
 }
-
 
 # read return code
 if (Test-Path $retcodefile)

@@ -9,7 +9,6 @@ using System.Text.RegularExpressions;
 using System.Text;
 using System.Collections.Concurrent;
 using PSModule.Models;
-using System.Xml;
 
 namespace PSModule
 {
@@ -29,7 +28,6 @@ namespace PSModule
         protected override void ProcessRecord()
         {
             string launcherPath, aborterPath = string.Empty, converterPath, paramFileName = string.Empty, resultsFileName;
-
             try
             {
                 Dictionary<string, string> properties = new Dictionary<string, string>();
@@ -45,9 +43,7 @@ namespace PSModule
                 string ufttfsdir = Environment.GetEnvironmentVariable("UFT_LAUNCHER");
 
                 launcherPath = Path.GetFullPath(Path.Combine(ufttfsdir, HpToolsLauncher_EXE));
-
                 aborterPath = Path.GetFullPath(Path.Combine(ufttfsdir, HpToolsAborter_EXE));
-
                 converterPath = Path.GetFullPath(Path.Combine(ufttfsdir, ReportConverter_EXE));
 
                 string propdir = Path.GetFullPath(Path.Combine(ufttfsdir, "props"));
@@ -79,82 +75,58 @@ namespace PSModule
                 //collect results
                 CollateResults(resultsFileName, _launcherConsole.ToString(), resdir);
 
-                int retCode = -1;
-                if (File.Exists(resultsFileName) && (new FileInfo(resultsFileName).Length > 0))//if results file exists
+                RunStatus runStatus = RunStatus.FAILED;
+                if (File.Exists(resultsFileName) && new FileInfo(resultsFileName).Length > 0)//if results file exists
                 {
                     //create UFT report from the results file
-                    List<ReportMetaData> listReport = Helper.ReadReportFromXMLFile(resultsFileName, new Dictionary<string, List<ReportMetaData>>(), false);
+                    var listReport = Helper.ReadReportFromXMLFile(resultsFileName);
 
                     string storageAccount = properties.GetValueOrDefault("storageAccount", string.Empty);
                     string container = properties.GetValueOrDefault("container", string.Empty);
 
-                    RunType runType = (RunType)Enum.Parse(typeof(RunType), properties["runType"]);
+                    var runType = (RunType)Enum.Parse(typeof(RunType), properties["runType"]);
                     //create html report
-                    if (runType == RunType.FileSystem && properties["uploadArtifact"].Equals("yes"))
+                    if (runType == RunType.FileSystem && properties["uploadArtifact"] == "yes")
                     {
-                        Helper.CreateSummaryReport(ufttfsdir, ref listReport,
-                                                        properties["uploadArtifact"], properties["artifactType"], storageAccount, container,
-                                                        properties["reportName"], properties["archiveName"], properties["buildNumber"],
-                                                        properties["runType"]);
+                        var artifactType = (ArtifactType)Enum.Parse(typeof(ArtifactType), properties["artifactType"]);
+                        Helper.CreateSummaryReport(ufttfsdir, properties["buildNumber"], runType, ref listReport,
+                                                        true, artifactType, storageAccount, container,
+                                                        properties["reportName"], properties["archiveName"]);
                     }
                     else
                     {
-                        Helper.CreateSummaryReport(ufttfsdir, ref listReport,
-                                                  string.Empty, string.Empty, string.Empty, string.Empty,
-                                                  string.Empty, string.Empty,
-                                                  properties["buildNumber"],
-                                                  properties["runType"]);
+                        Helper.CreateSummaryReport(ufttfsdir, properties["buildNumber"], runType, ref listReport);
                     }
                     //get task return code
-                    retCode = Helper.GetErrorCode(listReport);
+                    runStatus = Helper.GetRunStatus(listReport);
                     
-                    //create run status summary report
-                    string runStatus;
-                   
-                    switch (retCode)
-                    {
-                        case 0: runStatus = "PASSED"; break;
-                        case -1: runStatus = "FAILED"; break;
-                        case -2: runStatus = "UNSTABLE"; break;
-                        case -3: runStatus = "CLOSED BY USER"; break;
-                        default: runStatus = "UNDEFINED"; break;
-                    }
-
-                    var nrOfTests = new Dictionary<string, int>
-                    {
-                        { "Passed", 0 },
-                        { "Failed", 0 },
-                        { "Error", 0 },
-                        { "Warning", 0 }
-                    };
-
-                    int totalTests = Helper.GetNumberOfTests(listReport, ref nrOfTests);
+                    int totalTests = Helper.GetNumberOfTests(listReport, out IDictionary<string, int> nrOfTests);
                     
-                    Helper.CreateRunStatusSummary(runStatus, totalTests, nrOfTests, ufttfsdir, properties["buildNumber"], storageAccount, container);
+                    Helper.CreateRunStatusSummary(runStatus, totalTests, nrOfTests, ufttfsdir, properties["buildNumber"]);
                     
-                    var testNames = new List<string>();
                     var reportFolders = new List<string>();
-                    foreach(var item in listReport)
+                    foreach (var item in listReport)
                     {
-                        testNames.Add(item.getDisplayName().Substring(item.getDisplayName().LastIndexOf(@"\") + 1));
-                        reportFolders.Add(item.getReportPath());
+                        if (!item.getReportPath().IsNullOrWhiteSpace())
+                            reportFolders.Add(item.getReportPath());
                     }
 
-                    if (runType == RunType.FileSystem)
+                    if (runType == RunType.FileSystem && reportFolders.Any())
                     {
                         //run junit report converter
                         string outputFileReport = Path.Combine(resdir, "junit_report.xml");
                         RunConverter(converterPath, outputFileReport, reportFolders);
-                        var steps = new Dictionary<string, List<ReportMetaData>>();
-                        List<ReportMetaData> junitReportList = Helper.ReadReportFromXMLFile(outputFileReport, steps, true);
-                        if (nrOfTests["Failed"] > 0 || nrOfTests["Error"] > 0)
+                        if (File.Exists(outputFileReport) && new FileInfo(outputFileReport).Length > 0 &&
+                            (nrOfTests["Failed"] > 0 || nrOfTests["Error"] > 0))
                         {
+                            IDictionary<string, IList<ReportMetaData>> steps = new Dictionary<string, IList<ReportMetaData>>();
+                            Helper.ReadReportFromXMLFile(outputFileReport, true, ref steps);
                             Helper.CreateJUnitReport(steps, ufttfsdir, properties["buildNumber"]);
                         }
                     }
                 }
 
-                CollateRetCode(resdir, retCode);
+                CollateRetCode(resdir, (int)runStatus);
             }
             catch (IOException ioe)
             {
@@ -319,9 +291,8 @@ namespace PSModule
 
         protected virtual void CollateRetCode(string resdir, int retCode)
         {
-
             string fileName = GetRetCodeFileName();
-            if (string.IsNullOrEmpty(fileName))
+            if (fileName.IsNullOrWhiteSpace())
             {
                 WriteError(new ErrorRecord(new Exception("Method GetRetCodeFileName() did not return a value"), string.Empty, ErrorCategory.WriteError, string.Empty));
                 return;
@@ -360,13 +331,13 @@ namespace PSModule
 
             string reportFileName = GetReportFilename();
 
-            if (string.IsNullOrEmpty(reportFileName))
+            if (reportFileName.IsNullOrWhiteSpace())
             {
                 WriteError(new ErrorRecord(new Exception("collate results, empty reportFileName "), string.Empty, ErrorCategory.WriteError, string.Empty));
                 return;
             }
 
-            if ((string.IsNullOrEmpty(resultFile) || !File.Exists(resultFile)) && string.IsNullOrEmpty(log))
+            if ((resultFile.IsNullOrWhiteSpace() || !File.Exists(resultFile)) && log.IsNullOrWhiteSpace())
             {
                 WriteError(new ErrorRecord(new FileNotFoundException($"No results file ({resultFile}) nor result log provided"), string.Empty, ErrorCategory.WriteError, string.Empty));
 
@@ -376,7 +347,7 @@ namespace PSModule
             //read result xml file
             string s = File.ReadAllText(resultFile);
 
-            if (string.IsNullOrEmpty(s))
+            if (s.IsNullOrWhiteSpace())
             {
                 WriteError(new ErrorRecord(new FileNotFoundException("collate results, empty results file"), string.Empty, ErrorCategory.WriteError, string.Empty));
                 return;
@@ -411,7 +382,7 @@ namespace PSModule
 
         private List<Tuple<string, string>> GetRequiredLinksFromString(string s)
         {
-            if (string.IsNullOrEmpty(s))
+            if (s.IsNullOrWhiteSpace())
             {
                 return null;
             }
