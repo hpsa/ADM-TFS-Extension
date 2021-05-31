@@ -191,6 +191,7 @@ namespace PSModule
                 else if (artifactType == ArtifactType.onlyArchive)
                 {
                     var h4 = new HtmlTableCell { InnerText = "UFT report archive", Width = "150", Align = "center" };
+                    h4.Attributes.Add("style", "font-weight: bold;");
                     header.Cells.Add(h4);
                 }
             }
