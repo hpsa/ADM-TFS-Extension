@@ -119,7 +119,7 @@ namespace PSModule
                     
                     int totalTests = H.GetNumberOfTests(listReport, out IDictionary<string, int> nrOfTests);
                     
-                    H.CreateRunStatusSummary(runStatus, totalTests, nrOfTests, ufttfsdir, properties[BUILD_NUMBER]);
+                    H.CreateRunSummary(runStatus, totalTests, nrOfTests, ufttfsdir, properties[BUILD_NUMBER]);
                     
                     var reportFolders = new List<string>();
                     foreach (var item in listReport)
@@ -138,7 +138,7 @@ namespace PSModule
                         {
                             IDictionary<string, IList<ReportMetaData>> steps = new Dictionary<string, IList<ReportMetaData>>();
                             H.ReadReportFromXMLFile(outputFileReport, true, ref steps);
-                            H.CreateJUnitReport(steps, ufttfsdir, properties[BUILD_NUMBER]);
+                            H.CreateFailedStepsReport(steps, ufttfsdir, properties[BUILD_NUMBER]);
                         }
                     }
                 }

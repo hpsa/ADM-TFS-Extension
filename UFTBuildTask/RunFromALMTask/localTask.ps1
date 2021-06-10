@@ -36,10 +36,10 @@ if (Test-Path $report)
 }
 
 # delete old "UFT Report" file and create a new one
-$summaryReport = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\UFT Report")
+$uftReport = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\UFT Report")
 
 #run status summary Report
-$runStatus = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\Run status summary")
+$runSummary = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\Run Summary")
 
 # delete old "TestRunReturnCode" file and create a new one
 $retcodefile = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\TestRunReturnCode.txt")
@@ -48,28 +48,28 @@ $retcodefile = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNum
 $results = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber +"\*.xml")
 
 #junit report file 
-$outputJUnitFile = Join-Path $uftworkdir -ChildPath ("res\Report_" + $buildNumber + "\Failed tests")
+$failedTests = Join-Path $uftworkdir -ChildPath ("res\Report_" + $buildNumber + "\Failed Tests")
 
 Invoke-RunFromAlmTask $varAlmserv $varSSOEnabled $varClientID $varApiKeySecret $varUserName $varPass $varDomain $varProject $varTestsets $varTimeout $varReportName $runMode $testingToolHost $buildNumber -Verbose
 
-# create summary UFT report
-if (Test-Path $summaryReport)
+if (Test-Path $runSummary)
 {
 	#uploads report files to build artifacts
-	Write-Host "##vso[task.uploadsummary]$($summaryReport)" | ConvertTo-Html
+	Write-Host "##vso[task.uploadsummary]$($runSummary)"
 }
 
-if (Test-Path $runStatus)
+# create summary UFT report
+if (Test-Path $uftReport)
 {
 	#uploads report files to build artifacts
-	Write-Host "##vso[task.uploadsummary]$($runStatus)" | ConvertTo-Html
+	Write-Host "##vso[task.uploadsummary]$($uftReport)"
 }
 
 # upload junit report
-if (Test-Path $outputJUnitFile)
+if (Test-Path $failedTests)
 {
 	#uploads report files to build artifacts
-	Write-Host "##vso[task.uploadsummary]$($outputJUnitFile)" | ConvertTo-Html
+	Write-Host "##vso[task.uploadsummary]$($failedTests)"
 }
 
 # read return code

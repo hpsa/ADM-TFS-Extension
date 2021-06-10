@@ -25,25 +25,23 @@ $buildNumber = $env:BUILD_BUILDNUMBER
 Import-Module $uftworkdir\bin\PSModule.dll
 
 # delete old "ALM Lab Management Report" file and create a new one
-if (-Not $varReportName)
-{
+if (-Not $varReportName) {
 	$varReportName = "ALM Lab Management Report"
 }
 $report = Join-Path $env:UFT_LAUNCHER -ChildPath "res\$($varReportName)"
 
-if (Test-Path $report)
-{
+if (Test-Path $report) {
 	Remove-Item $report
 }
 
 # delete old "UFT Report" file and create a new one
-$summaryReport = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\UFT Report")
+$uftReport = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\UFT Report")
 
-#run status summary Report
-$runStatus = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\Run status summary")
+#run summary Report
+$runSummary = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\Run Summary")
 
 #junit report file 
-$outputJUnitFile = Join-Path $uftworkdir -ChildPath ("res\Report_" + $buildNumber + "\Failed tests")
+$failedTests = Join-Path $uftworkdir -ChildPath ("res\Report_" + $buildNumber + "\Failed Tests")
 
 # create return code file
 #if (-Not $varReturnCodeFile)
@@ -65,44 +63,36 @@ $results = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber 
 $CDA1 = [bool]($varUseCDA) 
 Invoke-AlmLabManagementTask $varAlmServ $varUserName $varPass $varDomain $varProject $varRunType $varTestSet $varDescription $varTimeslotDuration $varEnvironmentConfigurationID $varReportName $CDA1 $varDeploymentAction $varDeploymentEnvironmentName $varDeprovisioningAction $buildNumber -Verbose
 
-# create summary UFT report
-if (Test-Path $summaryReport)
-{
+if (Test-Path $runSummary) {
 	#uploads report files to build artifacts
-	Write-Host "##vso[task.uploadsummary]$($summaryReport)" | ConvertTo-Html
+	Write-Host "##vso[task.uploadsummary]$($runSummary)"
 }
 
-if (Test-Path $runStatus)
-{
+# create summary UFT report
+if (Test-Path $uftReport) {
 	#uploads report files to build artifacts
-	Write-Host "##vso[task.uploadsummary]$($runStatus)" | ConvertTo-Html
+	Write-Host "##vso[task.uploadsummary]$($uftReport)"
 }
 
 # upload junit report
-if (Test-Path $outputJUnitFile)
-{
+if (Test-Path $failedTests) {
 	#uploads report files to build artifacts
-	Write-Host "##vso[task.uploadsummary]$($outputJUnitFile)" | ConvertTo-Html
+	Write-Host "##vso[task.uploadsummary]$($failedTests)"
 }
 
 # read return code
-if (Test-Path $retcodefile)
-{
+if (Test-Path $retcodefile) {
 	$content = Get-Content $retcodefile
 	[int]$retcode = [convert]::ToInt32($content, 10)
 	
-	if($retcode -eq 0)
-	{
+	if ($retcode -eq 0) {
 		Write-Host "Test passed"
 	}
 
-	if ($retcode -eq -3)
-	{
+	if ($retcode -eq -3) {
 		#writes log messages in case of errors
 		Write-Error "Task Failed with message: Closed by user"
-	}
-	elseif ($retcode -ne 0)
-	{
+	} elseif ($retcode -ne 0) {
 		Write-Error "Task Failed"
 	}
 }

@@ -39,7 +39,7 @@ namespace PSModule
         private const string TOTAL_TESTS = "Total tests";
         private const string _STATUS = "Status";
         private const string NO_OF_TESTS = "No. of tests";
-        private const string PASSING_RATE = "Passing rate";
+        private const string PASSING_RATE = "Percentage of tests";
         private const string STYLE = "style";
         private const string UFT_REPORT = "UFT report";
         private const string UFT_REPORT_ARCHIVE = "UFT report archive";
@@ -49,15 +49,14 @@ namespace PSModule
         private const string CENTER = "center";
         private const string LEFT = "left";
         private const string RIGHT = "right";
-        private const string _50 = "50";
-        private const string _80 = "80";
-        private const string _100 = "100";
-        private const string _150 = "150";
-        private const string _300 = "300";
-        private const string _600 = "600";
-        private const string HEIGHT_30PX = "height: 30px;";
-        private const string FONT_WEIGHT_BOLD = "font-weight: bold;";
-        private const string FONT_WEIGHT_BOLD_UNDERLINE = "font-weight: bold; text-decoration: underline;";
+        private const string _200 = "200";
+        private const string _800 = "800";
+        private const string HEIGHT_30PX_AZURE = "height:30px;background-color:azure";
+        private const string HEIGHT_30PX = "height:30px;";
+        private const string HDR_FONT_WEIGHT_BOLD_MIN_WIDTH_200 = "font-weight:bold;min-width:200px";
+        private const string HDR_FONT_WEIGHT_BOLD_MIN_WIDTH_800 = "font-weight:bold;min-width:800px";
+        private const string FONT_WEIGHT_BOLD = "font-weight:bold;";
+        private const string FONT_WEIGHT_BOLD_UNDERLINE = "font-weight:bold; text-decoration:underline;";
 
         #endregion
 
@@ -194,39 +193,39 @@ namespace PSModule
                                                bool uploadArtifact = false, ArtifactType artifactType = ArtifactType.None,
                                                string storageAccount = "", string container = "", string reportName = "", string archiveName = "")
         {
-            var table = new HtmlTable();
+            var table = new HtmlTable { ClientIDMode = ClientIDMode.Static, ID = "tblSummaryReportId" };
             var header = new HtmlTableRow();
-            var h1 = new HtmlTableCell { InnerText = TEST_NAME, Width = _100, Align = CENTER };
-            h1.Attributes.Add(STYLE, FONT_WEIGHT_BOLD);
+            var h1 = new HtmlTableCell { InnerText = TEST_NAME, Width = _200, Align = LEFT };
+            h1.Attributes.Add(STYLE, HDR_FONT_WEIGHT_BOLD_MIN_WIDTH_200);
             header.Cells.Add(h1);
 
-            var h2 = new HtmlTableCell { InnerText = TIMESTAMP, Width = _150, Align = CENTER };
-            h2.Attributes.Add(STYLE, FONT_WEIGHT_BOLD);
+            var h2 = new HtmlTableCell { InnerText = TIMESTAMP, Width = _200, Align = LEFT };
+            h2.Attributes.Add(STYLE, HDR_FONT_WEIGHT_BOLD_MIN_WIDTH_200);
             header.Cells.Add(h2);
 
-            var h3 = new HtmlTableCell { InnerText = _STATUS, Width = _50, Align = CENTER };
-            h3.Attributes.Add(STYLE, FONT_WEIGHT_BOLD);
+            var h3 = new HtmlTableCell { InnerText = _STATUS, Width = _200, Align = LEFT };
+            h3.Attributes.Add(STYLE, HDR_FONT_WEIGHT_BOLD_MIN_WIDTH_200);
             header.Cells.Add(h3);
 
             if (runType == RunType.FileSystem && uploadArtifact)
             {
                 if (artifactType.In(ArtifactType.onlyReport, ArtifactType.bothReportArchive))
                 {
-                    var h4 = new HtmlTableCell { InnerText = UFT_REPORT, Width = _100, Align = CENTER };
-                    h4.Attributes.Add(STYLE, FONT_WEIGHT_BOLD);
+                    var h4 = new HtmlTableCell { InnerText = UFT_REPORT, Width = _200, Align = LEFT };
+                    h4.Attributes.Add(STYLE, HDR_FONT_WEIGHT_BOLD_MIN_WIDTH_200);
                     header.Cells.Add(h4);
 
                     if (artifactType == ArtifactType.bothReportArchive)
                     {
-                        var h5 = new HtmlTableCell { InnerText = UFT_REPORT_ARCHIVE, Width = _150, Align = CENTER };
-                        h5.Attributes.Add(STYLE, FONT_WEIGHT_BOLD);
+                        var h5 = new HtmlTableCell { InnerText = UFT_REPORT_ARCHIVE, Width = _200, Align = LEFT };
+                        h5.Attributes.Add(STYLE, HDR_FONT_WEIGHT_BOLD_MIN_WIDTH_200);
                         header.Cells.Add(h5);
                     }
                 }
                 else if (artifactType == ArtifactType.onlyArchive)
                 {
-                    var h4 = new HtmlTableCell { InnerText = UFT_REPORT_ARCHIVE, Width = _150, Align = CENTER };
-                    h4.Attributes.Add(STYLE, FONT_WEIGHT_BOLD);
+                    var h4 = new HtmlTableCell { InnerText = UFT_REPORT_ARCHIVE, Width = _200, Align = LEFT };
+                    h4.Attributes.Add(STYLE, HDR_FONT_WEIGHT_BOLD_MIN_WIDTH_200);
                     header.Cells.Add(h4);
                 }
             }
@@ -242,13 +241,13 @@ namespace PSModule
             foreach (ReportMetaData report in reportList)
             {
                 var row = new HtmlTableRow();
-                var cell1 = new HtmlTableCell { InnerText = GetTestName(report.getDisplayName()), Align = CENTER };
+                var cell1 = new HtmlTableCell { InnerText = GetTestName(report.getDisplayName()), Align = LEFT };
                 row.Cells.Add(cell1);
 
-                var cell2 = new HtmlTableCell { InnerText = report.getDateTime(), Align = CENTER };
+                var cell2 = new HtmlTableCell { InnerText = report.getDateTime(), Align = LEFT };
                 row.Cells.Add(cell2);
 
-                var cell3 = new HtmlTableCell { Align = CENTER };
+                var cell3 = new HtmlTableCell { Align = LEFT };
                 cell3.Controls.Add(new HtmlImage { Src = $"{IMG_LINK_PREFIX}/{report.getStatus()}.svg" });
                 row.Cells.Add(cell3);
 
@@ -256,21 +255,21 @@ namespace PSModule
                 {
                     if (artifactType.In(ArtifactType.onlyReport, ArtifactType.bothReportArchive))
                     {
-                        var cell4 = new HtmlTableCell { Align = CENTER };
+                        var cell4 = new HtmlTableCell { Align = LEFT };
                         var reportLink = new HtmlAnchor { HRef = $"{htmlLinkPrefix}_{index}.html", InnerText = VIEW_REPORT };
                         cell4.Controls.Add(reportLink);
                         row.Cells.Add(cell4);
 
                         if (artifactType == ArtifactType.bothReportArchive)
                         {
-                            var cell5 = new HtmlTableCell { Align = CENTER };
+                            var cell5 = new HtmlTableCell { Align = LEFT };
                             cell5.Controls.Add(new HtmlAnchor { HRef = $"{zipLinkPrefix}_{index}.zip", InnerText = DOWNLOAD });
                             row.Cells.Add(cell5);
                         }
                     }
                     else if (artifactType == ArtifactType.onlyArchive)
                     {
-                        var cell4 = new HtmlTableCell { Align = CENTER };
+                        var cell4 = new HtmlTableCell { Align = LEFT };
                         cell4.Controls.Add(new HtmlAnchor { HRef = $"{zipLinkPrefix}_{index}.zip", InnerText = DOWNLOAD });
                         row.Cells.Add(cell4);
                     }
@@ -282,44 +281,38 @@ namespace PSModule
 
             //add table to file
             string html;
-            var reportMessage = new StringBuilder();
-
             using (var sw = new StringWriter())
             {
                 table.RenderControl(new HtmlTextWriter(sw));
                 html = sw.ToString();
             }
-
-            reportMessage.AppendFormat(html);
-
-            File.WriteAllText($@"{uftWorkingFolder}\res\Report_{buildNumber}\UFT Report", reportMessage.ToString());
-
+            File.WriteAllText($@"{uftWorkingFolder}\res\Report_{buildNumber}\UFT Report", html);
         }
 
-        public static void CreateRunStatusSummary(RunStatus runStatus, int totalTests, IDictionary<string, int> nrOfTests,
+        public static void CreateRunSummary(RunStatus runStatus, int totalTests, IDictionary<string, int> nrOfTests,
                                                   string uftWorkingFolder, string buildNumber)
         {
-            var table = new HtmlTable();
+            var table = new HtmlTable { ClientIDMode = ClientIDMode.Static, ID = "tblRunSummaryId"};
             var header = new HtmlTableRow();
 
-            var h1 = new HtmlTableCell { InnerText = RUN_STATUS, Width = _100, Align = CENTER };
-            h1.Attributes.Add(STYLE, FONT_WEIGHT_BOLD);
+            var h1 = new HtmlTableCell { InnerText = RUN_STATUS, Width = _200, Align = LEFT };
+            h1.Attributes.Add(STYLE, HDR_FONT_WEIGHT_BOLD_MIN_WIDTH_200);
             header.Cells.Add(h1);
 
-            var h2 = new HtmlTableCell { InnerText = TOTAL_TESTS, Width = _150, Align = CENTER };
-            h2.Attributes.Add(STYLE, FONT_WEIGHT_BOLD);
+            var h2 = new HtmlTableCell { InnerText = TOTAL_TESTS, Width = _200, Align = LEFT };
+            h2.Attributes.Add(STYLE, HDR_FONT_WEIGHT_BOLD_MIN_WIDTH_200);
             header.Cells.Add(h2);
 
-            var h3 = new HtmlTableCell { InnerText = _STATUS, Width = _100, Align = CENTER, ColSpan = 2 };
-            h3.Attributes.Add(STYLE, FONT_WEIGHT_BOLD);
+            var h3 = new HtmlTableCell { InnerText = _STATUS, Width = _200, Align = LEFT, ColSpan = 2 };
+            h3.Attributes.Add(STYLE, HDR_FONT_WEIGHT_BOLD_MIN_WIDTH_200);
             header.Cells.Add(h3);
 
-            var h4 = new HtmlTableCell { InnerText = NO_OF_TESTS, Width = _80, Align = CENTER };
-            h4.Attributes.Add(STYLE, FONT_WEIGHT_BOLD);
+            var h4 = new HtmlTableCell { InnerText = NO_OF_TESTS, Width = _200, Align = LEFT };
+            h4.Attributes.Add(STYLE, HDR_FONT_WEIGHT_BOLD_MIN_WIDTH_200);
             header.Cells.Add(h4);
 
-            var h5 = new HtmlTableCell { InnerText = PASSING_RATE, Width = _150, Align = CENTER };
-            h5.Attributes.Add(STYLE, FONT_WEIGHT_BOLD);
+            var h5 = new HtmlTableCell { InnerText = PASSING_RATE, Width = _200, Align = LEFT };
+            h5.Attributes.Add(STYLE, HDR_FONT_WEIGHT_BOLD_MIN_WIDTH_200);
             header.Cells.Add(h5);
 
             header.BgColor = KnownColor.Azure.ToString();
@@ -334,16 +327,16 @@ namespace PSModule
                 HtmlTableRow row = new HtmlTableRow();
                 if (index == 0)
                 {
-                    var cell1 = new HtmlTableCell { InnerText = runStatus.ToString(), Align = CENTER, RowSpan = 4 };
+                    var cell1 = new HtmlTableCell { InnerText = runStatus.ToString(), Align = LEFT, RowSpan = 4 };
                     cell1.Attributes.Add(STYLE, FONT_WEIGHT_BOLD);
                     row.Cells.Add(cell1);
 
-                    var cell2 = new HtmlTableCell { InnerText = $"{totalTests}", Align = CENTER, RowSpan = 4 };
+                    var cell2 = new HtmlTableCell { InnerText = $"{totalTests}", Align = LEFT, RowSpan = 4 };
                     cell2.Attributes.Add(STYLE, FONT_WEIGHT_BOLD);
                     row.Cells.Add(cell2);
                 }
 
-                var cell3 = new HtmlTableCell { Align = RIGHT };
+                var cell3 = new HtmlTableCell { Align = LEFT };
                 var statusImage = new HtmlImage
                 {
                     Src = $"{IMG_LINK_PREFIX}/{statuses[index].ToLower()}.svg"
@@ -351,9 +344,9 @@ namespace PSModule
                 cell3.Controls.Add(statusImage);
                 row.Cells.Add(cell3);
 
-                row.Cells.Add(new HtmlTableCell { Align = CENTER, InnerText = statuses[index] });
-                row.Cells.Add(new HtmlTableCell { Align = CENTER, InnerText = nrOfTests[statuses[index]].ToString() });
-                row.Cells.Add(new HtmlTableCell { Align = CENTER, InnerText = $"{(int)Math.Round((double)(100 * nrOfTests[statuses[index]]) / totalTests)}%" });
+                row.Cells.Add(new HtmlTableCell { Align = LEFT, InnerText = statuses[index] });
+                row.Cells.Add(new HtmlTableCell { Align = LEFT, InnerText = nrOfTests[statuses[index]].ToString() });
+                row.Cells.Add(new HtmlTableCell { Align = LEFT, InnerText = $"{(int)Math.Round((double)(100 * nrOfTests[statuses[index]]) / totalTests)}%" });
 
                 row.Attributes.Add(STYLE, HEIGHT_30PX);
                 table.Rows.Add(row);
@@ -361,106 +354,77 @@ namespace PSModule
 
             //add table to file
             string html;
-            var runStatusMessage = new StringBuilder();
-
             using (var sw = new StringWriter())
             {
                 table.RenderControl(new HtmlTextWriter(sw));
                 html = sw.ToString();
             }
-
-            runStatusMessage.AppendFormat(html);
-
-            File.WriteAllText($@"{uftWorkingFolder}\res\Report_{buildNumber}\Run status summary", runStatusMessage.ToString());
+            File.WriteAllText($@"{uftWorkingFolder}\res\Report_{buildNumber}\Run Summary", html);
         }
 
-        public static void CreateJUnitReport(IDictionary<string, IList<ReportMetaData>> reports, string uftWorkingFolder, string buildNumber)
+        public static void CreateFailedStepsReport(IDictionary<string, IList<ReportMetaData>> reports, string uftWorkingFolder, string buildNumber)
         {
-            var table = new HtmlTable();
+            var table = new HtmlTable { ClientIDMode = ClientIDMode.Static, ID = "tblFailedStepsId" };
             var header = new HtmlTableRow();
 
-            var h1 = new HtmlTableCell
-            {
-                InnerText = TEST_NAME,
-                Width = _150,
-                Align = CENTER
-            };
-            h1.Attributes.Add(STYLE, FONT_WEIGHT_BOLD);
+            var h1 = new HtmlTableCell { InnerText = TEST_NAME, Width = _200, Align = LEFT };
+            h1.Attributes.Add(STYLE, HDR_FONT_WEIGHT_BOLD_MIN_WIDTH_200);
             header.Cells.Add(h1);
 
-            var h2 = new HtmlTableCell
-            {
-                InnerText = FAILED_STEPS,
-                Width = _300,
-                Align = LEFT
-            };
-            h2.Attributes.Add(STYLE, FONT_WEIGHT_BOLD);
+            var h2 = new HtmlTableCell { InnerText = FAILED_STEPS, Width = _200, Align = LEFT };
+            h2.Attributes.Add(STYLE, HDR_FONT_WEIGHT_BOLD_MIN_WIDTH_200);
             header.Cells.Add(h2);
 
-            var h3 = new HtmlTableCell
-            {
-                InnerText = DURATIONS,
-                Width = _100,
-                Align = LEFT
-            };
-            h3.Attributes.Add(STYLE, FONT_WEIGHT_BOLD);
+            var h3 = new HtmlTableCell { InnerText = DURATIONS, Width = _200, Align = LEFT };
+            h3.Attributes.Add(STYLE, HDR_FONT_WEIGHT_BOLD_MIN_WIDTH_200);
             header.Cells.Add(h3);
 
-            var h4 = new HtmlTableCell
-            {
-                InnerText = ERROR_DETAILS,
-                Width = _600,
-                Align = LEFT
-            };
-            h4.Attributes.Add(STYLE, FONT_WEIGHT_BOLD);
+            var h4 = new HtmlTableCell { InnerText = ERROR_DETAILS, Width = _800, Align = LEFT };
+            h4.Attributes.Add(STYLE, HDR_FONT_WEIGHT_BOLD_MIN_WIDTH_800);
             header.Cells.Add(h4);
 
-            header.BgColor = KnownColor.Azure.ToString();
+            header.Attributes.Add(STYLE, HEIGHT_30PX);
             table.Rows.Add(header);
 
             var numberOfFailedSteps = GetNumberOfFailedSteps(reports);
-
+            bool isOddRow = true;
             foreach (string testName in reports.Keys)
             {
                 int index = 0;
-                foreach (var item in reports[testName])
+                string style = isOddRow ? HEIGHT_30PX_AZURE : HEIGHT_30PX;
+                var failedTests = reports[testName].Where(x => x.getStatus() == FAIL);
+                foreach (var item in failedTests)
                 {
-                    if (item.getStatus() == FAIL)
+                    var row = new HtmlTableRow();
+                    if (index == 0)
                     {
-                        var row = new HtmlTableRow();
-                        if (index == 0)
-                        {
-                            var cell1 = new HtmlTableCell { InnerText = testName, Align = CENTER };
-                            cell1.Attributes.Add(STYLE, FONT_WEIGHT_BOLD_UNDERLINE);
-                            cell1.RowSpan = numberOfFailedSteps[testName];
-                            row.Cells.Add(cell1);
-                        }
-
-                        row.Cells.Add(new HtmlTableCell { InnerText = item.getDisplayName(), Align = LEFT });
-                        row.Cells.Add(new HtmlTableCell { InnerText = item.getDuration(), Align = LEFT });
-                        row.Cells.Add(new HtmlTableCell { InnerText = item.getErrorMessage(), Align = LEFT });
-
-                        row.Attributes.Add(STYLE, HEIGHT_30PX);
-                        table.Rows.Add(row);
-
-                        index++;
+                        var cell1 = new HtmlTableCell { InnerText = testName, Align = LEFT };
+                        cell1.Attributes.Add(STYLE, FONT_WEIGHT_BOLD_UNDERLINE);
+                        cell1.RowSpan = numberOfFailedSteps[testName];
+                        row.Cells.Add(cell1);
                     }
+
+                    row.Cells.Add(new HtmlTableCell { InnerText = item.getDisplayName(), Align = LEFT });
+                    row.Cells.Add(new HtmlTableCell { InnerText = item.getDuration(), Align = LEFT });
+                    row.Cells.Add(new HtmlTableCell { InnerText = item.getErrorMessage(), Align = LEFT });
+
+                    row.Attributes.Add(STYLE, style);
+                    table.Rows.Add(row);
+
+                    index++;
                 }
+                if (failedTests.Any())
+                    isOddRow = !isOddRow;
             }
 
             //add table to file
             string html;
-            var junitStatusMessage = new StringBuilder();
-
             using (var sw = new StringWriter())
             {
                 table.RenderControl(new HtmlTextWriter(sw));
                 html = sw.ToString();
             }
-
-            junitStatusMessage.AppendFormat(html);
-
-            File.WriteAllText($@"{uftWorkingFolder}\res\Report_{buildNumber}\Failed tests", junitStatusMessage.ToString());
+            File.WriteAllText($@"{uftWorkingFolder}\res\Report_{buildNumber}\Failed tests", html);
         }
 
         private static IDictionary<string, int> GetNumberOfFailedSteps(IDictionary<string, IList<ReportMetaData>> reports)
