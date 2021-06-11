@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Xml;
@@ -321,10 +320,16 @@ namespace PSModule
             string[] statuses = nrOfTests.Keys.ToArray();
             int length = statuses.Length;
 
+            var percentages = new decimal[length];
+            for (int index = 0; index < length; index++)
+            {
+                percentages[index] = (decimal)(100 * nrOfTests[statuses[index]]) / totalTests;
+            }
+            var roundedPercentages = GetPerfectRounding(percentages);
             //create table content
             for (int index = 0; index < length; index++)
             {
-                HtmlTableRow row = new HtmlTableRow();
+                var row = new HtmlTableRow();
                 if (index == 0)
                 {
                     var cell1 = new HtmlTableCell { InnerText = runStatus.ToString(), Align = LEFT, RowSpan = 4 };
@@ -346,7 +351,7 @@ namespace PSModule
 
                 row.Cells.Add(new HtmlTableCell { Align = LEFT, InnerText = statuses[index] });
                 row.Cells.Add(new HtmlTableCell { Align = LEFT, InnerText = nrOfTests[statuses[index]].ToString() });
-                row.Cells.Add(new HtmlTableCell { Align = LEFT, InnerText = $"{(int)Math.Round((double)(100 * nrOfTests[statuses[index]]) / totalTests)}%" });
+                row.Cells.Add(new HtmlTableCell { Align = LEFT, InnerText = $"{roundedPercentages[index]:00.00}%" });
 
                 row.Attributes.Add(STYLE, HEIGHT_30PX);
                 table.Rows.Add(row);
@@ -464,6 +469,38 @@ namespace PSModule
             imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
 
             return ms.ToArray();
+        }
+
+        private static decimal[] GetPerfectRounding(decimal[] original, decimal expectedSum = 100, int decimals = 1)
+        {
+            var rounded = original.Select(x => Math.Round(x, decimals)).ToArray();
+            var delta = expectedSum - rounded.Sum();
+            if (delta == 0) return rounded;
+            var deltaUnit = Convert.ToDecimal(Math.Pow(0.1, decimals)) * Math.Sign(delta);
+
+            IList<int> applyDeltaSequence;
+            if (delta < 0)
+            {
+                applyDeltaSequence = original
+                    .Zip(Enumerable.Range(0, int.MaxValue), (x, index) => new { x, index })
+                    .OrderBy(a => original[a.index] - rounded[a.index])
+                    .ThenByDescending(a => a.index)
+                    .Select(a => a.index).ToList();
+            }
+            else
+            {
+                applyDeltaSequence = original
+                    .Zip(Enumerable.Range(0, int.MaxValue), (x, index) => new { x, index })
+                    .OrderByDescending(a => original[a.index] - rounded[a.index])
+                    .Select(a => a.index).ToList();
+            }
+
+            Enumerable.Repeat(applyDeltaSequence, int.MaxValue)
+                .SelectMany(x => x)
+                .Take(Convert.ToInt32(delta / deltaUnit))
+                .ForEach(index => rounded[index] += deltaUnit);
+
+            return rounded;
         }
     }
 }
