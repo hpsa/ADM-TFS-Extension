@@ -47,10 +47,30 @@ namespace PSModule
         [Parameter(Position = 12)]
         public string ALMRunHost;
 
-       
+        /*[Parameter(Position = 13, Mandatory = true)]
+        public string UploadArtifact;
+
+        [Parameter(Position = 14)]
+        public ArtifactType ArtType;
+
+        [Parameter(Position = 15)]
+        public string StorageAccount;
+
+        [Parameter(Position = 16)]
+        public string Container;
+
+        [Parameter(Position = 17)]
+        public string ReportFileName;
+
+        [Parameter(Position = 18)]
+        public string ArchiveName;*/
+
+        [Parameter(Position = 13)]
+        public string BuildNumber;
+
         protected override string GetReportFilename()
         {
-            return String.IsNullOrEmpty(ReportName) ? base.GetReportFilename() : ReportName;
+            return string.IsNullOrEmpty(ReportName) ? base.GetReportFilename() : ReportName;
         }
 
         public override Dictionary<string, string> GetTaskProperties()
@@ -68,6 +88,7 @@ namespace PSModule
             builder.SetAlmProject(ALMProject);
             builder.SetAlmRunHost(ALMRunHost);
             builder.SetAlmTimeout(TimeOut);
+            builder.SetBuildNumber(BuildNumber);
 
             switch (RunMode)
             {
@@ -95,7 +116,14 @@ namespace PSModule
                 builder.SetAlmTestSet("");
             }
 
-           return builder.GetProperties();
+           /* builder.SetUploadArtifact(UploadArtifact);
+            builder.SetArtifactType(ArtType);
+            builder.SetReportName(ReportFileName);
+            builder.SetArchiveName(ArchiveName);
+            builder.SetStorageAccount(StorageAccount);
+            builder.SetContainer(Container);*/
+
+            return builder.GetProperties();
         }
 
         protected override string GetRetCodeFileName()

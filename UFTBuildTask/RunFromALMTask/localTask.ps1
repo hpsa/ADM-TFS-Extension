@@ -16,7 +16,9 @@ $varReportName = Get-VstsInput -Name 'varReportName'
 $runMode = Get-VstsInput -Name 'runMode'
 $testingToolHost = Get-VstsInput -Name 'testingToolHost'
 
+
 $uftworkdir = $env:UFT_LAUNCHER
+$buildNumber = $env:BUILD_BUILDNUMBER
 
 Import-Module $uftworkdir\bin\PSModule.dll
 
@@ -34,35 +36,40 @@ if (Test-Path $report)
 }
 
 # delete old "UFT Report" file and create a new one
-$summaryReport = Join-Path $env:UFT_LAUNCHER -ChildPath "res\UFT Report"
-if (Test-Path $summaryReport)
-{
-	Remove-Item $summaryReport
-}
+$uftReport = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\UFT Report")
+
+#run status summary Report
+$runSummary = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\Run Summary")
 
 # delete old "TestRunReturnCode" file and create a new one
-if (-Not $varReturnCodeFile)
-{
-	$varReturnCodeFile = "TestRunReturnCode.txt"
-}
-$retcodefile = Join-Path $env:UFT_LAUNCHER -ChildPath "res\$($varReturnCodeFile)"
-if (Test-Path $retcodefile)
-{
-	Remove-Item $retcodefile
-}
+$retcodefile = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\TestRunReturnCode.txt")
 
 # remove temporary files complited
-$results = Join-Path $env:UFT_LAUNCHER -ChildPath "res\*.xml"
-#Get-ChildItem -Path $results | foreach ($_) { Remove-Item $_.fullname }
+$results = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber +"\*.xml")
 
+#junit report file 
+$failedTests = Join-Path $uftworkdir -ChildPath ("res\Report_" + $buildNumber + "\Failed Tests")
 
-Invoke-RunFromAlmTask $varAlmserv $varSSOEnabled $varClientID $varApiKeySecret $varUserName $varPass $varDomain $varProject $varTestsets $varTimeout $varReportName $runMode $testingToolHost -Verbose
+Invoke-RunFromAlmTask $varAlmserv $varSSOEnabled $varClientID $varApiKeySecret $varUserName $varPass $varDomain $varProject $varTestsets $varTimeout $varReportName $runMode $testingToolHost $buildNumber -Verbose
 
-# create summary UFT report
-if (Test-Path $summaryReport)
+if (Test-Path $runSummary)
 {
 	#uploads report files to build artifacts
-	Write-Host "##vso[task.uploadsummary]$($summaryReport)" | ConvertTo-Html
+	Write-Host "##vso[task.uploadsummary]$($runSummary)"
+}
+
+# create summary UFT report
+if (Test-Path $uftReport)
+{
+	#uploads report files to build artifacts
+	Write-Host "##vso[task.uploadsummary]$($uftReport)"
+}
+
+# upload junit report
+if (Test-Path $failedTests)
+{
+	#uploads report files to build artifacts
+	Write-Host "##vso[task.uploadsummary]$($failedTests)"
 }
 
 # read return code
@@ -82,8 +89,6 @@ if (Test-Path $retcodefile)
 	}
 	elseif ($retcode -ne 0)
 	{
-		Write-Host "Return code: $($retcode)"
-		Write-Host "Task failed"
 		Write-Error "Task Failed"
 	}
 }

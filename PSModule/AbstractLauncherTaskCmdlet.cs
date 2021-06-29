@@ -9,18 +9,36 @@ using System.Text.RegularExpressions;
 using System.Text;
 using System.Collections.Concurrent;
 using PSModule.Models;
-using System.Xml;
 
 namespace PSModule
 {
+    using H = Helper;
     public abstract class AbstractLauncherTaskCmdlet : PSCmdlet
     {
-        const string UFTFolder = "UFTWorking";
-        const string HpToolsLauncher_SCRIPT_NAME = "HpToolsLauncher.exe";
-        const string HpToolsAborter_SCRIPT_NAME = "HpToolsAborter.exe";
+        #region - Private Constants
 
-        private ConcurrentQueue<string> outputToProcess = new ConcurrentQueue<string>();
-        private ConcurrentQueue<string> errorToProcess = new ConcurrentQueue<string>();
+        private const string HpToolsLauncher_EXE = "HpToolsLauncher.exe";
+        private const string HpToolsAborter_EXE = "HpToolsAborter.exe";
+        private const string ReportConverter_EXE = "ReportConverter.exe";
+        private const string UFT_LAUNCHER = "UFT_LAUNCHER";
+        private const string PROPS = "props";
+        private const string BUILD_NUMBER = "buildNumber";
+        private const string DDMMYYYYHHMMSSSSS = "ddMMyyyyHHmmssSSS";
+        private const string RESULTS_FILENAME = "resultsFilename";
+        private const string STORAGE_ACCOUNT = "storageAccount";
+        private const string CONTAINER = "container";
+        private const string RUN_TYPE = "runType";
+        private const string UPLOAD_ARTIFACT = "uploadArtifact";
+        private const string ARTIFACT_TYPE = "artifactType";
+        private const string REPORT_NAME = "reportName";
+        private const string ARCHIVE_NAME = "archiveName";
+        private const string YES = "yes";
+        private const string JUNIT_REPORT_XML = "junit_report.xml";
+
+        #endregion
+
+        private readonly ConcurrentQueue<string> outputToProcess = new ConcurrentQueue<string>();
+        private readonly ConcurrentQueue<string> errorToProcess = new ConcurrentQueue<string>();
 
         public AbstractLauncherTaskCmdlet() { }
 
@@ -28,11 +46,7 @@ namespace PSModule
 
         protected override void ProcessRecord()
         {
-            string launcherPath = "";
-            string aborterPath = "";
-            string paramFileName = "";
-            string resultsFileName = "";
-
+            string launcherPath, aborterPath = string.Empty, converterPath, paramFileName = string.Empty, resultsFileName;
             try
             {
                 Dictionary<string, string> properties = new Dictionary<string, string>();
@@ -42,71 +56,106 @@ namespace PSModule
                 }
                 catch (Exception e)
                 {
-                    ThrowTerminatingError(new ErrorRecord(e, "GetTaskProperties", ErrorCategory.ParserError, ""));
+                    ThrowTerminatingError(new ErrorRecord(e, nameof(GetTaskProperties), ErrorCategory.ParserError, string.Empty));
                 }
 
-                string ufttfsdir = Environment.GetEnvironmentVariable("UFT_LAUNCHER");
+                string ufttfsdir = Environment.GetEnvironmentVariable(UFT_LAUNCHER);
 
-                launcherPath = Path.GetFullPath(Path.Combine(ufttfsdir, HpToolsLauncher_SCRIPT_NAME));
+                launcherPath = Path.GetFullPath(Path.Combine(ufttfsdir, HpToolsLauncher_EXE));
+                aborterPath = Path.GetFullPath(Path.Combine(ufttfsdir, HpToolsAborter_EXE));
+                converterPath = Path.GetFullPath(Path.Combine(ufttfsdir, ReportConverter_EXE));
 
-                aborterPath = Path.GetFullPath(Path.Combine(ufttfsdir, HpToolsAborter_SCRIPT_NAME));
-
-                string propdir = Path.GetFullPath(Path.Combine(ufttfsdir, "props"));
+                string propdir = Path.GetFullPath(Path.Combine(ufttfsdir, PROPS));
 
                 if (!Directory.Exists(propdir))
                     Directory.CreateDirectory(propdir);
 
-                string resdir = Path.GetFullPath(Path.Combine(ufttfsdir, "res"));
+                string resdir = Path.GetFullPath(Path.Combine(ufttfsdir, $@"res\Report_{properties[BUILD_NUMBER]}"));
 
                 if (!Directory.Exists(resdir))
                     Directory.CreateDirectory(resdir);
 
-                string timeSign = DateTime.Now.ToString("ddMMyyyyHHmmssSSS");
+                string timeSign = DateTime.Now.ToString(DDMMYYYYHHMMSSSSS);
 
-                paramFileName = Path.Combine(propdir, "Props" + timeSign + ".txt");
+                paramFileName = Path.Combine(propdir, $"Props{timeSign}.txt");
+                resultsFileName = Path.Combine(resdir, $"Results{timeSign}.xml");
 
-                resultsFileName = Path.Combine(resdir, "Results" + timeSign + ".xml");
-
-                resultsFileName = resultsFileName.Replace("\\", "\\\\");
-
-                properties.Add("resultsFilename", resultsFileName);
+                properties.Add(RESULTS_FILENAME, resultsFileName.Replace(@"\", @"\\")); // double backslashes are expected by HpToolsLauncher.exe (JavaProperties.cs, in LoadInternal method)
 
                 if (!SaveProperties(paramFileName, properties))
                 {
-                    WriteError(new ErrorRecord(new Exception("cannot save properties"), "", ErrorCategory.WriteError, ""));
+                    WriteError(new ErrorRecord(new Exception("cannot save properties"), string.Empty, ErrorCategory.WriteError, string.Empty));
                     return;
                 }
-                
+
                 //run the build task
                 Run(launcherPath, paramFileName);
-
+               
                 //collect results
                 CollateResults(resultsFileName, _launcherConsole.ToString(), resdir);
 
-                int retCode = -1;
-                if (File.Exists(resultsFileName) && (new FileInfo(resultsFileName).Length > 0))//if results file exists
+                RunStatus runStatus = RunStatus.FAILED;
+                if (File.Exists(resultsFileName) && new FileInfo(resultsFileName).Length > 0)//if results file exists
                 {
                     //create UFT report from the results file
-                    List<ReportMetaData> listReport = Helper.readReportFromXMLFile(resultsFileName);
+                    var listReport = H.ReadReportFromXMLFile(resultsFileName);
 
+                    string storageAccount = properties.GetValueOrDefault(STORAGE_ACCOUNT, string.Empty);
+                    string container = properties.GetValueOrDefault(CONTAINER, string.Empty);
+
+                    var runType = (RunType)Enum.Parse(typeof(RunType), properties[RUN_TYPE]);
                     //create html report
-                    Helper.createSummaryReport(ufttfsdir, ref listReport);
-
+                    if (runType == RunType.FileSystem && properties[UPLOAD_ARTIFACT] == YES)
+                    {
+                        var artifactType = (ArtifactType)Enum.Parse(typeof(ArtifactType), properties[ARTIFACT_TYPE]);
+                        H.CreateSummaryReport(ufttfsdir, properties[BUILD_NUMBER], runType, ref listReport, true, artifactType, storageAccount, container, properties[REPORT_NAME], properties[ARCHIVE_NAME]);
+                    }
+                    else
+                    {
+                        H.CreateSummaryReport(ufttfsdir, properties[BUILD_NUMBER], runType, ref listReport);
+                    }
                     //get task return code
-                    retCode = Helper.getErrorCode(listReport);
-                    CollateRetCode(resdir, retCode);
+                    runStatus = H.GetRunStatus(listReport);
+                    
+                    int totalTests = H.GetNumberOfTests(listReport, out IDictionary<string, int> nrOfTests);
+                    
+                    H.CreateRunSummary(runStatus, totalTests, nrOfTests, ufttfsdir, properties[BUILD_NUMBER]);
+                    
+                    var reportFolders = new List<string>();
+                    foreach (var item in listReport)
+                    {
+                        if (!item.getReportPath().IsNullOrWhiteSpace())
+                            reportFolders.Add(item.getReportPath());
+                    }
+
+                    if (runType == RunType.FileSystem && reportFolders.Any())
+                    {
+                        //run junit report converter
+                        string outputFileReport = Path.Combine(resdir, JUNIT_REPORT_XML);
+                        RunConverter(converterPath, outputFileReport, reportFolders);
+                        if (File.Exists(outputFileReport) && new FileInfo(outputFileReport).Length > 0 &&
+                            (nrOfTests[H.FAIL] > 0 || nrOfTests[H.ERROR] > 0))
+                        {
+                            IDictionary<string, IList<ReportMetaData>> steps = new Dictionary<string, IList<ReportMetaData>>();
+                            H.ReadReportFromXMLFile(outputFileReport, true, ref steps);
+                            H.CreateFailedStepsReport(steps, ufttfsdir, properties[BUILD_NUMBER]);
+                        }
+                    }
                 }
+
+                CollateRetCode(resdir, (int)runStatus);
             }
             catch (IOException ioe)
             {
-                WriteError(new ErrorRecord(ioe, "IOException", ErrorCategory.ResourceExists, ""));
+                WriteError(new ErrorRecord(ioe, nameof(IOException), ErrorCategory.ResourceExists, string.Empty));
             }
             catch (ThreadInterruptedException e)
             {
-                WriteError(new ErrorRecord(e, "ThreadInterruptedException", ErrorCategory.OperationStopped, "ThreadInterruptedException targer"));
+                WriteError(new ErrorRecord(e, nameof(ThreadInterruptedException), ErrorCategory.OperationStopped, "ThreadInterruptedException target"));
                 Run(aborterPath, paramFileName);
             }
         }
+                
 
         private bool SaveProperties(string paramsFile, Dictionary<string, string> properties)
         {
@@ -116,7 +165,7 @@ namespace PSModule
             {
                 try
                 {
-                    foreach (String prop in properties.Keys.ToArray())
+                    foreach (string prop in properties.Keys.ToArray())
                     {
                         file.WriteLine(prop + "=" + properties[prop]);
                     }
@@ -125,7 +174,7 @@ namespace PSModule
                 catch (Exception e)
                 {
                     result = false;
-                    WriteError(new ErrorRecord(e, "", ErrorCategory.WriteError, ""));
+                    WriteError(new ErrorRecord(e, string.Empty, ErrorCategory.WriteError, string.Empty));
                 }
             }
 
@@ -138,18 +187,19 @@ namespace PSModule
             _launcherConsole.Clear();
             try
             {
-                ProcessStartInfo info = new ProcessStartInfo();
-                info.UseShellExecute = false;
-                info.Arguments = $" -paramfile \"{paramFile}\"";
-                info.FileName = launcherPath;
-                info.RedirectStandardOutput = true;
-                info.RedirectStandardError = true;
+                ProcessStartInfo info = new ProcessStartInfo
+                {
+                    UseShellExecute = false,
+                    Arguments = $" -paramfile \"{paramFile}\"",
+                    FileName = launcherPath,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true
+                };
 
-                Process launcher = new Process();
+                Process launcher = new Process { StartInfo = info };
+
                 launcher.OutputDataReceived += Launcher_OutputDataReceived;
                 launcher.ErrorDataReceived += Launcher_ErrorDataReceived;
-
-                launcher.StartInfo = info;
 
                 launcher.Start();
 
@@ -181,8 +231,66 @@ namespace PSModule
 
             catch (Exception e)
             {
-                WriteError(new ErrorRecord(e, "ThreadInterruptedException", ErrorCategory.InvalidData, "ThreadInterruptedException targer"));
+                WriteError(new ErrorRecord(e, nameof(ThreadInterruptedException), ErrorCategory.InvalidData, "ThreadInterruptedException target"));
                 return -1;
+            }
+        }
+
+        private StringBuilder _converterConsole = new StringBuilder();
+
+        private void RunConverter(string converterPath, string outputfile, List<string> inputReportFolders)
+        {
+            try
+            {
+                var info = new ProcessStartInfo
+                {
+                    UseShellExecute = false,
+                    Arguments = $" -j \"{outputfile}\" --aggregate",
+                    FileName = converterPath,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true
+                };
+                foreach (var reportFolder in inputReportFolders)
+                {
+                    info.Arguments += " \"" + reportFolder + "\"";
+                }
+                
+                Process converter = new Process { StartInfo = info };
+
+                converter.OutputDataReceived += Launcher_OutputDataReceived;
+                converter.ErrorDataReceived += Launcher_ErrorDataReceived;
+
+                converter.Start();
+
+                converter.BeginOutputReadLine();
+                converter.BeginErrorReadLine();
+
+                while (!converter.HasExited)
+                {
+                    if (outputToProcess.TryDequeue(out string line))
+                    {
+                        _converterConsole.Append(line);
+                        WriteObject(line);
+                    }
+
+                    if (errorToProcess.TryDequeue(out line))
+                    {
+                        _converterConsole.Append(line);
+                        WriteObject(line);
+                    }
+                }
+
+                converter.OutputDataReceived -= Launcher_OutputDataReceived;
+                converter.ErrorDataReceived -= Launcher_ErrorDataReceived;
+
+                converter.WaitForExit();
+
+               // return launcher.ExitCode;
+            }
+            catch (Exception e)
+            {
+                WriteError(new ErrorRecord(e, nameof(ThreadInterruptedException), ErrorCategory.InvalidData, "ThreadInterruptedException target"));
+               // return -1;
             }
         }
 
@@ -200,16 +308,15 @@ namespace PSModule
 
         protected virtual void CollateRetCode(string resdir, int retCode)
         {
-
             string fileName = GetRetCodeFileName();
-            if (String.IsNullOrEmpty(fileName))
+            if (fileName.IsNullOrWhiteSpace())
             {
-                WriteError(new ErrorRecord(new Exception("Method GetRetCodeFileName() did not return a value"), "", ErrorCategory.WriteError, ""));
+                WriteError(new ErrorRecord(new Exception("Method GetRetCodeFileName() did not return a value"), string.Empty, ErrorCategory.WriteError, string.Empty));
                 return;
             }
             if (!Directory.Exists(resdir))
             {
-                WriteError(new ErrorRecord(new DirectoryNotFoundException(resdir), "", ErrorCategory.WriteError, ""));
+                WriteError(new ErrorRecord(new DirectoryNotFoundException(resdir), string.Empty, ErrorCategory.WriteError, string.Empty));
                 return;
             }
             string retCodeFilename = Path.Combine(resdir, fileName);
@@ -222,34 +329,34 @@ namespace PSModule
             }
             catch (Exception e)
             {
-                WriteError(new ErrorRecord(e, "", ErrorCategory.WriteError, ""));
+                WriteError(new ErrorRecord(e, string.Empty, ErrorCategory.WriteError, string.Empty));
             }
         }
 
         protected virtual string GetReportFilename()
         {
-            return String.Empty;
+            return string.Empty;
         }
 
         protected virtual void CollateResults(string resultFile, string log, string resdir)
         {
             if (!File.Exists(resultFile))
             {
-                WriteError(new ErrorRecord(new Exception("result file does not exist"), "", ErrorCategory.WriteError, ""));
+                WriteError(new ErrorRecord(new Exception("result file does not exist"), string.Empty, ErrorCategory.WriteError, string.Empty));
                 File.Create(resultFile).Dispose();
             }
 
             string reportFileName = GetReportFilename();
 
-            if (String.IsNullOrEmpty(reportFileName))
+            if (reportFileName.IsNullOrWhiteSpace())
             {
-                WriteError(new ErrorRecord(new Exception("collate results, empty reportFileName "), "", ErrorCategory.WriteError, ""));
+                WriteError(new ErrorRecord(new Exception("collate results, empty reportFileName "), string.Empty, ErrorCategory.WriteError, string.Empty));
                 return;
             }
 
-            if ((String.IsNullOrEmpty(resultFile) || !File.Exists(resultFile)) && String.IsNullOrEmpty(log))
+            if ((resultFile.IsNullOrWhiteSpace() || !File.Exists(resultFile)) && log.IsNullOrWhiteSpace())
             {
-                WriteError(new ErrorRecord(new FileNotFoundException($"No results file ({resultFile}) nor result log provided"), "", ErrorCategory.WriteError, ""));
+                WriteError(new ErrorRecord(new FileNotFoundException($"No results file ({resultFile}) nor result log provided"), string.Empty, ErrorCategory.WriteError, string.Empty));
 
                 return;
             }
@@ -257,18 +364,18 @@ namespace PSModule
             //read result xml file
             string s = File.ReadAllText(resultFile);
 
-            if (String.IsNullOrEmpty(s))
+            if (s.IsNullOrWhiteSpace())
             {
-                WriteError(new ErrorRecord(new FileNotFoundException("collate results, empty results file"), "", ErrorCategory.WriteError, ""));
+                WriteError(new ErrorRecord(new FileNotFoundException("collate results, empty results file"), string.Empty, ErrorCategory.WriteError, string.Empty));
                 return;
             }
-            List<Tuple<string, string>> links = GetRequiredLinksFromString(s);
-            if (links == null || links.Count == 0)
+            var links = GetRequiredLinksFromString(s);
+            if (links.IsNullOrEmpty())
             {
                 links = GetRequiredLinksFromString(log);
-                if (links == null || links.Count == 0)
+                if (links.IsNullOrEmpty())
                 {
-                    WriteError(new ErrorRecord(new FileNotFoundException("No report links in results file or log found"), "", ErrorCategory.WriteError, ""));
+                    WriteError(new ErrorRecord(new FileNotFoundException("No report links in results file or log found"), string.Empty, ErrorCategory.WriteError, string.Empty));
                     return;
                 }
             }
@@ -276,24 +383,21 @@ namespace PSModule
             try
             {
                 string reportPath = Path.Combine(resdir, reportFileName);
-
-                using (StreamWriter file = new StreamWriter(Path.Combine(resdir, reportFileName), true))
+                using StreamWriter file = new StreamWriter(reportPath, true);
+                foreach (var link in links)
                 {
-                    foreach (var link in links)
-                    {
-                        file.WriteLine($"[Report {link.Item2}]({link.Item1})  ");
-                    }
+                    file.WriteLine($"[Report {link.Item2}]({link.Item1})  ");
                 }
             }
             catch (Exception e)
             {
-                WriteError(new ErrorRecord(e, "error writing the results", ErrorCategory.WriteError, ""));
+                WriteError(new ErrorRecord(e, "error writing the results", ErrorCategory.WriteError, string.Empty));
             }
         }
 
         private List<Tuple<string, string>> GetRequiredLinksFromString(string s)
         {
-            if (String.IsNullOrEmpty(s))
+            if (s.IsNullOrWhiteSpace())
             {
                 return null;
             }
@@ -317,7 +421,7 @@ namespace PSModule
             }
             catch (Exception e)
             {
-                WriteError(new ErrorRecord(e, "", ErrorCategory.WriteError, ""));
+                WriteError(new ErrorRecord(e, string.Empty, ErrorCategory.WriteError, string.Empty));
             }
             return results;
         }

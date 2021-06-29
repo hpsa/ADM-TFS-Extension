@@ -22,4 +22,21 @@ namespace PSModule
         TEST_SUITE,
         BUILD_VERIFICATION_SUITE
     }
+
+    public enum ArtifactType
+    {
+        onlyReport,
+        onlyArchive,
+        bothReportArchive,
+        None
+    }
+
+    public enum RunStatus
+    {
+        PASSED = 0,
+        FAILED = -1,
+        UNSTABLE = -2,
+        CLOSED_BY_USER = -3,
+        UNDEFINED = -9
+    }
 }
