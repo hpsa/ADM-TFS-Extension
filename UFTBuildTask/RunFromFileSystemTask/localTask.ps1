@@ -7,11 +7,12 @@ $testPathInput = Get-VstsInput -Name 'testPathInput' -Require
 $timeOutIn = Get-VstsInput -Name 'timeOutIn'
 $uploadArtifact = Get-VstsInput -Name 'uploadArtifact' -Require
 $artifactType = Get-VstsInput -Name 'artifactType'
-$reportFileName = Get-VstsInput -Name 'reportFileName'
+$rptFileName = Get-VstsInput -Name 'reportFileName'
 
 $uftworkdir = $env:UFT_LAUNCHER
 $buildNumber = $env:BUILD_BUILDNUMBER
 $pipelineName = $env:BUILD_DEFINITIONNAME
+$resDir = Join-Path $uftworkdir -ChildPath "res\Report_${buildNumber}"
 
 Import-Module $uftworkdir\bin\PSModule.dll
 
@@ -22,23 +23,21 @@ function UploadArtifactToAzureStorage($storageContext, $container, $testPathRepo
 	Set-AzStorageBlobContent -Container "$($container)" -File $testPathReportInput -Blob $artifact -Context $storageContext
 }
 
-function ArchiveReport($artifact, $reportFile) {
-	$sourceFolder = Join-Path $reportFile -ChildPath "Report"
-	if (Test-Path $sourceFolder) {
-		$destinationFolder = Join-Path $reportFile -ChildPath $artifact
-		Compress-Archive -Path $sourceFolder -DestinationPath $destinationFolder
-		return $destinationFolder
+function ArchiveReport($artifact, $rptFolder) {
+	if (Test-Path $rptFolder) {
+		$fullPathZipFile = Join-Path $rptFolder -ChildPath $artifact
+		Compress-Archive -Path $rptFolder -DestinationPath $fullPathZipFile
+		return $fullPathZipFile
 	}
 	return $null
 }
 
-function UploadHtmlReport($reports, $reportFileNames) {
+function UploadHtmlReport() {
 	$index = 0
-	foreach ( $item in $reports ) {
-		$testPathReportInput =  Join-Path $item -ChildPath "Report\run_results.html"
+	foreach ( $item in $rptFolders ) {
+		$testPathReportInput = Join-Path $item -ChildPath "run_results.html"
 		if (Test-Path $testPathReportInput) {
-			$artifact = $reportFileNames[$index]
-		
+			$artifact = $rptFileNames[$index]
 			# upload resource to container
 			UploadArtifactToAzureStorage $storageContext $container $testPathReportInput $artifact
 		}
@@ -46,15 +45,15 @@ function UploadHtmlReport($reports, $reportFileNames) {
 	}
 }
 
-function UploadArchive($reports, $archiveFileNames) {
+function UploadArchive() {
 	$index = 0
-	foreach ( $item in $reports ) {
+	foreach ( $item in $rptFolders ) {
 		#archive report folder	
-		$artifact = $archiveFileNames[$index]
+		$artifact = $zipFileNames[$index]
 		
-		$destinationFolder = ArchiveReport $artifact $item
-		if ($destinationFolder) {
-			UploadArtifactToAzureStorage $storageContext $container $destinationFolder $artifact
+		$fullPathZipFile = ArchiveReport $artifact $item
+		if ($fullPathZipFile) {
+			UploadArtifactToAzureStorage $storageContext $container $fullPathZipFile $artifact
 		}
 					
 		$index += 1
@@ -64,50 +63,31 @@ function UploadArchive($reports, $archiveFileNames) {
 #---------------------------------------------------------------------------------------------------
 
 # delete old "UFT Report" file and create a new one
-$uftReport = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\UFT Report")
+$uftReport = "${resDir}\UFT Report"
 
 #run status summary Report
-$runSummary = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\Run Summary")
+$runSummary = "${resDir}\Run Summary"
 
 # delete old "TestRunReturnCode" file and create a new one
-$retcodefile = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\TestRunReturnCode.txt")
+$retcodefile = "${resDir}\TestRunReturnCode.txt"
 
-# remove temporary files complited
-$results = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber +"\*.xml")
+# results files pattern
+$results = "${resDir}\Results*SSS.xml"
 
 #junit report file 
-$failedTests = Join-Path $uftworkdir -ChildPath ("res\Report_" + $buildNumber + "\Failed Tests")
+$failedTests = "${resDir}\Failed Tests"
 
-$reports = New-Object System.Collections.Generic.List[System.Object]
-$reportFileNames = New-Object System.Collections.Generic.List[System.Object]
-$archiveFileNames = New-Object System.Collections.Generic.List[System.Object]
+$rptFolders = New-Object System.Collections.Generic.List[System.String]
+$rptFileNames = New-Object System.Collections.Generic.List[System.String]
+$zipFileNames = New-Object System.Collections.Generic.List[System.String]
 
-if ($testPathInput.Contains(".mtb")) { #batch file with multiple tests
-	$XMLfile = $testPathInput
-	[XML]$testDetails = Get-Content $XMLfile
-	foreach($test in $testDetails.Mtbx.Test) {
-		$reports.Add($test.path)
-	}
-} else { #single test or multiline tests
-	$reports = $testPathInput.split([Environment]::NewLine)
-	$testPathReportInput = Join-Path $testPathInput -ChildPath "Report\run_results.html"
-}
-
-if ($reportFileName) {
-	$reportFileName = $reportFileName + '_' + $buildNumber
+if ($rptFileName) {
+	$rptFileName += "_${buildNumber}"
 } else {
-	$reportFileName = $pipelineName + "_" + $buildNumber
-}
-$ind = 1
-foreach ($item in $reports) {
-	$artifactName = $reportFileName + "_" + $ind + ".html"
-	$archiveName = $reportFileName + "_Report_" + $ind + ".zip"
-	$reportFileNames.Add($artifactName)
-	$archiveFileNames.Add($archiveName)
-	$ind += 1
+	$rptFileName = "${pipelineName}_${buildNumber}"
 }
 
-$archiveNamePattern = $reportFileName + "_Report"
+$archiveNamePattern = "${rptFileName}_Report"
 
 #---------------------------------------------------------------------------------------------------
 #storage variables validation
@@ -161,18 +141,46 @@ if($uploadArtifact -eq "yes") {
 
 #---------------------------------------------------------------------------------------------------
 #Run the tests
-Invoke-FSTask $testPathInput $timeOutIn $uploadArtifact $artifactType $env:STORAGE_ACCOUNT $env:CONTAINER $reportFileName $archiveNamePattern $buildNumber -Verbose 
+Invoke-FSTask $testPathInput $timeOutIn $uploadArtifact $artifactType $env:STORAGE_ACCOUNT $env:CONTAINER $rptFileName $archiveNamePattern $buildNumber -Verbose 
+
+if ($testPathInput.Contains(".mtb")) { #batch file with multiple tests
+	$XMLfile = $testPathInput
+	[XML]$testDetails = Get-Content $XMLfile
+	foreach($test in $testDetails.Mtbx.Test) {
+		$rptFolder = Join-Path $test.path -ChildPath "Report"
+		$rptFolders.Add($rptFolder)
+	}
+} else { #single test or multiline tests
+	$resFile = (Get-ChildItem -File $results | Sort-Object -Property CreationTime -Descending | Select-Object -First 1)
+	if ($resFile -and (Test-Path $resFile.FullName)) {
+		[XML]$testDetails = Get-Content $resFile.FullName
+		$testcases = $testDetails.SelectNodes('/testsuites/testsuite/testcase')
+		if ($testcases) {
+			foreach($testcase in $testcases) {
+				$rptFolders.Add($testcase.report)
+			}
+		}
+	} else {
+		Write-Error "Cannot find the ${results} file."
+	}
+}
+$ind = 1
+foreach ($item in $rptFolders) {
+	$rptFileNames.Add("${rptFileName}_${ind}.html")
+	$zipFileNames.Add("${rptFileName}_Report_${ind}.zip")
+	$ind += 1
+}
 
 #---------------------------------------------------------------------------------------------------
 #upload artifacts to Azure storage
 if ($uploadArtifact -eq "yes") {
 	if ($artifactType -eq "onlyReport") { #upload only report
-		UploadHtmlReport $reports $reportFileNames
+		UploadHtmlReport
 	} elseif ($artifactType -eq "onlyArchive") { #upload only archive
-		UploadArchive $reports $archiveFileNames
+		UploadArchive
 	} else { #upload both report and archive
-		UploadHtmlReport $reports $reportFileNames
-		UploadArchive $reports $archiveFileNames
+		UploadHtmlReport
+		UploadArchive
 	}
 }
 
@@ -208,4 +216,3 @@ if (Test-Path $retcodefile) {
 		Write-Error "Task Failed"
 	}
 }
-
