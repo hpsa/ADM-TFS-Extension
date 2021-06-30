@@ -154,10 +154,10 @@ if ($testPathInput.Contains(".mtb")) { #batch file with multiple tests
 	$resFile = (Get-ChildItem -File $results | Sort-Object -Property CreationTime -Descending | Select-Object -First 1)
 	if ($resFile -and (Test-Path $resFile.FullName)) {
 		[XML]$testDetails = Get-Content $resFile.FullName
-		$testcases = $testDetails.SelectNodes('/testsuites/testsuite/testcase')
-		if ($testcases) {
-			foreach($testcase in $testcases) {
-				$rptFolders.Add($testcase.report)
+		$rptAttributes = $testDetails.SelectNodes("/testsuites/testsuite/testcase[@report != '']/@report")
+		if ($rptAttributes) {
+			foreach($attr in $rptAttributes) {
+				$rptFolders.Add($attr.Value)
 			}
 		}
 	} else {

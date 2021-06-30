@@ -273,10 +273,9 @@ namespace PSModule
                         cell4.Controls.Add(new HtmlAnchor { HRef = $"{zipLinkPrefix}_{index}.zip", InnerText = DOWNLOAD });
                         row.Cells.Add(cell4);
                     }
+                    index++;
                 }
-
                 table.Rows.Add(row);
-                index++;
             }
 
             //add table to file
