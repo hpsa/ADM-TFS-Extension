@@ -40,7 +40,7 @@ namespace PSModule
         private const string NO_OF_TESTS = "No. of tests";
         private const string PASSING_RATE = "Percentage of tests";
         private const string STYLE = "style";
-        private const string UFT_REPORT_ = "UFT report";
+        private const string UFT_REPORT_COL_CAPTION = "UFT report";
         private const string UFT_REPORT_ARCHIVE = "UFT report archive";
         private const string VIEW_REPORT = "View report";
         private const string DOWNLOAD = "Download";
@@ -55,7 +55,7 @@ namespace PSModule
         private const string FONT_WEIGHT_BOLD = "font-weight:bold;";
         private const string FONT_WEIGHT_BOLD_UNDERLINE = "font-weight:bold; text-decoration:underline;";
 
-        private const string UFT_REPORT = "UFT Report";
+        private const string UFT_REPORT_CAPTION = "UFT Report";
         private const string RUN_SUMMARY = "Run Summary";
         private const string FAILED_TESTS = "Failed Tests";
         #endregion
@@ -211,7 +211,7 @@ namespace PSModule
             {
                 if (artifactType.In(ArtifactType.onlyReport, ArtifactType.bothReportArchive))
                 {
-                    var h4 = new HtmlTableCell { InnerText = UFT_REPORT_, Width = _200, Align = LEFT };
+                    var h4 = new HtmlTableCell { InnerText = UFT_REPORT_COL_CAPTION, Width = _200, Align = LEFT };
                     h4.Attributes.Add(STYLE, HDR_FONT_WEIGHT_BOLD_MIN_WIDTH_200);
                     header.Cells.Add(h4);
 
@@ -286,7 +286,7 @@ namespace PSModule
                 table.RenderControl(new HtmlTextWriter(sw));
                 html = sw.ToString();
             }
-            File.WriteAllText($@"{rptPath}\{UFT_REPORT}", html);
+            File.WriteAllText(Path.Combine(rptPath, UFT_REPORT_CAPTION), html);
         }
 
         public static void CreateRunSummary(RunStatus runStatus, int totalTests, IDictionary<string, int> nrOfTests, string rptPath)
@@ -364,7 +364,7 @@ namespace PSModule
                 table.RenderControl(new HtmlTextWriter(sw));
                 html = sw.ToString();
             }
-            File.WriteAllText($@"{rptPath}\{RUN_SUMMARY}", html);
+            File.WriteAllText(Path.Combine(rptPath,RUN_SUMMARY), html);
         }
 
         public static void CreateFailedStepsReport(IDictionary<string, IList<ReportMetaData>> reports, string rptPath)
@@ -429,7 +429,7 @@ namespace PSModule
                 table.RenderControl(new HtmlTextWriter(sw));
                 html = sw.ToString();
             }
-            File.WriteAllText($@"{rptPath}\{FAILED_TESTS}", html);
+            File.WriteAllText(Path.Combine(rptPath, FAILED_TESTS), html);
         }
 
         private static IDictionary<string, int> GetNumberOfFailedSteps(IDictionary<string, IList<ReportMetaData>> reports)

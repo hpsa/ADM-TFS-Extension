@@ -54,6 +54,11 @@ namespace PSModule
                 try
                 {
                     properties = GetTaskProperties();
+                    if (properties == null || !properties.Any())
+                    {
+                        ThrowTerminatingError(new ErrorRecord(new Exception("Invalid or missing properties!"), nameof(GetTaskProperties), ErrorCategory.ParserError, string.Empty));
+                        return;
+                    }
                 }
                 catch (Exception e)
                 {
