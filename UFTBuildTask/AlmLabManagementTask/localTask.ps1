@@ -18,9 +18,11 @@ $varDeploymentAction = Get-VstsInput -Name 'varDeploymentAction'
 $varDeploymentEnvironmentName = Get-VstsInput -Name 'varDeploymentEnvironmentName'
 $varDeprovisioningAction = Get-VstsInput -Name 'varDeprovisioningAction'
 
-
 $uftworkdir = $env:UFT_LAUNCHER
 $buildNumber = $env:BUILD_BUILDNUMBER
+$attemptNumber = $env:SYSTEM_STAGEATTEMPT
+[int]$rerunIdx = [convert]::ToInt32($attemptNumber, 10) - 1
+$resDir = Join-Path $uftworkdir -ChildPath "res\Report_$buildNumber"
 
 Import-Module $uftworkdir\bin\PSModule.dll
 
@@ -28,74 +30,72 @@ Import-Module $uftworkdir\bin\PSModule.dll
 if (-Not $varReportName) {
 	$varReportName = "ALM Lab Management Report"
 }
-$report = Join-Path $env:UFT_LAUNCHER -ChildPath "res\$($varReportName)"
+$report = "$res\$varReportName"
 
 if (Test-Path $report) {
 	Remove-Item $report
 }
 
-# delete old "UFT Report" file and create a new one
-$uftReport = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\UFT Report")
+$uftReport = "$resDir\UFT Report"
+$runSummary = "$resDir\Run Summary"
+$retcodefile = "$resDir\TestRunReturnCode.txt"
+$failedTests = "$resDir\Failed Tests"
 
-#run summary Report
-$runSummary = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\Run Summary")
-
-#junit report file 
-$failedTests = Join-Path $uftworkdir -ChildPath ("res\Report_" + $buildNumber + "\Failed Tests")
-
-# create return code file
-#if (-Not $varReturnCodeFile)
-#{
-#	$varReturnCodeFile = "TestRunReturnCode.txt"
-#}
-#$retcodefile = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\$($varReturnCodeFile)") 
-$retcodefile = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber + "\TestRunReturnCode.txt")
-if (Test-Path $retcodefile)
-{
-	Remove-Item $retcodefile
+if ($rerunIdx) {
+	Write-Host "Rerun attempt = $rerunIdx"
 }
-
-# remove temporary files complited
-$results = Join-Path $env:UFT_LAUNCHER -ChildPath ("res\Report_" + $buildNumber +"\*.xml")
- #Get-ChildItem -Path $results | foreach ($_) { Remove-Item $_.fullname }
-
 
 $CDA1 = [bool]($varUseCDA) 
 Invoke-AlmLabManagementTask $varAlmServ $varUserName $varPass $varDomain $varProject $varRunType $varTestSet $varDescription $varTimeslotDuration $varEnvironmentConfigurationID $varReportName $CDA1 $varDeploymentAction $varDeploymentEnvironmentName $varDeprovisioningAction $buildNumber -Verbose
 
+#---------------------------------------------------------------------------------------------------
+# uploads report files to build artifacts
+# upload and display Run Summary
 if (Test-Path $runSummary) {
-	#uploads report files to build artifacts
-	Write-Host "##vso[task.uploadsummary]$($runSummary)"
+	if ($rerunIdx) {
+		Write-Host "##vso[task.addattachment type=Distributedtask.Core.Summary;name=Run Summary (rerun $rerunIdx);]$runSummary"
+	} else {
+		Write-Host "##vso[task.uploadsummary]$runSummary"
+	}
 }
 
-# create summary UFT report
+# upload and display UFT report
 if (Test-Path $uftReport) {
-	#uploads report files to build artifacts
-	Write-Host "##vso[task.uploadsummary]$($uftReport)"
+	if ($rerunIdx) {
+		Write-Host "##vso[task.addattachment type=Distributedtask.Core.Summary;name=UFT Report (rerun $rerunIdx);]$uftReport"
+	} else {
+		Write-Host "##vso[task.uploadsummary]$uftReport"
+	}
 }
 
-# upload junit report
+# upload and display Failed Tests
 if (Test-Path $failedTests) {
-	#uploads report files to build artifacts
-	Write-Host "##vso[task.uploadsummary]$($failedTests)"
+	if ($rerunIdx) {
+		Write-Host "##vso[task.addattachment type=Distributedtask.Core.Summary;name=Failed Tests (rerun $rerunIdx);]$failedTests"
+	} else {
+		Write-Host "##vso[task.uploadsummary]$failedTests"
+	}
 }
 
 # read return code
 if (Test-Path $retcodefile) {
 	$content = Get-Content $retcodefile
-	[int]$retcode = [convert]::ToInt32($content, 10)
+	if ($content) {
+		$sep = [Environment]::NewLine
+		$option = [System.StringSplitOptions]::RemoveEmptyEntries
+		$arr = $content.Split($sep, $option)
+		[int]$retcode = [convert]::ToInt32($arr[-1], 10)
 	
-	if ($retcode -eq 0) {
-		Write-Host "Test passed"
-	}
+		if ($retcode -eq 0) {
+			Write-Host "Test passed"
+		}
 
-	if ($retcode -eq -3) {
-		#writes log messages in case of errors
-		Write-Error "Task Failed with message: Closed by user"
-	} elseif ($retcode -ne 0) {
-		Write-Error "Task Failed"
+		if ($retcode -eq -3) {
+			Write-Error "Task Failed with message: Closed by user"
+		} elseif ($retcode -ne 0) {
+			Write-Error "Task Failed"
+		}
+	} else {
+		Write-Error "The file [$retcodefile] is empty!"
 	}
 }
-
-
-
