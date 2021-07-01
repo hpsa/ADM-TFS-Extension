@@ -37,10 +37,11 @@ namespace PSModule
 
         #endregion
 
+        private readonly StringBuilder _launcherConsole = new StringBuilder();
         private readonly ConcurrentQueue<string> outputToProcess = new ConcurrentQueue<string>();
         private readonly ConcurrentQueue<string> errorToProcess = new ConcurrentQueue<string>();
 
-        public AbstractLauncherTaskCmdlet() { }
+        protected AbstractLauncherTaskCmdlet() { }
 
         public abstract Dictionary<string, string> GetTaskProperties();
 
@@ -49,14 +50,20 @@ namespace PSModule
             string launcherPath, aborterPath = string.Empty, converterPath, paramFileName = string.Empty, resultsFileName;
             try
             {
-                Dictionary<string, string> properties = new Dictionary<string, string>();
+                Dictionary<string, string> properties;
                 try
                 {
                     properties = GetTaskProperties();
+                    if (properties == null || !properties.Any())
+                    {
+                        ThrowTerminatingError(new ErrorRecord(new Exception("Invalid or missing properties!"), nameof(GetTaskProperties), ErrorCategory.ParserError, string.Empty));
+                        return;
+                    }
                 }
                 catch (Exception e)
                 {
                     ThrowTerminatingError(new ErrorRecord(e, nameof(GetTaskProperties), ErrorCategory.ParserError, string.Empty));
+                    return;
                 }
 
                 string ufttfsdir = Environment.GetEnvironmentVariable(UFT_LAUNCHER);
@@ -108,24 +115,22 @@ namespace PSModule
                     if (runType == RunType.FileSystem && properties[UPLOAD_ARTIFACT] == YES)
                     {
                         var artifactType = (ArtifactType)Enum.Parse(typeof(ArtifactType), properties[ARTIFACT_TYPE]);
-                        H.CreateSummaryReport(ufttfsdir, properties[BUILD_NUMBER], runType, ref listReport, true, artifactType, storageAccount, container, properties[REPORT_NAME], properties[ARCHIVE_NAME]);
+                        H.CreateSummaryReport(resdir, runType, listReport, true, artifactType, storageAccount, container, properties[REPORT_NAME], properties[ARCHIVE_NAME]);
                     }
                     else
                     {
-                        H.CreateSummaryReport(ufttfsdir, properties[BUILD_NUMBER], runType, ref listReport);
+                        H.CreateSummaryReport(resdir, runType, listReport);
                     }
                     //get task return code
                     runStatus = H.GetRunStatus(listReport);
-                    
                     int totalTests = H.GetNumberOfTests(listReport, out IDictionary<string, int> nrOfTests);
-                    
-                    H.CreateRunSummary(runStatus, totalTests, nrOfTests, ufttfsdir, properties[BUILD_NUMBER]);
+                    H.CreateRunSummary(runStatus, totalTests, nrOfTests, resdir);
                     
                     var reportFolders = new List<string>();
                     foreach (var item in listReport)
                     {
-                        if (!item.getReportPath().IsNullOrWhiteSpace())
-                            reportFolders.Add(item.getReportPath());
+                        if (!item.ReportPath.IsNullOrWhiteSpace())
+                            reportFolders.Add(item.ReportPath);
                     }
 
                     if (runType == RunType.FileSystem && reportFolders.Any())
@@ -133,12 +138,11 @@ namespace PSModule
                         //run junit report converter
                         string outputFileReport = Path.Combine(resdir, JUNIT_REPORT_XML);
                         RunConverter(converterPath, outputFileReport, reportFolders);
-                        if (File.Exists(outputFileReport) && new FileInfo(outputFileReport).Length > 0 &&
-                            (nrOfTests[H.FAIL] > 0 || nrOfTests[H.ERROR] > 0))
+                        if (File.Exists(outputFileReport) && new FileInfo(outputFileReport).Length > 0 && (nrOfTests[H.FAIL] > 0 || nrOfTests[H.ERROR] > 0))
                         {
                             IDictionary<string, IList<ReportMetaData>> steps = new Dictionary<string, IList<ReportMetaData>>();
                             H.ReadReportFromXMLFile(outputFileReport, true, ref steps);
-                            H.CreateFailedStepsReport(steps, ufttfsdir, properties[BUILD_NUMBER]);
+                            H.CreateFailedStepsReport(steps, resdir);
                         }
                     }
                 }
@@ -155,7 +159,6 @@ namespace PSModule
                 Run(aborterPath, paramFileName);
             }
         }
-                
 
         private bool SaveProperties(string paramsFile, Dictionary<string, string> properties)
         {
@@ -181,7 +184,6 @@ namespace PSModule
             return result;
         }
 
-        private StringBuilder _launcherConsole = new StringBuilder();
         private int Run(string launcherPath, string paramFile)
         {
             _launcherConsole.Clear();
@@ -236,8 +238,6 @@ namespace PSModule
             }
         }
 
-        private StringBuilder _converterConsole = new StringBuilder();
-
         private void RunConverter(string converterPath, string outputfile, List<string> inputReportFolders)
         {
             try
@@ -252,7 +252,7 @@ namespace PSModule
                 };
                 foreach (var reportFolder in inputReportFolders)
                 {
-                    info.Arguments += " \"" + reportFolder + "\"";
+                    info.Arguments += $" \"{reportFolder}\"";
                 }
                 
                 Process converter = new Process { StartInfo = info };
@@ -269,13 +269,11 @@ namespace PSModule
                 {
                     if (outputToProcess.TryDequeue(out string line))
                     {
-                        _converterConsole.Append(line);
                         WriteObject(line);
                     }
 
                     if (errorToProcess.TryDequeue(out line))
                     {
-                        _converterConsole.Append(line);
                         WriteObject(line);
                     }
                 }
@@ -322,10 +320,8 @@ namespace PSModule
             string retCodeFilename = Path.Combine(resdir, fileName);
             try
             {
-                using (StreamWriter file = new StreamWriter(retCodeFilename, true))
-                {
-                    file.WriteLine(retCode.ToString());
-                }
+                using StreamWriter file = new StreamWriter(retCodeFilename, true);
+                file.WriteLine(retCode.ToString());
             }
             catch (Exception e)
             {

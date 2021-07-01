@@ -41,18 +41,16 @@ namespace PSModule
 
 		public static bool In(this string str, bool ignoreCase, params string[] values)
 		{
-			string str2 = str;
 			if (ignoreCase)
 			{
-				return values?.Any((string s) => EqualsIgnoreCase(str2, s)) ?? (str2 == null);
+				return values?.Any((string s) => EqualsIgnoreCase(str, s)) ?? (str == null);
 			}
-			return In(str2, values);
+			return In(str, values);
 		}
 
 		public static bool In<T>(this T obj, params T[] values)
 		{
-			T obj2 = obj;
-			return values?.Any((T o) => object.Equals(obj2, o)) ?? false;
+			return values?.Any((T o) => Equals(obj, o)) ?? false;
 		}
 
 		public static bool IsNullOrEmpty<T>(this T[] arr)

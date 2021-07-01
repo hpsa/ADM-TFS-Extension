@@ -10,7 +10,7 @@ using System.Xml;
 
 namespace PSModule
 {
-    class Helper
+    static class Helper
     {
         #region - Private & Internal Constants
 
@@ -40,14 +40,12 @@ namespace PSModule
         private const string NO_OF_TESTS = "No. of tests";
         private const string PASSING_RATE = "Percentage of tests";
         private const string STYLE = "style";
-        private const string UFT_REPORT = "UFT report";
+        private const string UFT_REPORT_COL_CAPTION = "UFT report";
         private const string UFT_REPORT_ARCHIVE = "UFT report archive";
         private const string VIEW_REPORT = "View report";
         private const string DOWNLOAD = "Download";
 
-        private const string CENTER = "center";
         private const string LEFT = "left";
-        private const string RIGHT = "right";
         private const string _200 = "200";
         private const string _800 = "800";
         private const string HEIGHT_30PX_AZURE = "height:30px;background-color:azure";
@@ -57,6 +55,9 @@ namespace PSModule
         private const string FONT_WEIGHT_BOLD = "font-weight:bold;";
         private const string FONT_WEIGHT_BOLD_UNDERLINE = "font-weight:bold; text-decoration:underline;";
 
+        private const string UFT_REPORT_CAPTION = "UFT Report";
+        private const string RUN_SUMMARY = "Run Summary";
+        private const string FAILED_TESTS = "Failed Tests";
         #endregion
 
         public static IList<ReportMetaData> ReadReportFromXMLFile(string reportPath)
@@ -88,10 +89,10 @@ namespace PSModule
                     {
                         switch (attribute.Name)
                         {
-                            case NAME  : reportmetadata.setDisplayName(attribute.Value); break;
-                            case REPORT: reportmetadata.setReportPath(attribute.Value); break;
-                            case STATUS: reportmetadata.setStatus(attribute.Value); break;
-                            case TIME  : reportmetadata.setDuration(attribute.Value); break;
+                            case NAME  : reportmetadata.DisplayName = attribute.Value; break;
+                            case REPORT: reportmetadata.ReportPath  = attribute.Value; break;
+                            case STATUS: reportmetadata.Status      = attribute.Value; break;
+                            case TIME  : reportmetadata.Duration    = attribute.Value; break;
                             default    : break;
                         }
                     }
@@ -99,10 +100,10 @@ namespace PSModule
                     if (isJUnitReport)
                     {
                         //remove the number in front of each step
-                        string stepName = reportmetadata.getDisplayName();
+                        string stepName = reportmetadata.DisplayName;
                         if (stepName?.StartsWith(DIEZ) == true)
                         {
-                            reportmetadata.setDisplayName(stepName.Substring(stepName.IndexOf(COLON) + 1));
+                            reportmetadata.DisplayName = stepName.Substring(stepName.IndexOf(COLON) + 1);
                         }
                     }
 
@@ -115,14 +116,14 @@ namespace PSModule
                             {
                                 if (attribute.Name == MESSAGE)
                                 {
-                                    reportmetadata.setErrorMessage(attribute.Value);
-                                    reportmetadata.setStatus(FAIL);
+                                    reportmetadata.ErrorMessage = attribute.Value;
+                                    reportmetadata.Status = FAIL;
                                 }
                             }
                         }
                         if (xmlNode.Name == SYSTEM_OUT)
                         {
-                            reportmetadata.setDateTime(xmlNode.InnerText.Substring(0, 19));
+                            reportmetadata.DateTime = xmlNode.InnerText.Substring(0, 19);
                         }
                     }
                     if (isJUnitReport)
@@ -148,11 +149,11 @@ namespace PSModule
 
             foreach (ReportMetaData report in listReport)
             {
-                if (report.getStatus() == PASS)
+                if (report.Status == PASS)
                 {
                     passedTests++;
                 }
-                else if (report.getStatus().In(ERROR, FAIL))
+                else if (report.Status.In(ERROR, FAIL))
                 {
                     failedTests++;
                 }
@@ -182,13 +183,13 @@ namespace PSModule
 
             foreach (ReportMetaData item in listReport)
             {
-                nrOfTests[item.getStatus()]++;
+                nrOfTests[item.Status]++;
             }
 
             return listReport.Count;
         }
 
-        public static void CreateSummaryReport(string uftWorkingFolder, string buildNumber, RunType runType, ref IList<ReportMetaData> reportList,
+        public static void CreateSummaryReport(string rptPath, RunType runType, IList<ReportMetaData> reportList,
                                                bool uploadArtifact = false, ArtifactType artifactType = ArtifactType.None,
                                                string storageAccount = "", string container = "", string reportName = "", string archiveName = "")
         {
@@ -210,7 +211,7 @@ namespace PSModule
             {
                 if (artifactType.In(ArtifactType.onlyReport, ArtifactType.bothReportArchive))
                 {
-                    var h4 = new HtmlTableCell { InnerText = UFT_REPORT, Width = _200, Align = LEFT };
+                    var h4 = new HtmlTableCell { InnerText = UFT_REPORT_COL_CAPTION, Width = _200, Align = LEFT };
                     h4.Attributes.Add(STYLE, HDR_FONT_WEIGHT_BOLD_MIN_WIDTH_200);
                     header.Cells.Add(h4);
 
@@ -240,17 +241,17 @@ namespace PSModule
             foreach (ReportMetaData report in reportList)
             {
                 var row = new HtmlTableRow();
-                var cell1 = new HtmlTableCell { InnerText = GetTestName(report.getDisplayName()), Align = LEFT };
+                var cell1 = new HtmlTableCell { InnerText = GetTestName(report.DisplayName), Align = LEFT };
                 row.Cells.Add(cell1);
 
-                var cell2 = new HtmlTableCell { InnerText = report.getDateTime(), Align = LEFT };
+                var cell2 = new HtmlTableCell { InnerText = report.DateTime, Align = LEFT };
                 row.Cells.Add(cell2);
 
                 var cell3 = new HtmlTableCell { Align = LEFT };
-                cell3.Controls.Add(new HtmlImage { Src = $"{IMG_LINK_PREFIX}/{report.getStatus()}.svg" });
+                cell3.Controls.Add(new HtmlImage { Src = $"{IMG_LINK_PREFIX}/{report.Status}.svg" });
                 row.Cells.Add(cell3);
 
-                if (runType == RunType.FileSystem && uploadArtifact && !report.getReportPath().IsNullOrWhiteSpace())
+                if (runType == RunType.FileSystem && uploadArtifact && !report.ReportPath.IsNullOrWhiteSpace())
                 {
                     if (artifactType.In(ArtifactType.onlyReport, ArtifactType.bothReportArchive))
                     {
@@ -272,10 +273,9 @@ namespace PSModule
                         cell4.Controls.Add(new HtmlAnchor { HRef = $"{zipLinkPrefix}_{index}.zip", InnerText = DOWNLOAD });
                         row.Cells.Add(cell4);
                     }
+                    index++;
                 }
-
                 table.Rows.Add(row);
-                index++;
             }
 
             //add table to file
@@ -285,11 +285,10 @@ namespace PSModule
                 table.RenderControl(new HtmlTextWriter(sw));
                 html = sw.ToString();
             }
-            File.WriteAllText($@"{uftWorkingFolder}\res\Report_{buildNumber}\UFT Report", html);
+            File.WriteAllText(Path.Combine(rptPath, UFT_REPORT_CAPTION), html);
         }
 
-        public static void CreateRunSummary(RunStatus runStatus, int totalTests, IDictionary<string, int> nrOfTests,
-                                                  string uftWorkingFolder, string buildNumber)
+        public static void CreateRunSummary(RunStatus runStatus, int totalTests, IDictionary<string, int> nrOfTests, string rptPath)
         {
             var table = new HtmlTable { ClientIDMode = ClientIDMode.Static, ID = "tblRunSummaryId"};
             var header = new HtmlTableRow();
@@ -364,10 +363,10 @@ namespace PSModule
                 table.RenderControl(new HtmlTextWriter(sw));
                 html = sw.ToString();
             }
-            File.WriteAllText($@"{uftWorkingFolder}\res\Report_{buildNumber}\Run Summary", html);
+            File.WriteAllText(Path.Combine(rptPath,RUN_SUMMARY), html);
         }
 
-        public static void CreateFailedStepsReport(IDictionary<string, IList<ReportMetaData>> reports, string uftWorkingFolder, string buildNumber)
+        public static void CreateFailedStepsReport(IDictionary<string, IList<ReportMetaData>> reports, string rptPath)
         {
             var table = new HtmlTable { ClientIDMode = ClientIDMode.Static, ID = "tblFailedStepsId" };
             var header = new HtmlTableRow();
@@ -397,7 +396,7 @@ namespace PSModule
             {
                 int index = 0;
                 string style = isOddRow ? HEIGHT_30PX_AZURE : HEIGHT_30PX;
-                var failedTests = reports[testName].Where(x => x.getStatus() == FAIL);
+                var failedTests = reports[testName].Where(x => x.Status == FAIL);
                 foreach (var item in failedTests)
                 {
                     var row = new HtmlTableRow();
@@ -409,9 +408,9 @@ namespace PSModule
                         row.Cells.Add(cell1);
                     }
 
-                    row.Cells.Add(new HtmlTableCell { InnerText = item.getDisplayName(), Align = LEFT });
-                    row.Cells.Add(new HtmlTableCell { InnerText = item.getDuration(), Align = LEFT });
-                    row.Cells.Add(new HtmlTableCell { InnerText = item.getErrorMessage(), Align = LEFT });
+                    row.Cells.Add(new HtmlTableCell { InnerText = item.DisplayName, Align = LEFT });
+                    row.Cells.Add(new HtmlTableCell { InnerText = item.Duration, Align = LEFT });
+                    row.Cells.Add(new HtmlTableCell { InnerText = item.ErrorMessage, Align = LEFT });
 
                     row.Attributes.Add(STYLE, style);
                     table.Rows.Add(row);
@@ -429,7 +428,7 @@ namespace PSModule
                 table.RenderControl(new HtmlTextWriter(sw));
                 html = sw.ToString();
             }
-            File.WriteAllText($@"{uftWorkingFolder}\res\Report_{buildNumber}\Failed tests", html);
+            File.WriteAllText(Path.Combine(rptPath, FAILED_TESTS), html);
         }
 
         private static IDictionary<string, int> GetNumberOfFailedSteps(IDictionary<string, IList<ReportMetaData>> reports)
@@ -440,7 +439,7 @@ namespace PSModule
                 int failedSteps = 0;
                 foreach (var item in reports[test])
                 {
-                    if (item.getStatus() == FAIL)
+                    if (item.Status == FAIL)
                     {
                         failedSteps++;
                     }
