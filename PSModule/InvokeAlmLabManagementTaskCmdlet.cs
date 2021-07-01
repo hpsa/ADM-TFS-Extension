@@ -10,70 +10,52 @@ namespace PSModule
     public class InvokeAlmLabManagementTaskCmdlet : AbstractLauncherTaskCmdlet
     {
         [Parameter(Position = 0, Mandatory = true)]
-        public string ALMServerPath;
+        public string ALMServerPath { get; set; }
 
         [Parameter(Position = 1, Mandatory = true)]
-        public string ALMUserName;
+        public string ALMUserName { get; set; }
 
         [Parameter(Position = 2)]
-        public string ALMPassword;
+        public string ALMPassword { get; set; }
 
         [Parameter(Position = 3, Mandatory = true)]
-        public string ALMDomain;
+        public string ALMDomain { get; set; }
 
         [Parameter(Position = 4, Mandatory = true)]
-        public string ALMProject;
+        public string ALMProject { get; set; }
 
         [Parameter(Position = 5)]
-        public string TestRunType;
+        public string TestRunType { get; set; }
 
         [Parameter(Position = 6, Mandatory = true)]
-        public string ALMTestSet;
+        public string ALMTestSet { get; set; }
 
         [Parameter(Position = 7)]
-        public string Description;
+        public string Description { get; set; }
 
         [Parameter(Position = 8, Mandatory = true)]
-        public string TimeslotDuration;
+        public string TimeslotDuration { get; set; }
 
         [Parameter(Position = 9)]
-        public string EnvironmentConfigurationID;
+        public string EnvironmentConfigurationID { get; set; }
 
         [Parameter(Position = 10)]
-        public string ReportName;
+        public string ReportName { get; set; }
 
         [Parameter(Position = 11)]
-        public bool UseCDA;
+        public bool UseCDA { get; set; }
 
         [Parameter(Position = 12)]
-        public string DeploymentAction;
+        public string DeploymentAction { get; set; }
 
         [Parameter(Position = 13)]
-        public string DeploymentEnvironmentName;
+        public string DeploymentEnvironmentName { get; set; }
 
         [Parameter(Position = 14)]
-        public string DeprovisioningAction;
-
-        /*[Parameter(Position = 15, Mandatory = true)]
-        public string UploadArtifact;
-
-        [Parameter(Position = 16)]
-        public ArtifactType ArtType;
-
-        [Parameter(Position = 17)]
-        public string StorageAccount;
-
-        [Parameter(Position = 18)]
-        public string Container;
-
-        [Parameter(Position = 19)]
-        public string ReportFileName;
-
-        [Parameter(Position = 20)]
-        public string ArchiveName;*/
+        public string DeprovisioningAction { get; set; }
 
         [Parameter(Position = 15)]
-        public string BuildNumber;
+        public string BuildNumber { get; set; }
 
         protected override string GetReportFilename()
         {
@@ -128,13 +110,6 @@ namespace PSModule
             builder.SetAlmTimeout(TimeslotDuration);
             builder.SetAlmRunMode(AlmRunMode.RUN_LOCAL);
             builder.SetAlmRunHost("localhost");
-
-            /*builder.SetUploadArtifact(UploadArtifact);
-            builder.SetArtifactType(ArtType);
-            builder.SetReportName(ReportFileName);
-            builder.SetArchiveName(ArchiveName);
-            builder.SetStorageAccount(StorageAccount);
-            builder.SetContainer(Container);*/
 
             return builder.GetProperties();
         }

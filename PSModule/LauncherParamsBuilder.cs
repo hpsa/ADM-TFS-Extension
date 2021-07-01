@@ -157,11 +157,6 @@ namespace PSModule
             properties.Add("RunTestType", testType.ToString());
         }
 
-        private void SetParamValue(string v, int testID)
-        {
-            throw new NotImplementedException();
-        }
-
         public void SetAlmTestSet(string testSets)
         {
             SetParamValue("almTestSets", testSets);
