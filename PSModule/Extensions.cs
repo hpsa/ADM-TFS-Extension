@@ -55,20 +55,13 @@ namespace PSModule
 
 		public static bool IsNullOrEmpty<T>(this T[] arr)
 		{
-			if (arr != null)
-			{
-				return arr.Length == 0;
-			}
-			return true;
+			return arr == null || arr.Length == 0;
 		}
 
-		public static bool IsNullOrEmpty<T>(this IList<T> arr)
+		// ICollection is base class of IList and IDictionary
+		public static bool IsNullOrEmpty<T>(this ICollection<T> coll)
 		{
-			if (arr != null)
-			{
-				return arr.Count == 0;
-			}
-			return true;
+			return coll == null || coll.Count == 0;
 		}
 
 		public static bool IsNull(this DateTime dt)
