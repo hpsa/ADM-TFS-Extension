@@ -347,7 +347,7 @@ namespace PSModule
 
                 row.Cells.Add(new HtmlTableCell { Align = LEFT, InnerText = statuses[index] });
                 row.Cells.Add(new HtmlTableCell { Align = LEFT, InnerText = nrOfTests[statuses[index]].ToString() });
-                row.Cells.Add(new HtmlTableCell { Align = LEFT, InnerText = $"{roundedPercentages[index]:00.00}%" });
+                row.Cells.Add(new HtmlTableCell { Align = LEFT, InnerText = $"{roundedPercentages[index]:0.00}%" });
 
                 row.Attributes.Add(STYLE, HEIGHT_30PX);
                 table.Rows.Add(row);
