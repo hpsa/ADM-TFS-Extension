@@ -1,7 +1,6 @@
 ﻿using System.Management.Automation;
 using System.Linq;
 using System.Collections.Generic;
-using PSModule.Models;
 
 namespace PSModule
 {
@@ -9,33 +8,31 @@ namespace PSModule
     public class InvokeFSTaskCmdlet : AbstractLauncherTaskCmdlet
     {
         [Parameter(Position = 0, Mandatory = true)]
-        public string TestsPath;
+        public string TestsPath { get; set; }
 
         [Parameter(Position = 1)]
-        public string Timeout;
+        public string Timeout { get; set; }
 
         [Parameter(Position = 2, Mandatory = true)]
-        public string UploadArtifact;
+        public string UploadArtifact { get; set; }
 
         [Parameter(Position = 3)]
-        public ArtifactType ArtType;
+        public ArtifactType ArtType { get; set; }
 
         [Parameter(Position = 4)]
-        public string StorageAccount;
+        public string StorageAccount { get; set; }
 
         [Parameter(Position = 5)]
-        public string Container;
+        public string Container { get; set; }
 
         [Parameter(Position = 6)]
-        public string ReportFileName;
+        public string ReportFileName { get; set; }
 
         [Parameter(Position = 7)]
-        public string ArchiveName;
+        public string ArchiveName { get; set; }
 
         [Parameter(Position = 8)]
-        public string BuildNumber;
-
-        //public MobileSettings mobile;
+        public string BuildNumber { get; set; }
 
         protected override void CollateResults(string resultFile, string log, string resdir)
         {

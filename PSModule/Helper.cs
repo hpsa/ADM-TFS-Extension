@@ -253,24 +253,26 @@ namespace PSModule
 
                 if (runType == RunType.FileSystem && uploadArtifact && !report.ReportPath.IsNullOrWhiteSpace())
                 {
+                    string htmlLink = $"{htmlLinkPrefix}_{index}.html";
+                    string zipLink = $"{zipLinkPrefix}_{index}.zip";
                     if (artifactType.In(ArtifactType.onlyReport, ArtifactType.bothReportArchive))
                     {
                         var cell4 = new HtmlTableCell { Align = LEFT };
-                        var reportLink = new HtmlAnchor { HRef = $"{htmlLinkPrefix}_{index}.html", InnerText = VIEW_REPORT };
+                        var reportLink = new HtmlAnchor { HRef = htmlLink, InnerText = VIEW_REPORT };
                         cell4.Controls.Add(reportLink);
                         row.Cells.Add(cell4);
 
                         if (artifactType == ArtifactType.bothReportArchive)
                         {
                             var cell5 = new HtmlTableCell { Align = LEFT };
-                            cell5.Controls.Add(new HtmlAnchor { HRef = $"{zipLinkPrefix}_{index}.zip", InnerText = DOWNLOAD });
+                            cell5.Controls.Add(new HtmlAnchor { HRef = zipLink, InnerText = DOWNLOAD });
                             row.Cells.Add(cell5);
                         }
                     }
                     else if (artifactType == ArtifactType.onlyArchive)
                     {
                         var cell4 = new HtmlTableCell { Align = LEFT };
-                        cell4.Controls.Add(new HtmlAnchor { HRef = $"{zipLinkPrefix}_{index}.zip", InnerText = DOWNLOAD });
+                        cell4.Controls.Add(new HtmlAnchor { HRef = zipLink, InnerText = DOWNLOAD });
                         row.Cells.Add(cell4);
                     }
                     index++;

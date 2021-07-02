@@ -12,7 +12,9 @@ $rptFileName = Get-VstsInput -Name 'reportFileName'
 $uftworkdir = $env:UFT_LAUNCHER
 $buildNumber = $env:BUILD_BUILDNUMBER
 $pipelineName = $env:BUILD_DEFINITIONNAME
-$resDir = Join-Path $uftworkdir -ChildPath "res\Report_${buildNumber}"
+$attemptNumber = $env:SYSTEM_STAGEATTEMPT
+[int]$rerunIdx = [convert]::ToInt32($attemptNumber, 10) - 1
+$resDir = Join-Path $uftworkdir -ChildPath "res\Report_$buildNumber"
 
 Import-Module $uftworkdir\bin\PSModule.dll
 
@@ -62,29 +64,23 @@ function UploadArchive() {
 
 #---------------------------------------------------------------------------------------------------
 
-# delete old "UFT Report" file and create a new one
-$uftReport = "${resDir}\UFT Report"
-
-#run status summary Report
-$runSummary = "${resDir}\Run Summary"
-
-# delete old "TestRunReturnCode" file and create a new one
-$retcodefile = "${resDir}\TestRunReturnCode.txt"
-
-# results files pattern
-$results = "${resDir}\Results*SSS.xml"
-
-#junit report file 
-$failedTests = "${resDir}\Failed Tests"
+$uftReport = "$resDir\UFT Report"
+$runSummary = "$resDir\Run Summary"
+$retcodefile = "$resDir\TestRunReturnCode.txt"
+$results = "$resDir\Results*SSS.xml"
+$failedTests = "$resDir\Failed Tests"
 
 $rptFolders = New-Object System.Collections.Generic.List[System.String]
 $rptFileNames = New-Object System.Collections.Generic.List[System.String]
 $zipFileNames = New-Object System.Collections.Generic.List[System.String]
 
 if ($rptFileName) {
-	$rptFileName += "_${buildNumber}"
+	$rptFileName += "_$buildNumber"
 } else {
 	$rptFileName = "${pipelineName}_${buildNumber}"
+}
+if ($rerunIdx) {
+	$rptFileName += "_rerun$rerunIdx"
 }
 
 $archiveNamePattern = "${rptFileName}_Report"
@@ -139,6 +135,10 @@ if($uploadArtifact -eq "yes") {
 	}
 }
 
+if ($rerunIdx) {
+	Write-Host "Rerun attempt = $rerunIdx"
+}
+
 #---------------------------------------------------------------------------------------------------
 #Run the tests
 Invoke-FSTask $testPathInput $timeOutIn $uploadArtifact $artifactType $env:STORAGE_ACCOUNT $env:CONTAINER $rptFileName $archiveNamePattern $buildNumber -Verbose 
@@ -161,7 +161,7 @@ if ($testPathInput.Contains(".mtb")) { #batch file with multiple tests
 			}
 		}
 	} else {
-		Write-Error "Cannot find the ${results} file."
+		Write-Error "Cannot find the $results file."
 	}
 }
 $ind = 1
@@ -188,31 +188,50 @@ if ($uploadArtifact -eq "yes") {
 # uploads report files to build artifacts
 # upload and display Run Summary
 if (Test-Path $runSummary) {
-	Write-Host "##vso[task.uploadsummary]$($runSummary)"
+	if ($rerunIdx) {
+		Write-Host "##vso[task.addattachment type=Distributedtask.Core.Summary;name=Run Summary (rerun $rerunIdx);]$runSummary"
+	} else {
+		Write-Host "##vso[task.uploadsummary]$runSummary"
+	}
 }
 
 # upload and display UFT report
 if (Test-Path $uftReport) {
-	Write-Host "##vso[task.uploadsummary]$($uftReport)"
+	if ($rerunIdx) {
+		Write-Host "##vso[task.addattachment type=Distributedtask.Core.Summary;name=UFT Report (rerun $rerunIdx);]$uftReport"
+	} else {
+		Write-Host "##vso[task.uploadsummary]$uftReport"
+	}
 }
 
 # upload and display Failed Tests
 if (Test-Path $failedTests) {
-	Write-Host "##vso[task.uploadsummary]$($failedTests)"
+	if ($rerunIdx) {
+		Write-Host "##vso[task.addattachment type=Distributedtask.Core.Summary;name=Failed Tests (rerun $rerunIdx);]$failedTests"
+	} else {
+		Write-Host "##vso[task.uploadsummary]$failedTests"
+	}
 }
 
 # read return code
 if (Test-Path $retcodefile) {
 	$content = Get-Content $retcodefile
-	[int]$retcode = [convert]::ToInt32($content, 10)
+	if ($content) {
+		$sep = [Environment]::NewLine
+		$option = [System.StringSplitOptions]::RemoveEmptyEntries
+		$arr = $content.Split($sep, $option)
+		[int]$retcode = [convert]::ToInt32($arr[-1], 10)
 	
-	if($retcode -eq 0) {
-		Write-Host "Test passed"
-	}
+		if ($retcode -eq 0) {
+			Write-Host "Test passed"
+		}
 
-	if ($retcode -eq -3) {
-		Write-Error "Task Failed with message: Closed by user"
-	} elseif ($retcode -ne 0) {
-		Write-Error "Task Failed"
+		if ($retcode -eq -3) {
+			Write-Error "Task Failed with message: Closed by user"
+		} elseif ($retcode -ne 0) {
+			Write-Error "Task Failed"
+		}
+	} else {
+		Write-Error "The file [$retcodefile] is empty!"
 	}
 }

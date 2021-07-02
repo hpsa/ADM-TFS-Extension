@@ -9,64 +9,46 @@ namespace PSModule
     public class InvokeRunFromALMTaskCmdlet : AbstractLauncherTaskCmdlet
     {
         [Parameter(Position = 0, Mandatory = true)]
-        public string ALMServerPath;
+        public string ALMServerPath { get; set; }
 
         [Parameter(Position = 1, Mandatory = false)]
-        public string SSOEnabled;
+        public string SSOEnabled { get; set; }
 
         [Parameter(Position = 2)]
-        public string ClientID;
+        public string ClientID { get; set; }
 
         [Parameter(Position = 3)]
-        public string ApiKeySecret;
+        public string ApiKeySecret { get; set; }
 
         [Parameter(Position = 4)]
-        public string ALMUserName;
+        public string ALMUserName { get; set; }
 
         [Parameter(Position = 5)]
-        public string ALMPassword;
+        public string ALMPassword { get; set; }
 
         [Parameter(Position = 6)]
-        public string ALMDomain;
+        public string ALMDomain { get; set; }
 
         [Parameter(Position = 7)]
-        public string ALMProject;
+        public string ALMProject { get; set; }
 
         [Parameter(Position = 8)]
-        public string ALMTestSet;
+        public string ALMTestSet { get; set; }
 
         [Parameter(Position = 9)]
-        public string TimeOut;
+        public string TimeOut { get; set; }
 
         [Parameter(Position = 10)]
-        public string ReportName;
+        public string ReportName { get; set; }
 
         [Parameter(Position = 11)]
-        public string RunMode;
+        public string RunMode { get; set; }
 
         [Parameter(Position = 12)]
-        public string ALMRunHost;
-
-        /*[Parameter(Position = 13, Mandatory = true)]
-        public string UploadArtifact;
-
-        [Parameter(Position = 14)]
-        public ArtifactType ArtType;
-
-        [Parameter(Position = 15)]
-        public string StorageAccount;
-
-        [Parameter(Position = 16)]
-        public string Container;
-
-        [Parameter(Position = 17)]
-        public string ReportFileName;
-
-        [Parameter(Position = 18)]
-        public string ArchiveName;*/
+        public string ALMRunHost { get; set; }
 
         [Parameter(Position = 13)]
-        public string BuildNumber;
+        public string BuildNumber { get; set; }
 
         protected override string GetReportFilename()
         {
@@ -115,13 +97,6 @@ namespace PSModule
             {
                 builder.SetAlmTestSet("");
             }
-
-           /* builder.SetUploadArtifact(UploadArtifact);
-            builder.SetArtifactType(ArtType);
-            builder.SetReportName(ReportFileName);
-            builder.SetArchiveName(ArchiveName);
-            builder.SetStorageAccount(StorageAccount);
-            builder.SetContainer(Container);*/
 
             return builder.GetProperties();
         }
