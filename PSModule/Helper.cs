@@ -60,20 +60,16 @@ namespace PSModule
         private const string FAILED_TESTS = "Failed Tests";
         #endregion
 
-        public static IList<ReportMetaData> ReadReportFromXMLFile(string reportPath)
+        public static IList<ReportMetaData> ReadReportFromXMLFile(string reportPath, bool isJUnitReport, out IDictionary<string, IList<ReportMetaData>> failedSteps)
         {
-            IDictionary<string, IList<ReportMetaData>> testSteps = null;
-            return ReadReportFromXMLFile(reportPath, false, ref testSteps);
-        }
-        public static IList<ReportMetaData> ReadReportFromXMLFile(string reportPath, bool isJUnitReport, ref IDictionary<string, IList<ReportMetaData>> testSteps)
-        {
+            failedSteps = new Dictionary<string, IList<ReportMetaData>>();
             var listReport = new List<ReportMetaData>();
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(reportPath);
 
             foreach (XmlNode node in xmlDoc.DocumentElement.ChildNodes) //inside <testsuite> node 
             {
-                var steps = new List<ReportMetaData>();
+                var failedTestSteps = new List<ReportMetaData>();
                 string testName = string.Empty;
                 if (isJUnitReport)
                 {
@@ -126,15 +122,15 @@ namespace PSModule
                             reportmetadata.DateTime = xmlNode.InnerText.Substring(0, 19);
                         }
                     }
-                    if (isJUnitReport)
+                    if (isJUnitReport && reportmetadata.Status == FAIL)
                     {
-                        steps.Add(reportmetadata);
+                        failedTestSteps.Add(reportmetadata);
                     }
                     listReport.Add(reportmetadata);
                 }
-                if (isJUnitReport)
+                if (isJUnitReport && failedTestSteps.Any())
                 {
-                    testSteps.Add(testName, steps);
+                    failedSteps.Add(testName, failedTestSteps);
                 }
             }
 
@@ -144,8 +140,7 @@ namespace PSModule
         public static RunStatus GetRunStatus(IList<ReportMetaData> listReport)
         {
             var errorCode = RunStatus.PASSED;
-            int passedTests = 0;
-            int failedTests = 0;
+            int passedTests = 0, failedTests = 0;
 
             foreach (ReportMetaData report in listReport)
             {
@@ -352,7 +347,7 @@ namespace PSModule
 
                 row.Cells.Add(new HtmlTableCell { Align = LEFT, InnerText = statuses[index] });
                 row.Cells.Add(new HtmlTableCell { Align = LEFT, InnerText = nrOfTests[statuses[index]].ToString() });
-                row.Cells.Add(new HtmlTableCell { Align = LEFT, InnerText = $"{roundedPercentages[index]:00.00}%" });
+                row.Cells.Add(new HtmlTableCell { Align = LEFT, InnerText = $"{roundedPercentages[index]:0.00}%" });
 
                 row.Attributes.Add(STYLE, HEIGHT_30PX);
                 table.Rows.Add(row);
@@ -368,8 +363,11 @@ namespace PSModule
             File.WriteAllText(Path.Combine(rptPath,RUN_SUMMARY), html);
         }
 
-        public static void CreateFailedStepsReport(IDictionary<string, IList<ReportMetaData>> reports, string rptPath)
+        public static void CreateFailedStepsReport(IDictionary<string, IList<ReportMetaData>> failedSteps, string rptPath)
         {
+            if (failedSteps.IsNullOrEmpty())
+                return;
+
             var table = new HtmlTable { ClientIDMode = ClientIDMode.Static, ID = "tblFailedStepsId" };
             var header = new HtmlTableRow();
 
@@ -392,21 +390,20 @@ namespace PSModule
             header.Attributes.Add(STYLE, HEIGHT_30PX);
             table.Rows.Add(header);
 
-            var numberOfFailedSteps = GetNumberOfFailedSteps(reports);
             bool isOddRow = true;
-            foreach (string testName in reports.Keys)
+            foreach (string testName in failedSteps.Keys)
             {
                 int index = 0;
                 string style = isOddRow ? HEIGHT_30PX_AZURE : HEIGHT_30PX;
-                var failedTests = reports[testName].Where(x => x.Status == FAIL);
-                foreach (var item in failedTests)
+                var failedTestSteps = failedSteps[testName];
+                foreach (var item in failedTestSteps)
                 {
                     var row = new HtmlTableRow();
                     if (index == 0)
                     {
                         var cell1 = new HtmlTableCell { InnerText = testName, Align = LEFT };
                         cell1.Attributes.Add(STYLE, FONT_WEIGHT_BOLD_UNDERLINE);
-                        cell1.RowSpan = numberOfFailedSteps[testName];
+                        cell1.RowSpan = failedTestSteps.Count;
                         row.Cells.Add(cell1);
                     }
 
@@ -419,7 +416,7 @@ namespace PSModule
 
                     index++;
                 }
-                if (failedTests.Any())
+                if (failedTestSteps.Any())
                     isOddRow = !isOddRow;
             }
 
@@ -431,24 +428,6 @@ namespace PSModule
                 html = sw.ToString();
             }
             File.WriteAllText(Path.Combine(rptPath, FAILED_TESTS), html);
-        }
-
-        private static IDictionary<string, int> GetNumberOfFailedSteps(IDictionary<string, IList<ReportMetaData>> reports)
-        {
-            IDictionary<string, int> numberOfFailedSteps = new Dictionary<string, int>();
-            foreach (var test in reports.Keys)
-            {
-                int failedSteps = 0;
-                foreach (var item in reports[test])
-                {
-                    if (item.Status == FAIL)
-                    {
-                        failedSteps++;
-                    }
-                }
-                numberOfFailedSteps[test] = failedSteps;
-            }
-            return numberOfFailedSteps;
         }
 
         private static string GetTestName(string testPath)

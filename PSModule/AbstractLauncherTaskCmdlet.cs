@@ -105,7 +105,7 @@ namespace PSModule
                 if (File.Exists(resultsFileName) && new FileInfo(resultsFileName).Length > 0)//if results file exists
                 {
                     //create UFT report from the results file
-                    var listReport = H.ReadReportFromXMLFile(resultsFileName);
+                    var listReport = H.ReadReportFromXMLFile(resultsFileName, false, out _);
 
                     string storageAccount = properties.GetValueOrDefault(STORAGE_ACCOUNT, string.Empty);
                     string container = properties.GetValueOrDefault(CONTAINER, string.Empty);
@@ -138,11 +138,10 @@ namespace PSModule
                         //run junit report converter
                         string outputFileReport = Path.Combine(resdir, JUNIT_REPORT_XML);
                         RunConverter(converterPath, outputFileReport, reportFolders);
-                        if (File.Exists(outputFileReport) && new FileInfo(outputFileReport).Length > 0 && (nrOfTests[H.FAIL] > 0 || nrOfTests[H.ERROR] > 0))
+                        if (File.Exists(outputFileReport) && new FileInfo(outputFileReport).Length > 0 && nrOfTests[H.FAIL] > 0)
                         {
-                            IDictionary<string, IList<ReportMetaData>> steps = new Dictionary<string, IList<ReportMetaData>>();
-                            H.ReadReportFromXMLFile(outputFileReport, true, ref steps);
-                            H.CreateFailedStepsReport(steps, resdir);
+                            H.ReadReportFromXMLFile(outputFileReport, true, out IDictionary<string, IList<ReportMetaData>> failedSteps);
+                            H.CreateFailedStepsReport(failedSteps, resdir);
                         }
                     }
                 }
