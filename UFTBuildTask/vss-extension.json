@@ -1,148 +1,149 @@
 {
-  "manifestVersion": 1,
-  "id": "UFT-Azure-extension",
-  "name": "UFT One Azure DevOps extension",
-  "version": "2.0.0",
-  "publisher": "uftpublisher",
-  "targets": [
-    {
-      "id": "Microsoft.VisualStudio.Services",
-      "version": "[15.0,)"
-    }
-  ],
-  "description": "Enables you to run UFT tests as a build in an Azure DevOps build process. This extension includes 5 tasks.",
-  "categories": [
-    "Azure Pipelines"
-  ],
-  "resources": [
-    "some stuff"
-  ],
-  "tags": [
-    "UFT",
-    "ALM",
-    "Test task"
-  ],
-  "icons": {
-    "default": "images/tfs.png"
-  },
-  "demands": [ "contribution/ms.vss-dashboards-web.widget-sdk-version-2", "contribution/ms.vss-web.charts-service" ],
-  "screenshots ": [
-    {
-      "path": "resources/screenshots/AlmExecution.PNG"
-    },
-    {
-      "path": "resources/screenshots/screen2.png"
-    }
-  ],
-  "links": {
-    "home": {
-      "uri": "https://github.com/MicroFocus/ADM-TFS-Extension"
-    },
-    "installation": {
-      "uri": "https://admhelp.microfocus.com/uft/en/15.0-15.0.2/UFT_Help/Content/UFT_Tools/Azure_DevOps_Extension/uft-azure-devops.htm"
-    },
-    "learn": {
-      "uri": "https://admhelp.microfocus.com/uft/en/15.0-15.0.2/UFT_Help/Content/UFT_Tools/Azure_DevOps_Extension/uft-azure-devops.htm"
-    }
-  },
-  "content": {
-    "details": {
-      "path": "README.md"
-    },
-    "overview": {
-      "path": "overview.md"
-    },
-    "license": {
-      "path": "LICENSE"
-    }
-  },
-  "branding": {
-    "color": "rgb(1, 66, 114)",
-    "theme": "dark"
-  },
-  "files": [
-    {
-      "path": "AlmLabEnvPrepareTask"
-    },
-    {
-      "path": "AlmLabManagementTask"
-    },
-    {
-      "path": "RunFromALMTask"
-    },
-    {
-      "path": "RunFromFileSystemTask"
-    },
-    {
-      "path": "node_modules/vss-web-extension-sdk/lib/VSS.SDK.js",
-      "addressable": true
-    },
-    {
-      "path": "images",
-      "addressable": true
-    }   
-  ],
-  "scopes": [
-    "vso.test",
-    "vso.build_execute",
-    "vso.serviceendpoint"
-  ],
+	"manifestVersion": 1,
+	"id": "UFT-Azure-extension",
+	"name": "UFT One Azure DevOps extension",
+	"version": "2.0.0",
+	"publisher": "uftpublisher",
+	"targets": [{
+		"id": "Microsoft.VisualStudio.Services",
+		"version": "[15.0,)"
+	}],
+	"description": "Enables you to run UFT tests as a build in an Azure DevOps build process. This extension includes 5 tasks.",
+	"categories": [
+		"Azure Pipelines"
+	],
+	"resources": [
+		"some stuff"
+	],
+	"tags": [
+		"UFT",
+		"ALM",
+		"Test task"
+	],
+	"icons": {
+		"default": "images/tfs.png"
+	},
+	"demands": ["contribution/ms.vss-dashboards-web.widget-sdk-version-2", "contribution/ms.vss-web.charts-service"],
+	"screenshots ": [{
+			"path": "resources/screenshots/AlmExecution.PNG"
+		},
+		{
+			"path": "resources/screenshots/screen2.png"
+		}
+	],
+	"links": {
+		"home": {
+			"uri": "https://github.com/MicroFocus/ADM-TFS-Extension"
+		},
+		"installation": {
+			"uri": "https://admhelp.microfocus.com/uft/en/15.0-15.0.2/UFT_Help/Content/UFT_Tools/Azure_DevOps_Extension/uft-azure-devops.htm"
+		},
+		"learn": {
+			"uri": "https://admhelp.microfocus.com/uft/en/15.0-15.0.2/UFT_Help/Content/UFT_Tools/Azure_DevOps_Extension/uft-azure-devops.htm"
+		},
+		"privacypolicy": {
+			"uri": "https://www.microfocus.com/about/legal/#your_privacy"
+		},
+		"support": {
+			"uri": "https://www.microfocus.com/en-us/support/"
+		}
+	},
+	"content": {
+		"details": {
+			"path": "README.md"
+		},
+		"overview": {
+			"path": "overview.md"
+		},
+		"license": {
+			"path": "LICENSE"
+		}
+	},
+	"branding": {
+		"color": "rgb(1, 66, 114)",
+		"theme": "dark"
+	},
+	"files": [{
+			"path": "AlmLabEnvPrepareTask"
+		},
+		{
+			"path": "AlmLabManagementTask"
+		},
+		{
+			"path": "RunFromALMTask"
+		},
+		{
+			"path": "RunFromFileSystemTask"
+		},
+		{
+			"path": "node_modules/vss-web-extension-sdk/lib/VSS.SDK.js",
+			"addressable": true
+		},
+		{
+			"path": "images",
+			"addressable": true
+		}
+	],
+	"scopes": [
+		"vso.test",
+		"vso.build_execute",
+		"vso.serviceendpoint"
+	],
 
 
-  "contributions": [
-    {
-      "id": "custom-build-task-1",
-      "type": "ms.vss-distributed-task.task",
-      "targets": [
-        "ms.vss-distributed-task.tasks"
-      ],
-      "properties": {
-        "name": "AlmLabEnvPrepareTask"
-      }
-    },
-    {
-      "id": "custom-build-task-2",
-      "type": "ms.vss-distributed-task.task",
-      "targets": [
-        "ms.vss-distributed-task.tasks"
-      ],
-      "properties": {
-        "name": "AlmLabManagementTask"
-      }
-    },
-    {
-      "id": "custom-build-task-3",
-      "type": "ms.vss-distributed-task.task",
-      "targets": [
-        "ms.vss-distributed-task.tasks"
-      ],
-      "properties": {
-        "name": "RunFromALMTask"
-      }
-    },
-    {
-      "id": "my-hub",
-      "type": "ms.vss-web.hub",
-      "targets": [
-        "ms.vss-code-web.code-hub-group"
-      ],
-      "properties": {
-        "name": "My Hub",
-        "uri": "my-hub.html"
-      }
-    },
-    {
-      "id": "custom-build-task-4",
-      "type": "ms.vss-distributed-task.task",
-      "targets": [
-        "ms.vss-distributed-task.tasks"
-      ],
-      "properties": {
-        "name": "RunFromFileSystemTask"
-      }
-    }
-  ],
-  "galleryFlags": [
-    "Public"
-  ]
+	"contributions": [{
+			"id": "custom-build-task-1",
+			"type": "ms.vss-distributed-task.task",
+			"targets": [
+				"ms.vss-distributed-task.tasks"
+			],
+			"properties": {
+				"name": "AlmLabEnvPrepareTask"
+			}
+		},
+		{
+			"id": "custom-build-task-2",
+			"type": "ms.vss-distributed-task.task",
+			"targets": [
+				"ms.vss-distributed-task.tasks"
+			],
+			"properties": {
+				"name": "AlmLabManagementTask"
+			}
+		},
+		{
+			"id": "custom-build-task-3",
+			"type": "ms.vss-distributed-task.task",
+			"targets": [
+				"ms.vss-distributed-task.tasks"
+			],
+			"properties": {
+				"name": "RunFromALMTask"
+			}
+		},
+		{
+			"id": "my-hub",
+			"type": "ms.vss-web.hub",
+			"targets": [
+				"ms.vss-code-web.code-hub-group"
+			],
+			"properties": {
+				"name": "My Hub",
+				"uri": "my-hub.html"
+			}
+		},
+		{
+			"id": "custom-build-task-4",
+			"type": "ms.vss-distributed-task.task",
+			"targets": [
+				"ms.vss-distributed-task.tasks"
+			],
+			"properties": {
+				"name": "RunFromFileSystemTask"
+			}
+		}
+	],
+	"galleryFlags": [
+		"Public"
+	]
 }
